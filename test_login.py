@@ -16,8 +16,8 @@ def test_auth_cms(app):
     app.open_cms()
     # для работы с полем  есть методы click(), clear()\
     app.login("ikoshkin", "123456")
-    app.check()
     time.sleep(15)
+    app.check()
     app.wd.find_element_by_xpath("//button[@type='submit']").click()
 
 
