@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
+import time
 from application import Application
 
 
@@ -16,6 +17,7 @@ def test_auth_cms(app):
     # для работы с полем  есть методы click(), clear()\
     app.login("ikoshkin", "123456")
     app.check()
+    time.sleep(15)
     app.wd.find_element_by_xpath("//button[@type='submit']").click()
 
 
