@@ -1,16 +1,18 @@
 from selenium import webdriver
 import sys
-from selenium.webdriver.support.ui import Select
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+from fixture.session import SessionHelper
+from fixture.page import PageHelper
 
 
 class Application:
 
     def __init__(self):
-        #self.wd = webdriver.Firefox(executable_path=r'C:\Jenkins\workspace\geckodriver.exe')
-
+        # self.wd = webdriver.Firefox(executable_path=r'C:\Jenkins\workspace\geckodriver.exe')
 
         capabilities = {
             "browserName": "chrome",
@@ -26,6 +28,8 @@ class Application:
 
         self.wd.implicitly_wait(30)
         self.verificationErrors = []
+        self.session = SessionHelper(self)
+        self.page = PageHelper(self)
 
     def create_project(self):
         wd = self.wd
@@ -154,24 +158,9 @@ class Application:
             self.verificationErrors.append(str(e))
         wd.find_element_by_xpath("(//button[@type='button'])[5]").click()
 
-    def login(self, username, password):
-        wd = self.wd
-        wd.find_element_by_id("username").send_keys(username)
-        wd.find_element_by_id("password_field").send_keys(password)
-
-    def open_cms(self):
+    def open_login_page(self):
         wd = self.wd
         wd.get("https://cms-test.neuro.net/login")
-
-    def check(self):
-        wd = self.wd
-        wd.find_element_by_xpath("//button[@type='submit']").click()
-        wd.find_element_by_link_text("Call Logs").click()
-        wd.find_element_by_link_text("Records").click()
-        wd.find_element_by_link_text("Prompts").click()
-        wd.find_element_by_link_text("Accounts").click()
-        wd.find_element_by_link_text("ikoshkin").click()
-        wd.find_element_by_link_text("Log out").click()
 
     def edit_logic_unit(self):
         wd = self.wd
