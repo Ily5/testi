@@ -1,4 +1,7 @@
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 
 
 class PageHelper:
@@ -105,3 +108,70 @@ class PageHelper:
         wd.find_element_by_id("tts").clear()
         wd.find_element_by_id("tts").send_keys(project.tts)
         wd.find_element_by_id("btn_edit_project_save").click()
+
+    def go_to_entities_page(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("Entities").click()
+
+    def create_in_entity(self, name, json):
+        wd = self.app.wd
+        self.go_to_entities_page()
+        wd.find_element_by_id("btn_add_recobj").click()
+        wd.find_element_by_id("input_name").send_keys(name)
+        wd.find_element_by_id("input_json").send_keys(json)
+        wd.find_element_by_id("input_entype").click()
+        Select(wd.find_element_by_id("input_entype")).select_by_visible_text("str")
+        wd.find_element_by_xpath("//option[@value='str']").click()
+        wd.find_element_by_id("input_language").click()
+        Select(wd.find_element_by_id("input_language")).select_by_visible_text("Russian (Russia)-ru-RU")
+        wd.find_element_by_xpath("//option[@value='ru-RU']").click()
+        wd.find_element_by_id("btn-add-form-subm").click()
+        wd.find_element_by_xpath("//table[@id='recobjs_table']/tbody/tr/td[5]/a/i").click()
+
+    def delete_in_entity(self):
+        wd = self.app.wd
+        self.go_to_entities_page()
+        try:
+            assert "py_test_entity" in wd.find_element_by_xpath("//table[@id='recobjs_table']/tbody/tr/td").text
+        except AssertionError as e:
+            self.app.verificationErrors.append(str(e))
+        wd.find_element_by_xpath("(//button[@type='button'])[5]").click()
+
+    def edit_prompt(self):
+        wd = self.app.wd
+        self.open_prompts_page()
+        WebDriverWait(wd, 2).until(EC.invisibility_of_element_located(
+            (By.XPATH, "//div[@class='ivu-modal-wrap vertical-center-modal circuit-loading-modal']")))
+        mySelectElement = WebDriverWait(wd, 2).until(EC.element_to_be_clickable(
+            (By.XPATH, "// *[ @ id = 'promts_table'] / tbody / tr[1] / td[3] / a")))
+        mySelectElement.click()
+        wd.find_element_by_xpath("/html/body/div[4]/div/div/div[1]/div[2]/button").click()
+        wd.find_element_by_id("text").send_keys("text_prompt")
+        wd.find_element_by_id("flag-feild").send_keys("pytest_project")
+        Select(wd.find_element_by_id("language-feild")).select_by_visible_text("Russian (Russia)-ru-RU")
+        wd.find_element_by_xpath("//option[@value='ru-RU']").click()
+        wd.find_element_by_id("file").send_keys(r"/tmp/audio.wav")
+        wd.find_element_by_id("btn-add-form-subm").click()
+        #wd.find_element_by_id("btn-edit-file-form-subm").click()
+        # app.wd.find_element_by_xpath("// div[ @ id = 'file_add_modal'] / div").click()
+        # if app.wd.is_element_present(app.wd.By.XPATH, "//table[@id='promt_files_table']/tbody/tr/td[4]/button/i"):
+        # app.click_buttons_by_class_name(s="btn btn-danger btn-del-file")
+        # // *[ @ id = "promt_files_table"] / tbody / tr[1] / td[8] / button
+        self.open_prompts_page()
+        wd.find_element_by_xpath('// *[ @ id = "promts_table"] / tbody / tr[1] / td[4] / button').click()
+
+    def add_prompt(self, name, desc):
+        wd = self.app.wd
+        self.open_prompts_page()
+        wd.find_element_by_id("add_promt").click()
+        wd.find_element_by_id("name").send_keys(name)
+        wd.find_element_by_id("description").send_keys(desc)
+        wd.find_element_by_id("btn-add-form-subm").submit()
+
+
+    def open_prompts_page(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("Records").click()
+        wd.find_element_by_link_text("Prompts").click()
+
+
