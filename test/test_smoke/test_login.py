@@ -5,3 +5,4 @@ import allure
 @allure.story("Тестовый отчёт проверяем работу cms")
 def test_auth_cms(app):
     app.page.check_navigate_elements()
+    assert app.wd.current_url == "cms.neuro.net"
