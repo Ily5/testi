@@ -17,9 +17,12 @@ def app(request):
     request.addfinalizer(done)
     return fixture
 
-
-@pytest.fixture
-def db(request):
-    fixture = Connector()
-    request.addfinalizer(fixture.cancel)
-    return fixture
+#
+# ------
+#@pytest.fixture
+#def db(request):
+#    fixture = Connector()
+#    request.addfinalizer(fixture.cancel)
+#    return fixture
+# -------
+#
