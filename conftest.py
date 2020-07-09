@@ -1,5 +1,4 @@
 from fixture.application import Application
-from fixture.database import Connector
 import pytest
 
 
@@ -19,6 +18,7 @@ def app(request):
 
 #
 # ------
+#from fixture.database import Connector
 #@pytest.fixture
 #def db(request):
 #    fixture = Connector()
