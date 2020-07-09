@@ -1,3 +1,5 @@
+"""
+
 import psycopg2
 
 
@@ -20,5 +22,4 @@ class Connector:
 
 
 
-#Connector().db_conn(
-#                  s="SELECT action_data FROM call_stats WHERE ACTION = 'detected_speech' and uuid = '" + "70219b4a-b6cc-11ea-9ead-cb87ec06544a" + "'")
+"""
