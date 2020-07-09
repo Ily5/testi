@@ -152,7 +152,7 @@ class PageHelper:
         wd.find_element_by_xpath("//option[@value='ru-RU']").click()
         wd.find_element_by_id("file").send_keys(r"/tmp/audio.wav")
         wd.find_element_by_id("btn-add-form-subm").click()
-        #wd.find_element_by_id("btn-edit-file-form-subm").click()
+        # wd.find_element_by_id("btn-edit-file-form-subm").click()
         # app.wd.find_element_by_xpath("// div[ @ id = 'file_add_modal'] / div").click()
         # if app.wd.is_element_present(app.wd.By.XPATH, "//table[@id='promt_files_table']/tbody/tr/td[4]/button/i"):
         # app.click_buttons_by_class_name(s="btn btn-danger btn-del-file")
@@ -168,10 +168,30 @@ class PageHelper:
         wd.find_element_by_id("description").send_keys(desc)
         wd.find_element_by_id("btn-add-form-subm").submit()
 
-
     def open_prompts_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("Records").click()
         wd.find_element_by_link_text("Prompts").click()
 
+    def get_report(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("Analytics").click()
+        wd.find_element_by_link_text("On-line report").click()
+        wd.find_element_by_id("date_start").send_keys("10/06/2019 17:13")
+        wd.find_element_by_id("date_end").send_keys("10/06/2020 17:13")
+        wd.find_element_by_xpath("//button[@type='submit']").click()
+        wd.find_element_by_link_text("Analytics").click()
+        wd.find_element_by_link_text("Off-line report").click()
+        assert ("Download" in wd.find_element_by_link_text("Download").text)
+        wd.find_element_by_link_text("Download").click()
 
+    def get_log(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("Call Logs").click()
+        wd.find_element_by_id("date_start").send_keys("09/06/2020 08:25")
+        wd.find_element_by_id("date_end").send_keys("09/07/2020 08:25")
+        wd.find_element_by_xpath("//button[@type='submit']").click()
+        wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button/span").click()
+        wd.find_element_by_xpath("(//button[@type='button'])[2]").click()
+        wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button[3]/span").click()
+        wd.find_element_by_xpath("//table[@id='call_list_table']/tbody/tr/td[5]/button/span").click()
