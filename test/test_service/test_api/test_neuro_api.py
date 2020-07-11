@@ -88,7 +88,6 @@ def test_data_and_calls(app):
     assert json["result"]["calls"][0]["status"] == "successful"
 
     resp = app.api.get_data_by_bulk_id(24, 28)
-    print(resp)
     json = app.api.get_json(resp.json())
     assert resp.status_code == 200
     assert type(json["result"][0]["call_id"]) == str

@@ -27,8 +27,12 @@ class ApiHelper:
         return new_methods
 
     def get_json(self, s):
-        s = json.dumps(s)
-        return json.loads(s)
+        try:
+            s = json.dumps(s)
+            return json.loads(s)
+        except ConnectionError:
+             print("Connection error")
+
 
     def get_agents(self):
         data = {"jsonrpc": "2.0", "method": "get_agents", "id": "test"}

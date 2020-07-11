@@ -3,10 +3,11 @@ import time
 
 def test_call(app, db):
     # initiate call with central api
-    resp = app.app.initiate_call(63, "ss_12345_ss")
+    resp = app.api.initiate_call(63, "ss_12345_ss")
     assert resp.status_code == 200
     # get call_id from api response
     call_id = app.asr.get_data(resp)
+    print(call_id)
     # wait migration call to r/w base
     time.sleep(30)
     # check call status "+OK"
