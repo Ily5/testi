@@ -7,6 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from fixture.session import SessionHelper
 from fixture.page import PageHelper
+from fixture.asr import AsrHelper
+from fixture.api import ApiHelper
 
 
 class Application:
@@ -30,6 +32,8 @@ class Application:
         self.verificationErrors = []
         self.session = SessionHelper(self)
         self.page = PageHelper(self)
+        self.asr = AsrHelper(self)
+        self.api = ApiHelper(self)
 
     def click_buttons_by_class_name(self, s):
         wd = self.wd

@@ -1,10 +1,11 @@
 from fixture.application import Application
+from fixture.database import Connector
 import pytest
 
 
 # fixture = None
 
-@pytest.fixture (scope="session")
+@pytest.fixture(scope="session")
 def app(request):
     fixture = Application()
     fixture.session.login(username="ikoshkin", password="123456")
@@ -16,13 +17,9 @@ def app(request):
     request.addfinalizer(done)
     return fixture
 
-#
-# ------
-#from fixture.database import Connector
-#@pytest.fixture
-#def db(request):
-#    fixture = Connector()
-#    request.addfinalizer(fixture.cancel)
-#    return fixture
-# -------
-#
+
+@pytest.fixture(scope="session")
+def db(request):
+    fixture = Connector()
+    request.addfinalizer(fixture.cancel)
+    return fixture

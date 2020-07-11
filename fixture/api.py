@@ -3,7 +3,7 @@ import json
 
 
 class ApiHelper:
-    def __init__(self):
+    def __init__(self, app):
         self.url = 'https://api-test.neuro.net/api/v1/'
         self.jsonvers = {"jsonrpc": "2.0"}
         self.headers = {'Content-type': 'application/json',
@@ -16,6 +16,7 @@ class ApiHelper:
                         'get_output_entity', 'get_output_entities', 'set_output_entity', 'delete_output_entity',
                         'initiate_call', 'get_data_by_bulk_id', 'get_data_by_call_group_id', 'get_data_by_timeslot',
                         'get_call_records']
+        self.app = app
 
     def get_methods(self, s):
         methods = self.methods

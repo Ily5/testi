@@ -1,5 +1,3 @@
-"""
-
 import psycopg2
 
 
@@ -22,4 +20,3 @@ class Connector:
 
 
 
-"""

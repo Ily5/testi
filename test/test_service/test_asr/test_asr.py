@@ -1,7 +1,7 @@
 import time
 
 
-def test_call(app, db):
+def test_asr_call(app, db):
     # initiate call with central api
     resp = app.app.initiate_call(63, "ss_12345_ss")
     assert resp.status_code == 200
