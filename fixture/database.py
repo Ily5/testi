@@ -18,5 +18,18 @@ class Connector:
     def cancel(self):
         self.conn.close()
 
+    def check_call_status(self, call_id):
+        while True:
+            conn = self.db_conn("SELECT result FROM calls WHERE main_id = %s" % str(call_id))
+            if conn[0][0] == "+OK":
+                break
+            else:
+                continue
+
+    def get_detected_speech(self,call_id):
+        detected = list(self.db_conn("SELECT action_data FROM call_stats WHERE ACTION = 'detected_speech' and uuid = '"
+                                   + str(self.db_conn("SELECT uuid FROM calls WHERE main_id = %s" % str(call_id))[0][0])
+                                   + "'")[0][0].split(" "))
+        return detected
 
 

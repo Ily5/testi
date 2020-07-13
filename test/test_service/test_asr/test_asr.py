@@ -17,7 +17,7 @@ def test_bad_call(app, db):
     # get call_id from api response
     call_id = app.asr.get_data(resp)
     # wait migration call to r/w base
-    time.sleep(30)
+    time.sleep(45)
     # check call status "+OK"
     while True:
         conn = db.db_conn("SELECT result FROM calls WHERE main_id = %s" % str(call_id))
@@ -52,6 +52,7 @@ def test_bad_call(app, db):
     knowns = list(set(knowns) - set(matchs))
     wer = (val + len(detect) + len(knowns)) / extend
     print(wer)
+    print(knowns)
     gwer += wer
     divider +=1
 
@@ -68,7 +69,7 @@ def test_good_call(app, db):
     # get call_id from api response
     call_id = app.asr.get_data(resp)
     # wait migration call to r/w base
-    time.sleep(30)
+    time.sleep(45)
     # check call status "+OK"
     while True:
         conn = db.db_conn("SELECT result FROM calls WHERE main_id = %s" % str(call_id))
@@ -103,6 +104,7 @@ def test_good_call(app, db):
     detect = list(set(detect) - set(matchs))
     knowns = list(set(knowns) - set(matchs))
     wer = (val + len(detect) + len(knowns)) / extend
+    print(knowns)
     print(wer)
     gwer += wer
     divider += 1
@@ -120,7 +122,7 @@ def test_neutral_call(app, db):
     # get call_id from api response
     call_id = app.asr.get_data(resp)
     # wait migration call to r/w base
-    time.sleep(30)
+    time.sleep(45)
     # check call status "+OK"
     while True:
         conn = db.db_conn("SELECT result FROM calls WHERE main_id = %s" % str(call_id))
@@ -157,5 +159,6 @@ def test_neutral_call(app, db):
     wer = (val + len(detect) + len(knowns)) / extend
     gwer += wer
     divider += 1
+    print(knowns)
     print(gwer/divider)
  # необходимо тестировать вынести скрипт в хелпер , вызывать его тут, возвращать wer gwer тоже суммировать простой функцией
