@@ -11,8 +11,11 @@ def app(request):
     fixture.session.login(username="ikoshkin", password="123456")
 
     def done():
-        fixture.session.logout(username="ikoshkin")
-        fixture.cancel()
+        try:
+            fixture.session.logout(username="ikoshkin")
+            fixture.cancel()
+        except:
+            pass
 
     request.addfinalizer(done)
     return fixture
