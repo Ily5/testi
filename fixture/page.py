@@ -4,7 +4,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 
 
-
 class PageHelper:
 
     def __init__(self, app):
@@ -60,7 +59,6 @@ class PageHelper:
         wd.find_element_by_xpath("//option[@value='yandex']").click()
         wd.find_element_by_id("tts").send_keys(project.tts)
         wd.find_element_by_id("btn_add_project_save").click()
-
 
     def edit(self, project):
         wd = self.app.wd
@@ -152,7 +150,8 @@ class PageHelper:
         wd.find_element_by_id("flag-feild").send_keys("pytest_project")
         Select(wd.find_element_by_id("language-feild")).select_by_visible_text("Russian (Russia)-ru-RU")
         wd.find_element_by_xpath("//option[@value='ru-RU']").click()
-        wd.find_element_by_id("file").send_keys(r"/tmp/audio.wav")
+        #wd.find_element_by_id("file").send_keys(r"/tmp/audio.wav")
+        wd.find_element_by_id("file").send_keys(r"C:\tets_prompt_hello.wav")
         wd.find_element_by_id("btn-add-form-subm").click()
         # wd.find_element_by_id("btn-edit-file-form-subm").click()
         # app.wd.find_element_by_xpath("// div[ @ id = 'file_add_modal'] / div").click()
@@ -172,6 +171,7 @@ class PageHelper:
 
     def open_prompts_page(self):
         wd = self.app.wd
+        wd.get("https://cms-test.neuro.net/promts_manage")
         wd.find_element_by_link_text("Records").click()
         wd.find_element_by_link_text("Prompts").click()
 
@@ -197,3 +197,9 @@ class PageHelper:
         wd.find_element_by_xpath("(//button[@type='button'])[2]").click()
         wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button[3]/span").click()
         wd.find_element_by_xpath("//table[@id='call_list_table']/tbody/tr/td[5]/button/span").click()
+
+    def upload_call(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("Data uploading").click()
+        wd.find_element_by_id("file").send_keys(r"/tmp/Hff.xlsx")
+        wd.find_element_by_id("btn_add_file").click()
