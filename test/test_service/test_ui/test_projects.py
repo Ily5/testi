@@ -12,6 +12,7 @@ def test_add_project(app):
                 ))
 
 
+@allure.feature("Проверка работы с проектами")
 @allure.story("Изменение проекта")
 def test_edit_project(app):
     app.page.edit(
