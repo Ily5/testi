@@ -24,7 +24,7 @@ class Application:
         }
 
         self.wd = webdriver.Remote(
-            command_executor='http://10.129.0.112:4444/',
+            command_executor='http://10.129.0.112:4444',
             desired_capabilities=capabilities
         )
 
