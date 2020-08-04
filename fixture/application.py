@@ -14,7 +14,7 @@ from fixture.api import ApiHelper
 class Application:
 
     def __init__(self):
-        # self.wd = webdriver.Firefox(executable_path=r'C:\Jenkins\workspace\geckodriver.exe')
+        # self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
 
         capabilities = {
             "browserName": "chrome",

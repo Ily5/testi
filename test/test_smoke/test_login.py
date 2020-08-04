@@ -1,8 +1,8 @@
 import allure
 
 
-@allure.feature("go to cms page")
-@allure.story("Тестовый отчёт проверяем работу cms")
+@allure.feature("Проверка логина через cms")
 def test_auth_cms(app):
-    app.page.check_navigate_elements()
+    with allure.step("Проверяем наличие элементов на странице"):
+        app.page.check_navigate_elements()
 

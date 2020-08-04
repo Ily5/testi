@@ -2,7 +2,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
-
+import allure
 
 
 class PageHelper:
@@ -25,42 +25,44 @@ class PageHelper:
         wd = self.app.wd
         wd.find_element_by_id("a_project").click()
 
-    def add(self, project):
+    def add_project(self, project):
         wd = self.app.wd
-        self.open_projects_menu()
-        wd.find_element_by_link_text("Create New Agent").click()
-        wd.find_element_by_id("name_add").send_keys(project.name)
-        wd.find_element_by_id("description_add").send_keys(project.description)
-        wd.find_element_by_name("not_before").send_keys(project.not_before)
-        wd.find_element_by_name("not_after").send_keys(project.not_after)
-        wd.find_element_by_name("delay").send_keys(project.delay)
-        wd.find_element_by_id("count_add").send_keys(project.count)
-        wd.find_element_by_id("channel_add").send_keys(project.channel)
-        wd.find_element_by_id("flag_add").send_keys(project.flag)
-        wd.find_element_by_id("api_url_add").send_keys(project.api_url)
-        wd.find_element_by_id("start_unit_add").send_keys(project.start_unit)
-        wd.find_element_by_id("log_verbose").click()
-        wd.find_element_by_id("record_path").send_keys(project.record_path)
-        wd.find_element_by_id("caller_id").send_keys(project.caller_id)
-        wd.find_element_by_id("before_call_unit").send_keys(project.before_call_unit)
-        wd.find_element_by_id("after_call_unit").send_keys(project.after_call_unit)
-        wd.find_element_by_id("routing_channel_limit").send_keys(project.routing_channel_limit)
-        wd.find_element_by_id("total_channel_limit").send_keys(project.total_channel_limit)
-        wd.find_element_by_id("company_id").click()
-        Select(wd.find_element_by_id("company_id")).select_by_visible_text("Neuro.net")
-        wd.find_element_by_xpath("//option[@value='1']").click()
-        wd.find_element_by_id("pool_id").click()
-        Select(wd.find_element_by_id("pool_id")).select_by_visible_text("test_pool")
-        wd.find_element_by_xpath("(//option[@value='1'])[3]").click()
-        wd.find_element_by_id("language").click()
-        Select(wd.find_element_by_id("language")).select_by_visible_text("Russian (Russia)-ru-RU")
-        wd.find_element_by_xpath("//option[@value='ru-RU']").click()
-        wd.find_element_by_id("asr").click()
-        Select(wd.find_element_by_id("asr")).select_by_visible_text("yandex")
-        wd.find_element_by_xpath("//option[@value='yandex']").click()
-        wd.find_element_by_id("tts").send_keys(project.tts)
-        wd.find_element_by_id("btn_add_project_save").click()
-
+        with allure.step("Открываем страницу создания проекта"):
+            self.open_projects_menu()
+        with allure.step("Заполняем поля проекта"):
+            wd.find_element_by_link_text("Create New Agent").click()
+            wd.find_element_by_id("name_add").send_keys(project.name)
+            wd.find_element_by_id("description_add").send_keys(project.description)
+            wd.find_element_by_name("not_before").send_keys(project.not_before)
+            wd.find_element_by_name("not_after").send_keys(project.not_after)
+            wd.find_element_by_name("delay").send_keys(project.delay)
+            wd.find_element_by_id("count_add").send_keys(project.count)
+            wd.find_element_by_id("channel_add").send_keys(project.channel)
+            wd.find_element_by_id("flag_add").send_keys(project.flag)
+            wd.find_element_by_id("api_url_add").send_keys(project.api_url)
+            wd.find_element_by_id("start_unit_add").send_keys(project.start_unit)
+            wd.find_element_by_id("log_verbose").click()
+            wd.find_element_by_id("record_path").send_keys(project.record_path)
+            wd.find_element_by_id("caller_id").send_keys(project.caller_id)
+            wd.find_element_by_id("before_call_unit").send_keys(project.before_call_unit)
+            wd.find_element_by_id("after_call_unit").send_keys(project.after_call_unit)
+            wd.find_element_by_id("routing_channel_limit").send_keys(project.routing_channel_limit)
+            wd.find_element_by_id("total_channel_limit").send_keys(project.total_channel_limit)
+            wd.find_element_by_id("company_id").click()
+            Select(wd.find_element_by_id("company_id")).select_by_visible_text("Neuro.net")
+            wd.find_element_by_xpath("//option[@value='1']").click()
+            wd.find_element_by_id("pool_id").click()
+            Select(wd.find_element_by_id("pool_id")).select_by_visible_text("test_pool")
+            wd.find_element_by_xpath("(//option[@value='1'])[3]").click()
+            wd.find_element_by_id("language").click()
+            Select(wd.find_element_by_id("language")).select_by_visible_text("Russian (Russia)-ru-RU")
+            wd.find_element_by_xpath("//option[@value='ru-RU']").click()
+            wd.find_element_by_id("asr").click()
+            Select(wd.find_element_by_id("asr")).select_by_visible_text("yandex")
+            wd.find_element_by_xpath("//option[@value='yandex']").click()
+            wd.find_element_by_id("tts").send_keys(project.tts)
+        with allure.step("Сохраняем проект"):
+            wd.find_element_by_id("btn_add_project_save").click()
 
     def edit(self, project):
         wd = self.app.wd
