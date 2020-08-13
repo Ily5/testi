@@ -14,8 +14,8 @@ from fixture.api import ApiHelper
 class Application:
 
     def __init__(self):
-        # self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
-        self.wd = webdriver.Chrome(executable_path=r'/home/ilya/PycharmProjects/chromedriver')
+        self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
+        # self.wd = webdriver.Chrome(executable_path=r'/home/ilya/PycharmProjects/chromedriver')
         # self.wd = webdriver.Opera(executable_path=r'/home/ilya/PycharmProjects/operadriver')
         # capabilities = {
         #     "browserName": "chrome",
