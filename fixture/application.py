@@ -14,27 +14,27 @@ from fixture.api import ApiHelper
 class Application:
 
     def __init__(self):
-        # self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
+        self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
+        # self.wd = webdriver.Chrome(executable_path=r'/home/ilya/PycharmProjects/chromedriver')
+        # self.wd = webdriver.Opera(executable_path=r'/home/ilya/PycharmProjects/operadriver')
+        # capabilities = {
+        #     "browserName": "chrome",
+        #     "version": "83.0",
+        #     "platform": "LINUX",
+        #     "enableVNC": True
+        # }
+        #
+        # self.wd = webdriver.Remote(
+        #     command_executor='http://10.129.0.112:4444/wd/hub',
+        #     desired_capabilities=capabilities
+        # )
 
-    capabilities = {
-    "browserName": "firefox",
-    "version": "78.0",
-    "enableVNC": True,
-    "enableVideo": False
-    }
-
-    self.wd = webdriver.Remote(
-        command_executor="http://selenoid:4444/wd/hub",
-        desired_capabilities=capabilities
-    )
-
-
-    self.wd.implicitly_wait(10)
-    self.verificationErrors = []
-    self.session = SessionHelper(self)
-    self.page = PageHelper(self)
-    self.asr = AsrHelper(self)
-    self.api = ApiHelper(self)
+        self.wd.implicitly_wait(10)
+        self.verificationErrors = []
+        self.session = SessionHelper(self)
+        self.page = PageHelper(self)
+        self.asr = AsrHelper(self)
+        self.api = ApiHelper(self)
 
     def click_buttons_by_class_name(self, s):
         wd = self.wd
