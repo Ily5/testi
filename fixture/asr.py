@@ -1,6 +1,6 @@
 import json
 import time
-
+import logging
 
 
 class AsrHelper:
@@ -39,24 +39,27 @@ class AsrHelper:
         self.knowns = []
         self.detect = []
         self.val = 0
+        logging.info("Call error rate : %s " % wer )
         print(wer)
         return wer
 
-    def start_call(self, app, db):
-        # initiate call with central api
-        resp = app.api.initiate_call(63, "neutral_call")
-        assert resp.status_code == 200
-        # get call_id from api response
-        call_id = app.asr.get_data(resp)
-        # wait migration call to r/w base
-        time.sleep(45)
-        # check call status "+OK"
-        db.check_call_status(call_id)
-        # get data from "detected_speech" column
-        detected = db.get_detected_speech(call_id)
-        known = list(CallTranscript.neutral_call.split(" "))
-        gwer += app.asr.get_wer(known, detected)
-        divider += 1
-        print(gwer / divider)
+
+
+    # def start_call(self, app, db):
+    #     # initiate call with central api
+    #     resp = app.api.initiate_call(63, "neutral_call")
+    #     assert resp.status_code == 200
+    #     # get call_id from api response
+    #     call_id = app.asr.get_data(resp)
+    #     # wait migration call to r/w base
+    #     time.sleep(45)
+    #     # check call status "+OK"
+    #     db.check_call_status(call_id)
+    #     # get data from "detected_speech" column
+    #     detected = db.get_detected_speech(call_id)
+    #     known = list(CallTranscript.neutral_call.split(" "))
+    #     gwer += app.asr.get_wer(known, detected)
+    #     divider += 1
+    #     print(gwer / divider)
 
 
