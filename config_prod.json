@@ -1,6 +1,6 @@
 {
-  "CmsUrl": "https://cms-test.neuro.net/",
-  "ApiEndpoint": "https://api-test.neuro.net/api/v1/",
+  "CmsUrl": "https://cms.neuro.net/",
+  "ApiEndpoint": "https://api.neuro.net/api/v1/",
   "PoolApiUrl": "http://10.129.0.9:8080",
   "Postgres": {"RW":{"database": "pbx",
                       "user": "postgres",
@@ -14,8 +14,8 @@
                       "port": 5433}
   },
   "UsernameCms": "ikoshkin",
-  "PasswordCms": "123456",
-  "ProjectId": 109,
+  "PasswordCms": "12345678",
+  "ProjectId": 163,
   "Browser": "Remote",
   "ApiHeaders":
                         {

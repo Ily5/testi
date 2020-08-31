@@ -20,7 +20,7 @@ def app(request):
                               pool_api=config["PoolApiUrl"], p_api_headers=config["PoolApiHeaders"],
                               project=config["ProjectId"], rwdb=config["Postgres"]["RW"],
                               cms_db=config["Postgres"]["CMS"])
-        # fixture.session.login(username=config["UsernameCms"], password=config["PasswordCms"])
+        fixture.session.login(username=config["UsernameCms"], password=config["PasswordCms"])
 
     def done():
         try:
@@ -53,5 +53,5 @@ def mdb(request):
 
 
 def pytest_addoption(parser):
-    parser.addoption("--browser", action="store", default="firefox")
+    parser.addoption("--browser", action="store", default="Remote")
     parser.addoption("--config", action="store", default=ROOT_DIR + "\config_test.json")
