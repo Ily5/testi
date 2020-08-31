@@ -22,7 +22,7 @@ mng_calls = {}
 #     for i in range(len(call)):
 #         call_py.append(Numbers(number=call[i]["number"], transcript=call[i]["transcript"]))
 
-with open("data_test.json", encoding='utf-8') as json_file:
+with open(sys.path[0] + "/data_test.json", encoding='utf-8') as json_file:
     call_test = json.load(json_file)
     call_py = []
     for i in range(len(call_test)):
