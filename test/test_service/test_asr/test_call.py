@@ -3,13 +3,12 @@ import time
 
 def test_call(app, db):
     # initiate call with central api
-    resp = app.api.initiate_call(63, "ss_12345_ss")
+    resp = app.api.initiate_call(app.project, "test_asr_10")
     assert resp.status_code == 200
     # get call_id from api response
     call_id = app.asr.get_data(resp)
-    print(call_id)
     # wait migration call to r/w base
-    time.sleep(30)
+    time.sleep(35)
     # check call status "+OK"
     while True:
         conn = db.db_conn("SELECT result FROM calls WHERE main_id = %s" % str(call_id))
@@ -21,5 +20,6 @@ def test_call(app, db):
     speech = list(db.db_conn("SELECT action_data FROM call_stats WHERE ACTION = 'detected_speech' and uuid = '"
                              + str(db.db_conn("SELECT uuid FROM calls WHERE main_id = %s" % str(call_id))[0][0])
                              + "'")[0][0].split(" "))
-    matches = ["сможет", "ответить", "интересующие", "обменяться", "договориться"]
-    assert all(x in speech for x in matches)
+    # matches = ["сможет", "ответить", "интересующие", "обменяться", "договориться"]
+    matches = ["конечно", "буквально", "подключила", "тариф", "поменяла"]
+    assert any(x in speech for x in matches)
