@@ -2,11 +2,11 @@ import time
 
 
 gwer = 0
-divider=0
+div=0
 
 
 def test_bad_call(app, db):
-    global divider
+    global div
     global gwer
     knowns = []
     detect = []
@@ -58,7 +58,7 @@ def test_bad_call(app, db):
 
 
 def test_good_call(app, db):
-    global divider
+    global div
     global gwer
     knowns = []
     detect = []
@@ -111,7 +111,7 @@ def test_good_call(app, db):
 
 
 def test_neutral_call(app, db):
-    global divider
+    global div
     global gwer
     knowns = []
     detect = []

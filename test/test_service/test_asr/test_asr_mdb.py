@@ -6,6 +6,7 @@ import logging
 import os
 import sys
 
+# add filemode="w" to overwrite
 logging.basicConfig(filename=sys.path[1] + "/log/test_asr.log", level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
@@ -14,13 +15,6 @@ div = 0
 ids = []
 calls = []
 mng_calls = {}
-
-# open json file send params to call_py
-# with open(sys.path[1] + "/data.json", encoding='utf-8') as json_file:
-#     call = json.load(json_file)
-#     call_py = []
-#     for i in range(len(call)):
-#         call_py.append(Numbers(number=call[i]["number"], transcript=call[i]["transcript"]))
 
 with open("data_test.json", encoding='utf-8') as json_file:
     call_test = json.load(json_file)
@@ -34,38 +28,49 @@ def test_send_call(app, mdb, call):
     global ids
     global calls
     global mng_calls
+    # logger = logging.getLogger("test_app.test_asr.add")
     # initiate call with central api
-
     resp = app.api.initiate_call(app.project, call.number)
     time.sleep(5)
     logging.info("api_response : %s " % (resp.json()))
     logging.info("number: %s   human_transcript : %s " % (call.number, call.transcript))
     assert resp.status_code == 200
-
     # get call_id from api response
     call_id = app.asr.get_data(resp)
+    # wait migration call to stat base
     ids.append(call_id)
     calls.append(call.number)
     mng_calls = dict(zip(calls, ids))
+    # check call status "+OK"
+    # db.check_call_status(call_id)
+    # get data from "detected_speech" column
 
 
-@pytest.mark.parametrize("call", call_py, ids=[repr(x.number) for x in call_py])
-def test_asr(app, db, call):
+def test_call(app, db, call):
     global gwer
     global div
-    global mng_calls
-    time.sleep(3)
-    # check call status == "+OK" in rw base
-    db.check_call_status(mng_calls[call.number])
-
+    # logger = logging.getLogger("test_app.test_asr.add")
+    # initiate call with central api
+    resp = app.api.initiate_call(app.project, call.number)
+    logging.info("api_response : %s " % (resp.json()))
+    logging.info("number: %s   human_transcript : %s " % (call.number, call.transcript))
+    assert resp.status_code == 200
+    # get call_id from api response
+    call_id = app.asr.get_data(resp)
+    # wait migration call to r/w base
+    time.sleep(45)
+    # check call status "+OK"
+    db.check_call_status(call_id)
     # get data from "detected_speech" column
-    detected = db.get_detected_speech(mng_calls[call.number])
+    detected = db.get_detected_speech(call_id)
     logging.info("detected speech  %s" % detected)
     known = list(call.transcript.split(" "))
     gwer += app.asr.get_wer(known, detected)
     div += 1
     logging.info("call count : %s " % div)
     logging.info("stream error rate : %s " % (gwer / div))
+
+
 
 # @pytest.mark.parametrize("call", call_py, ids=[repr(x.number) for x in call_py])
 # def test_call(app, mdb, call):
@@ -88,33 +93,3 @@ def test_asr(app, db, call):
 #     div += 1
 #     logging.info("call count : %s " % div)
 #     logging.info("stream error rate : %s " % (gwer / div))
-
-
-# @pytest.mark.parametrize("call", call_py, ids=[repr(x.number) for x in call_py])
-# def test_asr_call(app, db, call):
-#     global gwer
-#     global div
-#     # logger = logging.getLogger("test_app.test_asr.add")
-#     # initiate call with central api
-#     resp = app.api.initiate_call(63, call.number)
-#     logging.info("api_response : %s " % (resp.json()))
-#     logging.info("number: %s   human_transcript : %s " % (call.number, call.transcript))
-#     assert resp.status_code == 200
-#     # get call_id from api response
-#     call_id = app.asr.get_data(resp)
-#     print(type(call_id))
-#     print(call_id)
-#     # wait migration call to r/w base
-#     time.sleep(45)
-#     # check call status "+OK"
-#     db.check_call_status(call_id)
-#     # get data from "detected_speech" column
-#     detected = db.get_detected_speech(call_id)
-#     logging.info("detected speech  %s" % detected)
-#     known = list(call.transcript.split(" "))
-#     gwer += app.asr.get_wer(known, detected)
-#     div += 1
-#     logging.info("call count : %s " % div)
-#     logging.info("stream error rate : %s " % (gwer / div))
-#     print(gwer / div)
-

@@ -1,12 +1,12 @@
 import time
 from model.call_transcript import CallTranscript
 gwer = 0
-divider = 0
+div = 0
 
 
 def test_bad_call(app, db):
     global gwer
-    global divider
+    global div
     # initiate call with central api
     resp = app.api.initiate_call(63, "bad_call")
     assert resp.status_code == 200
@@ -25,7 +25,7 @@ def test_bad_call(app, db):
 
 def test_good_call(app, db):
     global gwer
-    global divider
+    global div
     # initiate call with central api
     resp = app.api.initiate_call(63, "good_call")
     assert resp.status_code == 200
@@ -44,7 +44,7 @@ def test_good_call(app, db):
 
 def test_neutral_call(app, db):
     global gwer
-    global divider
+    global div
     # initiate call with central api
     resp = app.api.initiate_call(63, "neutral_call")
     assert resp.status_code == 200
@@ -65,7 +65,7 @@ def test_neutral_call(app, db):
 
 def test_asr(app, db):
     global gwer
-    global divider
+    global div
     # initiate call with central api
     resp = app.api.initiate_call(63, "neutral_call")
     assert resp.status_code == 200
