@@ -54,4 +54,4 @@ def mdb(request):
 
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="Remote")
-    parser.addoption("--config", action="store", default=ROOT_DIR + "\config_test.json")
+    parser.addoption("--config", action="store", default=ROOT_DIR + "/config_test.json")

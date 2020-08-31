@@ -6,7 +6,7 @@ import logging
 import os
 import sys
 
-logging.basicConfig(filename=sys.path[1] + "/log/test_asr.log", level=logging.INFO,
+logging.basicConfig(filename=sys.path[1]+"/log/test_asr.log", level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 gwer = 0
@@ -16,7 +16,7 @@ calls = []
 mng_calls = {}
 
 # open json file send params to call_py
-# with open(sys.path[1] + "/data.json", encoding='utf-8') as json_file:
+# with open(sys.path[0] + "/data.json", encoding='utf-8') as json_file:
 #     call = json.load(json_file)
 #     call_py = []
 #     for i in range(len(call)):
@@ -54,7 +54,7 @@ def test_asr(app, db, call):
     global gwer
     global div
     global mng_calls
-    time.sleep(3)
+    time.sleep(30)
     # check call status == "+OK" in rw base
     db.check_call_status(mng_calls[call.number])
 

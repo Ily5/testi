@@ -55,7 +55,7 @@ class Application:
         self.api = ApiHelper(self)
         self.p_api = PoolApiHelper(self)
 
-        logging.basicConfig(filename=r"C:\Users\iwear\PycharmProjects\demo\test_asr.log", level=logging.INFO,
+        logging.basicConfig(filename=sys.path[1] + "/log/test_asr.log", level=logging.INFO,
                             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         logging.info("Fixture created")
 
