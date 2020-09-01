@@ -218,12 +218,13 @@ class PageHelper:
     def edit_prompt(self):
         wd = self.app.wd
         self.open_prompts_page("Prompts")
+        # self.open_prompts_page("Prompts")
         WebDriverWait(wd, 2).until(EC.invisibility_of_element_located(
             (By.XPATH, "//div[@class='ivu-modal-wrap vertical-center-modal circuit-loading-modal']")))
         mySelectElement = WebDriverWait(wd, 2).until(EC.element_to_be_clickable(
             (By.XPATH, "// *[ @ id = 'promts_table'] / tbody / tr[1] / td[3] / a")))
         mySelectElement.click()
-        wd.find_element_by_xpath("/html/body/div[4]/div/div/div[1]/div[2]/button").click()
+        wd.find_element_by_xpath("(//button[@type='button'])[4]").click()
         wd.find_element_by_id("text").send_keys("text_prompt")
         wd.find_element_by_id("flag-feild").send_keys("pytest_project")
         Select(wd.find_element_by_id("language-feild")).select_by_visible_text("Russian (Russia)-ru-RU")
@@ -240,7 +241,8 @@ class PageHelper:
 
     def add_prompt(self, name, desc):
         wd = self.app.wd
-        self.open_prompts_page("Prompts")
+        wd.find_element_by_link_text("Records").click()
+        wd.find_element_by_link_text("Prompts").click()
         wd.find_element_by_id("add_promt").click()
         wd.find_element_by_id("name").send_keys(name)
         wd.find_element_by_id("description").send_keys(desc)
@@ -248,6 +250,7 @@ class PageHelper:
 
     def open_prompts_page(self, p):
         wd = self.app.wd
+        wd.get(self.app.cms_url)
         wd.find_element_by_link_text("Records").click()
         wd.find_element_by_link_text(p).click()
 
@@ -265,14 +268,17 @@ class PageHelper:
 
     def get_log(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("Call Logs").click()
-        wd.find_element_by_id("date_start").send_keys("09/06/2020 08:25")
-        wd.find_element_by_id("date_end").send_keys("09/07/2020 08:25")
-        wd.find_element_by_xpath("//button[@type='submit']").click()
-        wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button/span").click()
-        wd.find_element_by_xpath("(//button[@type='button'])[2]").click()
-        wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button[3]/span").click()
-        wd.find_element_by_xpath("//table[@id='call_list_table']/tbody/tr/td[5]/button/span").click()
+        with allure.step("Открываем страницу с отчётами о звонках"):
+            wd.find_element_by_link_text("Call Logs").click()
+        with allure.step("Задаём промежуток времени"):
+            wd.find_element_by_id("date_start").send_keys("09/06/2020 08:25")
+            wd.find_element_by_id("date_end").send_keys("09/07/2020 08:25")
+        with allure.step("Выгружаем полученную выборку"):
+            wd.find_element_by_xpath("//button[@type='submit']").click()
+            wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button/span").click()
+            wd.find_element_by_xpath("(//button[@type='button'])[2]").click()
+            wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button[3]/span").click()
+            wd.find_element_by_xpath("//table[@id='call_list_table']/tbody/tr/td[5]/button/span").click()
 
     def open_prompts_entity(self):
         wd = self.app.wd
