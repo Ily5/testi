@@ -22,8 +22,10 @@ database = {"rw":
 
 @allure.feature("Проверка работы cms")
 def test_auth_cms(app, mdb):
+    time.sleep(3)
     with allure.step("Переходим в проект Release_run"):
         app.page.go_to_project("Release_run")
+        time.sleep(3)
     with allure.step("Проверяем наличие элементов на странице"):
         app.page.check_navigate_elements()
 
@@ -32,8 +34,10 @@ def test_auth_cms(app, mdb):
 @pytest.mark.parametrize("pools", pools_py, ids=[repr(x) for x in pools_py])
 def test_edit_asr(app, pools, db, mdb):
     with allure.step("Задаём Pool"):
+        time.sleep(3)
         app.page.edit_pool(Project(pool=pools))
     with allure.step("Отправляем звонок на api"):
+        time.sleep(3)
         resp = app.api.initiate_release_call(app.project, "test_asr_901", "yandex", "oksana@yandex")
         assert resp.status_code == 200
         call_id = app.asr.get_data(resp)
@@ -60,12 +64,10 @@ def test_edit_asr(app, pools, db, mdb):
         db.create_connect(database["rw"][str(pools)])
         detected = db.get_detected_speech(call_id)
         detected= list(set(detected))
-        print(detected)
         matches = ["тарифный", "план"]
         assert all(x in detected for x in matches)
     with allure.step("Проверяем результаты синтеза google из mongodb"):
         mongo_array = mdb.request({"main_id": int(call_id)})
         speak = mdb.parse(result=mongo_array, array="actions", key="speak", value="action_data")
-        print(speak)
         assert speak == '"Hello"'
 
