@@ -40,6 +40,7 @@ class Application:
             capabilities = {
                 "browserName": "firefox",
                 "version": "78.0",
+                "platform": "LINUX",
                 "enableVNC": True,
             }
 
