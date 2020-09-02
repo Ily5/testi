@@ -393,3 +393,26 @@ class PageHelper:
         wd.find_element(By.LINK_TEXT, "Records").click()
         wd.find_element(By.LINK_TEXT, "Prompts").click()
         wd.find_element(By.CSS_SELECTOR, ".odd .btn-del-promt > .fa").click()
+
+    def go_to_project(self, s):
+        wd = self.app.wd
+        wd.get(self.app.cms_url)
+        self.open_projects_menu()
+        wd.find_element(By.LINK_TEXT, s).click()
+
+    def edit_pool(self, project):
+        wd = self.app.wd
+        self.open_projects_menu()
+        # wd.find_element_by_link_text("Settings").click()
+        # wd.find_element_by_id("pool_id").click()
+        # Select(wd.find_element_by_id("pool_id")).select_by_visible_text(project.pool)
+        # wd.find_element_by_xpath("(//option[@value='1'])[3]").click()
+        # wd.find_element_by_id("btn_edit_project_save").click()
+        wd.find_element_by_link_text("Settings").click()
+        wd.find_element_by_id("pool_id").click()
+        Select(wd.find_element_by_id("pool_id")).select_by_visible_text(project.pool)
+        if project.pool == "main_pool":
+            wd.find_element_by_xpath("(//option[@value='2'])[3]").click()
+        else:
+            wd.find_element_by_xpath("(//option[@value='4'])[3]").click()
+        wd.find_element_by_id("btn_edit_project_save").click()
