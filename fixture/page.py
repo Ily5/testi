@@ -1,13 +1,15 @@
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.wait import WebDriverWait
 from model.record_entity import RecordEntityFile
 import allure
 import random
-import time
 import string
 import re
+import pytest
+import time
 
 
 def generate(prefix):
@@ -163,8 +165,8 @@ class PageHelper:
                 # wd.find_element_by_xpath("//table[@id='branch_content']/tr[%s]/td/div/select" % (i)).click()
                 # wd.find_element_by_xpath("//option[@name='%s'][%s]" % (actions[i], i)).click()
                 Select(wd.find_element_by_xpath
-                       ("//table[@id='branch_content']/tr[%s]/td/div/select" % (i))).select_by_visible_text\
-                        ("%s" % (actions[i]))
+                       ("//table[@id='branch_content']/tr[%s]/td/div/select" % (i))).select_by_visible_text \
+                    ("%s" % (actions[i]))
                 wd.find_element_by_id("add_action").click()
         with allure.step("Сохраняем"):
             wd.find_element_by_id("save_branch").click()
@@ -340,7 +342,7 @@ class PageHelper:
         for i in range(60):
             try:
                 if wd.find_element_by_xpath(
-                    xpath).is_displayed(): break
+                        xpath).is_displayed(): break
             except:
                 pass
             time.sleep(1)
@@ -353,12 +355,41 @@ class PageHelper:
         self.check_element("//table[@id='promts_entity_table']/tbody/tr/td")
         wd.find_element_by_xpath("(//button[@type='button'])[5]").click()
 
-
-
-
-
-
-
-
-
-
+    def recordprompt(self):
+        wd = self.app.wd
+        # wd.get("https://cms-test.neuro.net/login?next=%2F")
+        # wd.set_window_size(1936, 1176)
+        # wd.find_element(By.ID, "username").click()
+        # wd.find_element(By.ID, "username").send_keys("ikoshkin")
+        # wd.find_element(By.ID, "password_field").send_keys("123456")
+        # wd.find_element(By.CSS_SELECTOR, ".btn").click()
+        wd.find_element(By.LINK_TEXT, "Records").click()
+        wd.find_element(By.LINK_TEXT, "Prompts").click()
+        wd.find_element(By.ID, "add_promt").click()
+        wd.find_element(By.ID, "name").click()
+        wd.find_element(By.ID, "name").send_keys("ytuyiyuiyuiyui")
+        wd.find_element(By.ID, "description").click()
+        wd.find_element(By.ID, "description").send_keys("yuiyuiyu")
+        wd.find_element(By.ID, "btn-add-form-subm").click()
+        wd.find_element(By.CSS_SELECTOR, ".odd .btn-edit-promt > .fa").click()
+        wd.find_element(By.CSS_SELECTOR, ".btn:nth-child(1)").click()
+        element = wd.find_element(By.CSS_SELECTOR, ".btn:nth-child(1)")
+        actions = ActionChains(wd)
+        actions.move_to_element(element).perform()
+        element = wd.find_element(By.CSS_SELECTOR, "body")
+        actions = ActionChains(wd)
+        actions.move_to_element(element, 0, 0).perform()
+        wd.find_element(By.ID, "text").click()
+        wd.find_element(By.ID, "text").send_keys("uiuui")
+        wd.find_element(By.ID, "flag-feild").click()
+        wd.find_element(By.ID, "flag-feild").send_keys("uiuiii")
+        wd.find_element(By.ID, "language-feild").click()
+        dropdown = wd.find_element(By.ID, "language-feild")
+        dropdown.find_element(By.XPATH, "//option[. = 'Russian (Russia)-ru-RU']").click()
+        wd.find_element(By.CSS_SELECTOR, "#language-feild > option:nth-child(2)").click()
+        wd.find_element(By.ID, "file").click()
+        wd.find_element(By.ID, "file").send_keys("C:\\fakepath\\6111.wav")
+        wd.find_element(By.ID, "btn-add-form-subm").click()
+        wd.find_element(By.LINK_TEXT, "Records").click()
+        wd.find_element(By.LINK_TEXT, "Prompts").click()
+        wd.find_element(By.CSS_SELECTOR, ".odd .btn-del-promt > .fa").click()

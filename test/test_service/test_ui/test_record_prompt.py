@@ -11,4 +11,4 @@ def test_add_prompt(app):
 @allure.story("Изменение prompt")
 def test_edit_prompt(app):
     # app.page.add_prompt("py_test_run_prompt", "desc")
-    app.page.edit_prompt()
+    app.page.recordprompt()
