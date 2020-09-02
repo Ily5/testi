@@ -5,22 +5,24 @@ import json
 import sys
 import os
 
-# fixture = None
+fixture = None
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 @pytest.fixture(scope="session")
 def app(request):
-    browser = request.config.getoption("--browser")
-    with open(request.config.getoption("--config")) as cfg:
-        config = json.load(cfg)
-        fixture = Application(browser=browser, cms_url=config["CmsUrl"], api_url=config["ApiEndpoint"],
-                              api_headers=config["ApiHeaders"], api_methods=config["ApiMethods"],
-                              pool_api=config["PoolApiUrl"], p_api_headers=config["PoolApiHeaders"],
-                              project=config["ProjectId"], rwdb=config["Postgres"]["RW"],
-                              cms_db=config["Postgres"]["CMS"], mdb = config["Mongo_client"])
-        fixture.session.login(username=config["UsernameCms"], password=config["PasswordCms"])
+    global fixture
+    if fixture is None:
+        browser = request.config.getoption("--browser")
+        with open(request.config.getoption("--config")) as cfg:
+            config = json.load(cfg)
+            fixture = Application(browser=browser, cms_url=config["CmsUrl"], api_url=config["ApiEndpoint"],
+                                  api_headers=config["ApiHeaders"], api_methods=config["ApiMethods"],
+                                  pool_api=config["PoolApiUrl"], p_api_headers=config["PoolApiHeaders"],
+                                  project=config["ProjectId"], rwdb=config["Postgres"]["RW"],
+                                  cms_db=config["Postgres"]["CMS"], mdb = config["Mongo_client"])
+            fixture.session.login(username=config["UsernameCms"], password=config["PasswordCms"])
 
     def done():
         try:
