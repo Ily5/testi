@@ -25,28 +25,28 @@ class Application:
             # self.wd = webdriver.Chrome(executable_path=r'/home/ilya/PycharmProjects/chromedriver')
 
         else:
-            # capabilities = {
-        #             #     "browserName": "chrome",
-        #             #     "version": "83.0",
-        #             #     "platform": "LINUX",
-        #             #     "enableVNC": True
-        #             # }
-        #             #
-        #             # self.wd = webdriver.Remote(
-        #             #     command_executor='http://10.129.0.112:4444/wd/hub',
-        #             #     desired_capabilities=capabilities
-        #             # )
-
             capabilities = {
-                "browserName": "firefox",
-                "version": "78.0",
-                "platform": "LINUX",
-                "enableVNC": True,
-            }
+                        "browserName": "chrome",
+                        "version": "83.0",
+                        "platform": "LINUX",
+                        "enableVNC": True
+                    }
 
             self.wd = webdriver.Remote(
-                command_executor="http://selenoid:4444/wd/hub",
-                desired_capabilities=capabilities)
+                command_executor='http://10.129.0.112:4444/wd/hub',
+                desired_capabilities=capabilities
+                    )
+
+            # capabilities = {
+            #     "browserName": "firefox",
+            #     "version": "78.0",
+            #     "platform": "LINUX",
+            #     "enableVNC": True,
+            # }
+            #
+            # self.wd = webdriver.Remote(
+            #     command_executor="http://selenoid:4444/wd/hub",
+            #     desired_capabilities=capabilities)
 
         self.wd.implicitly_wait(30)
         self.cms_url = cms_url
