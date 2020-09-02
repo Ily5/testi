@@ -45,6 +45,7 @@ def test_edit_asr(app, pools, db, mdb):
         print(detected)
         matches = ["тарифный", "план"]
         assert all(x in detected for x in matches)
+        # TODO: for cycle here
     with allure.step("Проверяем результаты синтеза яндекс из mongodb"):
         mongo_array = mdb.request({"main_id": int(call_id)})
         speak = mdb.parse(result=mongo_array, array="actions", key="speak", value="action_data")
@@ -68,25 +69,3 @@ def test_edit_asr(app, pools, db, mdb):
         print(speak)
         assert speak == "Hello"
 
-
-"""
-"main_pool"
-ru-RU-Wavenet-A@google
-lite smoke run 
-логинимся в cms 
-делаем check кнопок 
-параметрезируем через asr tts [] 
-    вызываем метод edit задаём аср и ттс 
-    вызываем звонок через api (ассертим что api отвечает) 
-    ждем выгружаем detected speech и speak один из монги второй из постгреса ассертим оба на значения 
-    вроде всё пункты отчёта 
-                                cms доступна 
-                                api отвечает 
-                                база статистики доступна 
-                                r/w база доступна 
-                                аср яндекс работает 
-                                онлайн ттс яндекс работает 
-                                аср google работает 
-                                онлайн ттс google работает 
-
-"""
