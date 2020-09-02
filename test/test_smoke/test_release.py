@@ -50,7 +50,7 @@ def test_edit_asr(app, pools, db, mdb):
         mongo_array = mdb.request({"main_id": int(call_id)})
         speak = mdb.parse(result=mongo_array, array="actions", key="speak", value="action_data")
         print(speak)
-        assert speak == "Hello"
+        assert speak == '"Hello"'
     with allure.step("Отправляем звонок на api"):
         resp = app.api.initiate_release_call(app.project, "test_asr_901", "google", "ru-RU-Wavenet-A@google")
         assert resp.status_code == 200
@@ -67,5 +67,5 @@ def test_edit_asr(app, pools, db, mdb):
         mongo_array = mdb.request({"main_id": int(call_id)})
         speak = mdb.parse(result=mongo_array, array="actions", key="speak", value="action_data")
         print(speak)
-        assert speak == "Hello"
+        assert speak == '"Hello"'
 
