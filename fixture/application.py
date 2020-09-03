@@ -17,8 +17,8 @@ class Application:
     def __init__(self, browser, cms_url, api_url, api_headers, api_methods, pool_api, p_api_headers,
                  project, rwdb, cms_db, mdb):
         if browser == 'firefox':
-            self.wd = webdriver.Firefox()
-            # self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
+            # self.wd = webdriver.Firefox()
+            self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
 
         elif browser == 'chrome':
             self.wd = webdriver.Chrome()
@@ -48,7 +48,7 @@ class Application:
             #     command_executor="http://selenoid:4444/wd/hub",
             #     desired_capabilities=capabilities)
 
-        self.wd.implicitly_wait(60)
+        self.wd.implicitly_wait(120)
         self.cms_url = cms_url
         self.api_url = api_url
         self.api_headers = api_headers
