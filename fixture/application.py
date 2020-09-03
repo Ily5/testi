@@ -48,7 +48,7 @@ class Application:
             #     command_executor="http://selenoid:4444/wd/hub",
             #     desired_capabilities=capabilities)
 
-        self.wd.implicitly_wait(60)
+        self.wd.implicitly_wait(120)
         self.cms_url = cms_url
         self.api_url = api_url
         self.api_headers = api_headers
