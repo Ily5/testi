@@ -6,7 +6,7 @@ import logging
 import os
 import sys
 
-logging.basicConfig(filename=sys.path[1] + "/log/test_asr_google.log", level=logging.INFO,
+logging.basicConfig(filename=sys.path[1] + "/log/test_asr.log", level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 gwer = 0
