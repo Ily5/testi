@@ -17,8 +17,8 @@ class Application:
     def __init__(self, browser, cms_url, api_url, api_headers, api_methods, pool_api, p_api_headers,
                  project, rwdb, cms_db, mdb):
         if browser == 'firefox':
-            self.wd = webdriver.Firefox()
-            # self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
+            # self.wd = webdriver.Firefox()
+            self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
 
         elif browser == 'chrome':
             self.wd = webdriver.Chrome()
@@ -69,7 +69,7 @@ class Application:
         self.api = ApiHelper(self)
         self.p_api = PoolApiHelper(self)
 
-        logging.basicConfig(filename=r"C:\Users\iwear\PycharmProjects\demo\test_asr.log", level=logging.INFO,
+        logging.basicConfig(filename=sys.path[1] + "/log/test_asr.log", level=logging.INFO,
                             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         logging.info("Fixture created")
 
