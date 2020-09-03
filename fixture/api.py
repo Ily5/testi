@@ -107,8 +107,14 @@ class ApiHelper:
 
     def initiate_call(self, agent_id, phone):
         data = {"jsonrpc": "2.0", "method": "initiate_call",
+                "params": {"agent_id": agent_id, "phone": phone}, "id": "test"}
+        answer = requests.post(self.url, data=json.dumps(data), headers=self.headers)
+        return answer
+
+    def initiate_release_call(self, agent_id, phone, asr, tts):
+        data = {"jsonrpc": "2.0", "method": "initiate_call",
                 "params": {"agent_id": agent_id, "phone": phone,
-                           "name": "name", "id": "name2"}, "id": "test"}
+                           "ASR": asr, "TTS": tts}, "id": "release_run"}
         answer = requests.post(self.url, data=json.dumps(data), headers=self.headers)
         return answer
 

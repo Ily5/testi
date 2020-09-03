@@ -15,15 +15,18 @@
   },
   "UsernameCms": "ikoshkin",
   "PasswordCms": "12345678",
-  "ProjectId": 163,
+  "Pool": "",
+  "Server": "",
+  "Mongo_client": "mongodb://10.129.0.14:27017/",
+  "ProjectId": 214,
   "Browser": "Remote",
   "ApiHeaders":
                         {
                         "Content-type": "application/json",
                         "Accept": "text/plain",
                         "Content-Encoding": "utf-8",
-                        "Authorization": "Basic aWtvc2hraW46MTIzNDU2",
-                        "Host": "api-test.neuro.net"
+                        "Authorization": "Basic aWtvc2hraW46MTIzNDU2Nzg=",
+                        "Host": "api.neuro.net"
                         },
   "ApiMethods":         [
                         "get_agents", "set_agent_param", "get_agent_params", "get_agent_param",

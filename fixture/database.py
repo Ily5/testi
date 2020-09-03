@@ -45,8 +45,8 @@ class Connector:
 
 
 class MongoConnector:
-    def __init__(self):
-        self.cluster = MongoClient('mongodb://10.129.0.9:27017/')
+    def __init__(self, data):
+        self.cluster = MongoClient(data)
         self.db = self.cluster["pbx"]
         self.collection = self.db["statistic"]
 
