@@ -1,13 +1,15 @@
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.wait import WebDriverWait
 from model.record_entity import RecordEntityFile
 import allure
 import random
-import time
 import string
 import re
+import pytest
+import time
 
 
 def generate(prefix):
@@ -163,8 +165,8 @@ class PageHelper:
                 # wd.find_element_by_xpath("//table[@id='branch_content']/tr[%s]/td/div/select" % (i)).click()
                 # wd.find_element_by_xpath("//option[@name='%s'][%s]" % (actions[i], i)).click()
                 Select(wd.find_element_by_xpath
-                       ("//table[@id='branch_content']/tr[%s]/td/div/select" % (i))).select_by_visible_text\
-                        ("%s" % (actions[i]))
+                       ("//table[@id='branch_content']/tr[%s]/td/div/select" % (i))).select_by_visible_text \
+                    ("%s" % (actions[i]))
                 wd.find_element_by_id("add_action").click()
         with allure.step("Сохраняем"):
             wd.find_element_by_id("save_branch").click()
@@ -218,12 +220,13 @@ class PageHelper:
     def edit_prompt(self):
         wd = self.app.wd
         self.open_prompts_page("Prompts")
+        # self.open_prompts_page("Prompts")
         WebDriverWait(wd, 2).until(EC.invisibility_of_element_located(
             (By.XPATH, "//div[@class='ivu-modal-wrap vertical-center-modal circuit-loading-modal']")))
         mySelectElement = WebDriverWait(wd, 2).until(EC.element_to_be_clickable(
             (By.XPATH, "// *[ @ id = 'promts_table'] / tbody / tr[1] / td[3] / a")))
         mySelectElement.click()
-        wd.find_element_by_xpath("/html/body/div[4]/div/div/div[1]/div[2]/button").click()
+        wd.find_element_by_xpath("(//button[@type='button'])[4]").click()
         wd.find_element_by_id("text").send_keys("text_prompt")
         wd.find_element_by_id("flag-feild").send_keys("pytest_project")
         Select(wd.find_element_by_id("language-feild")).select_by_visible_text("Russian (Russia)-ru-RU")
@@ -240,7 +243,8 @@ class PageHelper:
 
     def add_prompt(self, name, desc):
         wd = self.app.wd
-        self.open_prompts_page("Prompts")
+        wd.find_element_by_link_text("Records").click()
+        wd.find_element_by_link_text("Prompts").click()
         wd.find_element_by_id("add_promt").click()
         wd.find_element_by_id("name").send_keys(name)
         wd.find_element_by_id("description").send_keys(desc)
@@ -248,6 +252,7 @@ class PageHelper:
 
     def open_prompts_page(self, p):
         wd = self.app.wd
+        wd.get(self.app.cms_url)
         wd.find_element_by_link_text("Records").click()
         wd.find_element_by_link_text(p).click()
 
@@ -265,14 +270,17 @@ class PageHelper:
 
     def get_log(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("Call Logs").click()
-        wd.find_element_by_id("date_start").send_keys("09/06/2020 08:25")
-        wd.find_element_by_id("date_end").send_keys("09/07/2020 08:25")
-        wd.find_element_by_xpath("//button[@type='submit']").click()
-        wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button/span").click()
-        wd.find_element_by_xpath("(//button[@type='button'])[2]").click()
-        wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button[3]/span").click()
-        wd.find_element_by_xpath("//table[@id='call_list_table']/tbody/tr/td[5]/button/span").click()
+        with allure.step("Открываем страницу с отчётами о звонках"):
+            wd.find_element_by_link_text("Call Logs").click()
+        with allure.step("Задаём промежуток времени"):
+            wd.find_element_by_id("date_start").send_keys("09/06/2020 08:25")
+            wd.find_element_by_id("date_end").send_keys("09/07/2020 08:25")
+        with allure.step("Выгружаем полученную выборку"):
+            wd.find_element_by_xpath("//button[@type='submit']").click()
+            wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button/span").click()
+            wd.find_element_by_xpath("(//button[@type='button'])[2]").click()
+            wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button[3]/span").click()
+            wd.find_element_by_xpath("//table[@id='call_list_table']/tbody/tr/td[5]/button/span").click()
 
     def open_prompts_entity(self):
         wd = self.app.wd
@@ -334,7 +342,7 @@ class PageHelper:
         for i in range(60):
             try:
                 if wd.find_element_by_xpath(
-                    xpath).is_displayed(): break
+                        xpath).is_displayed(): break
             except:
                 pass
             time.sleep(1)
@@ -347,12 +355,64 @@ class PageHelper:
         self.check_element("//table[@id='promts_entity_table']/tbody/tr/td")
         wd.find_element_by_xpath("(//button[@type='button'])[5]").click()
 
+    def recordprompt(self):
+        wd = self.app.wd
+        # wd.get("https://cms-test.neuro.net/login?next=%2F")
+        # wd.set_window_size(1936, 1176)
+        # wd.find_element(By.ID, "username").click()
+        # wd.find_element(By.ID, "username").send_keys("ikoshkin")
+        # wd.find_element(By.ID, "password_field").send_keys("123456")
+        # wd.find_element(By.CSS_SELECTOR, ".btn").click()
+        wd.find_element(By.LINK_TEXT, "Records").click()
+        wd.find_element(By.LINK_TEXT, "Prompts").click()
+        wd.find_element(By.ID, "add_promt").click()
+        wd.find_element(By.ID, "name").click()
+        wd.find_element(By.ID, "name").send_keys("ytuyiyuiyuiyui")
+        wd.find_element(By.ID, "description").click()
+        wd.find_element(By.ID, "description").send_keys("yuiyuiyu")
+        wd.find_element(By.ID, "btn-add-form-subm").click()
+        wd.find_element(By.CSS_SELECTOR, ".odd .btn-edit-promt > .fa").click()
+        wd.find_element(By.CSS_SELECTOR, ".btn:nth-child(1)").click()
+        element = wd.find_element(By.CSS_SELECTOR, ".btn:nth-child(1)")
+        actions = ActionChains(wd)
+        actions.move_to_element(element).perform()
+        element = wd.find_element(By.CSS_SELECTOR, "body")
+        actions = ActionChains(wd)
+        actions.move_to_element(element, 0, 0).perform()
+        wd.find_element(By.ID, "text").click()
+        wd.find_element(By.ID, "text").send_keys("uiuui")
+        wd.find_element(By.ID, "flag-feild").click()
+        wd.find_element(By.ID, "flag-feild").send_keys("uiuiii")
+        wd.find_element(By.ID, "language-feild").click()
+        dropdown = wd.find_element(By.ID, "language-feild")
+        dropdown.find_element(By.XPATH, "//option[. = 'Russian (Russia)-ru-RU']").click()
+        wd.find_element(By.CSS_SELECTOR, "#language-feild > option:nth-child(2)").click()
+        wd.find_element(By.ID, "file").click()
+        wd.find_element(By.ID, "file").send_keys("C:\\fakepath\\6111.wav")
+        wd.find_element(By.ID, "btn-add-form-subm").click()
+        wd.find_element(By.LINK_TEXT, "Records").click()
+        wd.find_element(By.LINK_TEXT, "Prompts").click()
+        wd.find_element(By.CSS_SELECTOR, ".odd .btn-del-promt > .fa").click()
 
+    def go_to_project(self, s):
+        wd = self.app.wd
+        wd.get(self.app.cms_url)
+        self.open_projects_menu()
+        wd.find_element(By.LINK_TEXT, s).click()
 
-
-
-
-
-
-
-
+    def edit_pool(self, project):
+        wd = self.app.wd
+        self.open_projects_menu()
+        # wd.find_element_by_link_text("Settings").click()
+        # wd.find_element_by_id("pool_id").click()
+        # Select(wd.find_element_by_id("pool_id")).select_by_visible_text(project.pool)
+        # wd.find_element_by_xpath("(//option[@value='1'])[3]").click()
+        # wd.find_element_by_id("btn_edit_project_save").click()
+        wd.find_element_by_link_text("Settings").click()
+        wd.find_element_by_id("pool_id").click()
+        Select(wd.find_element_by_id("pool_id")).select_by_visible_text(project.pool)
+        if project.pool == "main_pool":
+            wd.find_element_by_xpath("(//option[@value='2'])[3]").click()
+        else:
+            wd.find_element_by_xpath("(//option[@value='4'])[3]").click()
+        wd.find_element_by_id("btn_edit_project_save").click()

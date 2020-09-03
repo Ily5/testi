@@ -16,7 +16,7 @@
   "UsernameCms": "ikoshkin",
   "PasswordCms": "123456",
   "ProjectId": 109,
-  "Browser": "Remote",
+  "Browser": "firefox",
   "ApiHeaders":
                         {
                         "Content-type": "application/json",
