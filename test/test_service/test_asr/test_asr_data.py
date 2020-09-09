@@ -54,7 +54,7 @@ def test_asr(app, db, call):
     global gwer
     global div
     global mng_calls
-    time.sleep(9)
+    time.sleep(3)
     # check call status == "+OK" in rw base
     db.check_call_status(mng_calls[call.number])
 
