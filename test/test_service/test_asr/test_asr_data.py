@@ -49,7 +49,7 @@ def test_send_call(app, mdb, call):
     mng_calls = dict(zip(calls, ids))
 
 def test_sleep():
-    time.sleep(240)
+    time.sleep(40)
 
 @pytest.mark.parametrize("call", call_py, ids=[repr(x.number) for x in call_py])
 def test_asr(app, db, call):
