@@ -48,13 +48,15 @@ def test_send_call(app, mdb, call):
     calls.append(call.number)
     mng_calls = dict(zip(calls, ids))
 
+def test_sleep():
+    time.sleep(240)
 
 @pytest.mark.parametrize("call", call_py, ids=[repr(x.number) for x in call_py])
 def test_asr(app, db, call):
     global gwer
     global div
     global mng_calls
-    time.sleep(3)
+    # time.sleep(1)
     # check call status == "+OK" in rw base
     db.check_call_status(mng_calls[call.number])
 
