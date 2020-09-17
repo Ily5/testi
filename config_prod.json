@@ -19,7 +19,7 @@
   "Server": "",
   "Mongo_client": "mongodb://10.129.0.14:27017/",
   "ProjectId": 214,
-  "Browser": "Remote",
+  "Browser": "firefox",
   "ApiHeaders":
                         {
                         "Content-type": "application/json",

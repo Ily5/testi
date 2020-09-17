@@ -41,15 +41,15 @@ def test_edit_asr(app, pools, db, mdb):
         resp = app.api.initiate_release_call(app.project, "test_asr_901", "yandex", "oksana@yandex")
         assert resp.status_code == 200
         call_id = app.asr.get_data(resp)
-        time.sleep(60)
+        time.sleep(75)
     with allure.step("Проверяем результаты распознование яндекс из rw базы"):
         db.create_connect(database["rw"][str(pools)])
         detected = db.get_detected_speech(call_id)
         detected= list(set(detected))
         print(detected)
         matches = ["тарифный", "план"]
-        assert all(x in detected for x in matches)
-        # TODO: for cycle here
+        assert any(x in detected for x in matches)
+        # TODO: for cycle here and wait for speak in mongodb and queue defer
     with allure.step("Проверяем результаты синтеза яндекс из mongodb"):
         mongo_array = mdb.request({"main_id": int(call_id)})
         speak = mdb.parse(result=mongo_array, array="actions", key="speak", value="action_data")
@@ -59,15 +59,14 @@ def test_edit_asr(app, pools, db, mdb):
         resp = app.api.initiate_release_call(app.project, "test_asr_901", "google", "ru-RU-Wavenet-A@google")
         assert resp.status_code == 200
         call_id = app.asr.get_data(resp)
-        time.sleep(60)
+        time.sleep(75)
     with allure.step("Проверяем результаты распознование google из rw базы"):
         db.create_connect(database["rw"][str(pools)])
         detected = db.get_detected_speech(call_id)
         detected= list(set(detected))
         matches = ["тарифный", "план"]
-        assert all(x in detected for x in matches)
+        assert any(x in detected for x in matches)
     with allure.step("Проверяем результаты синтеза google из mongodb"):
         mongo_array = mdb.request({"main_id": int(call_id)})
         speak = mdb.parse(result=mongo_array, array="actions", key="speak", value="action_data")
         assert speak == '"Hello"'
-
