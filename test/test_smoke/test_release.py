@@ -41,7 +41,10 @@ def test_edit_asr(app, pools, db, mdb):
         resp = app.api.initiate_release_call(app.project, "test_asr_901", "yandex", "oksana@yandex")
         assert resp.status_code == 200
         call_id = app.asr.get_data(resp)
-        time.sleep(100)
+        app.page.check_navigate_elements()
+        time.sleep(50)
+        app.page.check_navigate_elements()
+        time.sleep(50
     with allure.step("Проверяем результаты распознование яндекс из rw базы"):
         db.create_connect(database["rw"][str(pools)])
         detected = db.get_detected_speech(call_id)
@@ -59,7 +62,10 @@ def test_edit_asr(app, pools, db, mdb):
         resp = app.api.initiate_release_call(app.project, "test_asr_901", "google", "ru-RU-Wavenet-A@google")
         assert resp.status_code == 200
         call_id = app.asr.get_data(resp)
-        time.sleep(100)
+        pp.page.check_navigate_elements()
+        time.sleep(50)
+        app.page.check_navigate_elements()
+        time.sleep(50
     with allure.step("Проверяем результаты распознование google из rw базы"):
         db.create_connect(database["rw"][str(pools)])
         detected = db.get_detected_speech(call_id)
