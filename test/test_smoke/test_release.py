@@ -51,7 +51,7 @@ def test_edit_asr(app, pools, db, mdb):
         detected = db.get_detected_speech(call_id)
         detected= list(set(detected))
         print(detected)
-        matches = ["тарифный", "план"]
+        matches = ["тарифный", "план", "включайся"]
         assert any(x in detected for x in matches)
         # TODO: for cycle here
     with allure.step("Проверяем результаты синтеза яндекс из mongodb"):
@@ -71,7 +71,7 @@ def test_edit_asr(app, pools, db, mdb):
         db.create_connect(database["rw"][str(pools)])
         detected = db.get_detected_speech(call_id)
         detected= list(set(detected))
-        matches = ["тарифный", "план"]
+        matches = ["тарифный", "план", "включайся"]
         assert any(x in detected for x in matches)
     with allure.step("Проверяем результаты синтеза google из mongodb"):
         mongo_array = mdb.request({"main_id": int(call_id)})
