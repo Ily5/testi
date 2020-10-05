@@ -44,7 +44,7 @@ def test_edit_asr(app, pools, db, mdb):
         app.page.check_navigate_elements()
         time.sleep(50)
         app.page.check_navigate_elements()
-        time.sleep(50
+        time.sleep(50)
     with allure.step("Проверяем результаты распознование яндекс из rw базы"):
         db.create_connect(database["rw"][str(pools)])
         detected = db.get_detected_speech(call_id)
@@ -65,7 +65,7 @@ def test_edit_asr(app, pools, db, mdb):
         pp.page.check_navigate_elements()
         time.sleep(50)
         app.page.check_navigate_elements()
-        time.sleep(50
+        time.sleep(50)
     with allure.step("Проверяем результаты распознование google из rw базы"):
         db.create_connect(database["rw"][str(pools)])
         detected = db.get_detected_speech(call_id)
