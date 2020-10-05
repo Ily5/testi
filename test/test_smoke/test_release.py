@@ -34,6 +34,7 @@ def test_auth_cms(app, mdb):
 @pytest.mark.parametrize("pools", pools_py, ids=[repr(x) for x in pools_py])
 def test_edit_asr(app, pools, db, mdb):
     with allure.step("Задаём Pool"):
+        app.page.go_to_project("Release_run")
         time.sleep(3)
         app.page.edit_pool(Project(pool=pools))
     with allure.step("Отправляем звонок на api"):
@@ -62,7 +63,7 @@ def test_edit_asr(app, pools, db, mdb):
         resp = app.api.initiate_release_call(app.project, "test_asr_901", "google", "ru-RU-Wavenet-A@google")
         assert resp.status_code == 200
         call_id = app.asr.get_data(resp)
-        pp.page.check_navigate_elements()
+        app.page.check_navigate_elements()
         time.sleep(50)
         app.page.check_navigate_elements()
         time.sleep(50)
