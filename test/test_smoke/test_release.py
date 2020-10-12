@@ -4,7 +4,7 @@ import allure
 import pytest
 import time
 
-pools_py = ["main_pool"]
+pools_py = ["test_pool"]
 database = {"rw":
                  {"test_pool": {"database": "test_pool_pbx",
                          "user": "postgres",
