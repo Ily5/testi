@@ -1,5 +1,3 @@
-from fixture.asr import AsrHelper
-from fixture.api import ApiHelper, PoolApiHelper
 import allure
 import pytest
 import time
@@ -30,9 +28,6 @@ database = {"rw":
 speech_engine = {"yandex": "oksana@yandex", "google": "ru-RU-Wavenet-A@google"}
 
 
-# speech_engine = {"yandex": "oksana@yandex"}
-
-
 @allure.feature("Проверка работы cms")
 def test_auth_cms(app):
     time.sleep(3)
@@ -48,21 +43,17 @@ def test_auth_cms(app):
 @pytest.mark.parametrize("pools", pools_py, ids=[repr(x) for x in pools_py])
 def test_edit_asr(app, pools, db, mdb):
     with allure.step("Задаём Pool"):
-        # app.page.edit_pool(Project(pool=pools)
         db.create_connect(database["cms"])
         pool_id = [i[0] for i in (db.select_data('server_pools', 'name', 'id', pools))][0]
-        # print("pool_id is %s" % pool_id)
         db.change_project_data("pool_id", pool_id, app.project)
-        # db.change_pool_id(2,app.project)
-        # print(db.select_data('projects', 'id', 'pool_id', app.project))
 
     with allure.step("Убираем звонки из queue api"):
-        app.p_api.queue_clean(app.project)   # papi
+        app.p_api.queue_clean(app.project)   #
     for asr, tts in speech_engine.items():
         with allure.step("Отправляем звонок на api"):
-            resp = app.api.initiate_release_call(app.project, "test_asr_901", asr, tts) # api
+            resp = app.api.initiate_release_call(app.project, "test_asr_901", asr, tts)
             assert resp.status_code == 200
-            call_id = app.asr.get_data(resp, "call_id")  # asr
+            call_id = app.asr.get_data(resp, "call_id")
 
         with allure.step("Проверяем результаты распознование %s из rw базы" % asr):
             db.create_connect(database["rw"][str(pools)])
@@ -75,5 +66,4 @@ def test_edit_asr(app, pools, db, mdb):
         with allure.step("Проверяем результаты синтеза %s из mongodb" % asr):
             mongo_array = mdb.request({"main_id": call_id})
             speak = mdb.parse(result=mongo_array, array="actions", key="speak", value="action_data")
-            print(speak)
             assert speak == '"Hello"'
