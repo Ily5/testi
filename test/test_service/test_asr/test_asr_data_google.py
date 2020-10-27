@@ -16,13 +16,11 @@ calls = []
 mng_calls = {}
 
 # open json file send params to call_py
-# with open("data_test.json", encoding='utf-8') as json_file:
-with open(sys.path[1] + "/data2.json", encoding='utf-8') as json_file:
+with open(sys.path[1] + "/data.json", encoding='utf-8') as json_file:
     call = json.load(json_file)
     call_py = []
     for i in range(len(call)):
         call_py.append(Numbers(number=call[i]["number"], transcript=call[i]["transcript"]))
-
 
 # with open("data_test.json", encoding='utf-8') as json_file:
 #     call_test = json.load(json_file)
@@ -37,9 +35,8 @@ def test_send_call(app, mdb, call):
     global calls
     global mng_calls
     # initiate call with central api
-
-    resp = app.api.initiate_call(app.project, call.number)
-    time.sleep(10)
+    resp = app.api.initiate_release_call(app.project, call.number, "google", "ru-RU-Wavenet-A@google")
+    time.sleep(5)
     logging.info("api_response : %s " % (resp.json()))
     logging.info("number: %s   human_transcript : %s " % (call.number, call.transcript))
     assert resp.status_code == 200
@@ -51,14 +48,14 @@ def test_send_call(app, mdb, call):
     mng_calls = dict(zip(calls, ids))
 
 def test_sleep():
-    time.sleep(40)
+    time.sleep(240)
 
 @pytest.mark.parametrize("call", call_py, ids=[repr(x.number) for x in call_py])
 def test_asr(app, db, call):
     global gwer
     global div
     global mng_calls
-    time.sleep(3)
+    # time.sleep(9)
     # check call status == "+OK" in rw base
     db.check_call_status(mng_calls[call.number])
 
@@ -70,7 +67,6 @@ def test_asr(app, db, call):
     div += 1
     logging.info("call count : %s " % div)
     logging.info("stream error rate : %s " % (gwer / div))
-
 
 # @pytest.mark.parametrize("call", call_py, ids=[repr(x.number) for x in call_py])
 # def test_call(app, mdb, call):
@@ -122,3 +118,4 @@ def test_asr(app, db, call):
 #     logging.info("call count : %s " % div)
 #     logging.info("stream error rate : %s " % (gwer / div))
 #     print(gwer / div)
+
