@@ -21,7 +21,7 @@ def app(request):
                                   api_headers=config["ApiHeaders"], api_methods=config["ApiMethods"],
                                   pool_api=config["PoolApiUrl"], p_api_headers=config["PoolApiHeaders"],
                                   project=config["ProjectId"], rwdb=config["Postgres"]["RW"],
-                                  cms_db=config["Postgres"]["CMS"], mdb = config["Mongo_client"])
+                                  cms_db=config["Postgres"]["CMS"], mdb=config["Mongo_client"])
             fixture.session.login(username=config["UsernameCms"], password=config["PasswordCms"])
 
     def done():
@@ -42,6 +42,14 @@ def db(request):
         fixture = Connector(data=config["Postgres"]["RW"])
     request.addfinalizer(fixture.cancel)
     return fixture
+
+# @pytest.fixture(scope="session")
+# def api(request):
+#     with open(request.config.getoption("--config")) as cfg:
+#         config = json.load(cfg)
+#         fixture = Connector(data=config["Postgres"]["RW"])
+#     request.addfinalizer(fixture.cancel)
+#     return fixture
 
 
 @pytest.fixture(scope="session")
