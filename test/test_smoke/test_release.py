@@ -4,8 +4,7 @@ import allure
 import pytest
 import time
 
-pools_py = ["test_pool",
-            "main_pool"]
+pools_py = ["test_pool"]
 database = {"rw":
                  {"test_pool": {"database": "test_pool_pbx",
                          "user": "postgres",
@@ -34,6 +33,7 @@ def test_auth_cms(app, mdb):
 @pytest.mark.parametrize("pools", pools_py, ids=[repr(x) for x in pools_py])
 def test_edit_asr(app, pools, db, mdb):
     with allure.step("Задаём Pool"):
+        app.page.go_to_project("Release_run")
         time.sleep(3)
         app.page.edit_pool(Project(pool=pools))
     with allure.step("Отправляем звонок на api"):
@@ -41,14 +41,17 @@ def test_edit_asr(app, pools, db, mdb):
         resp = app.api.initiate_release_call(app.project, "test_asr_901", "yandex", "oksana@yandex")
         assert resp.status_code == 200
         call_id = app.asr.get_data(resp)
-        time.sleep(60)
+        app.page.check_navigate_elements()
+        time.sleep(50)
+        app.page.check_navigate_elements()
+        time.sleep(50)
     with allure.step("Проверяем результаты распознование яндекс из rw базы"):
         db.create_connect(database["rw"][str(pools)])
         detected = db.get_detected_speech(call_id)
         detected= list(set(detected))
         print(detected)
-        matches = ["тарифный", "план"]
-        assert all(x in detected for x in matches)
+        matches = ["тарифный", "план", "включайся"]
+        assert any(x in detected for x in matches)
         # TODO: for cycle here
     with allure.step("Проверяем результаты синтеза яндекс из mongodb"):
         mongo_array = mdb.request({"main_id": int(call_id)})
@@ -59,13 +62,16 @@ def test_edit_asr(app, pools, db, mdb):
         resp = app.api.initiate_release_call(app.project, "test_asr_901", "google", "ru-RU-Wavenet-A@google")
         assert resp.status_code == 200
         call_id = app.asr.get_data(resp)
-        time.sleep(60)
+        app.page.check_navigate_elements()
+        time.sleep(50)
+        app.page.check_navigate_elements()
+        time.sleep(50)
     with allure.step("Проверяем результаты распознование google из rw базы"):
         db.create_connect(database["rw"][str(pools)])
         detected = db.get_detected_speech(call_id)
         detected= list(set(detected))
-        matches = ["тарифный", "план"]
-        assert all(x in detected for x in matches)
+        matches = ["тарифный", "план", "включайся"]
+        assert any(x in detected for x in matches)
     with allure.step("Проверяем результаты синтеза google из mongodb"):
         mongo_array = mdb.request({"main_id": int(call_id)})
         speak = mdb.parse(result=mongo_array, array="actions", key="speak", value="action_data")
