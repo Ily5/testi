@@ -48,7 +48,7 @@ def test_edit_asr(app, pools, db, mdb):
         db.change_project_data("pool_id", pool_id, app.project)
 
     with allure.step("Убираем звонки из queue api"):
-        app.p_api.queue_clean(app.project)   #
+        app.p_api.queue_clean(app.project)
     for asr, tts in speech_engine.items():
         with allure.step("Отправляем звонок на api"):
             resp = app.api.initiate_release_call(app.project, "test_asr_901", asr, tts)
