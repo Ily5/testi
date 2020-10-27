@@ -26,8 +26,5 @@ def test_edit_project(app):
     # app.page.edit(Project())
 
 
-@allure.feature("Проверка работы с проектами")
-@allure.story("Изменение параметров распознавания")
-
 def test_change_voice_params(app):
     app.page.edit_voice_param(Project(tts="ru-RU-Wavenet-A@google", asr="google"))
