@@ -35,8 +35,7 @@ def test_send_call(app, mdb, call):
     global calls
     global mng_calls
     # initiate call with central api
-
-    resp = app.api.initiate_call(app.project, call.number)
+    resp = app.api.initiate_release_call(app.project, call.number, "google", "ru-RU-Wavenet-A@google")
     time.sleep(5)
     logging.info("api_response : %s " % (resp.json()))
     logging.info("number: %s   human_transcript : %s " % (call.number, call.transcript))
@@ -49,14 +48,14 @@ def test_send_call(app, mdb, call):
     mng_calls = dict(zip(calls, ids))
 
 def test_sleep():
-    time.sleep(40)
+    time.sleep(240)
 
 @pytest.mark.parametrize("call", call_py, ids=[repr(x.number) for x in call_py])
 def test_asr(app, db, call):
     global gwer
     global div
     global mng_calls
-    # time.sleep(1)
+    # time.sleep(9)
     # check call status == "+OK" in rw base
     db.check_call_status(mng_calls[call.number])
 
