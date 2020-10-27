@@ -1,0 +1,37 @@
+{
+  "CmsUrl": "https://cms-test.neuro.net/",
+  "ApiEndpoint": "https://api-test.neuro.net/api/v1/",
+  "PoolApiUrl": "http://10.129.0.9:8080",
+  "Postgres": {"RW":{"database": "pbx",
+                      "user": "postgres",
+                      "password": "",
+                      "host": "10.129.0.9",
+                      "port": 5436},
+              "CMS": {"database": "pbx",
+                      "user": "postgres",
+                      "password": "",
+                      "host": "10.129.0.9",
+                      "port": 5433}
+  },
+  "UsernameCms": "ikoshkin",
+  "PasswordCms": "123456",
+  "ProjectId": 109,
+  "Browser": "firefox",
+  "ApiHeaders":
+                        {
+                        "Content-type": "application/json",
+                        "Accept": "text/plain",
+                        "Content-Encoding": "utf-8",
+                        "Authorization": "Basic aWtvc2hraW46MTIzNDU2",
+                        "Host": "api-test.neuro.net"
+                        },
+  "ApiMethods":         [
+                        "get_agents", "set_agent_param", "get_agent_params", "get_agent_param",
+                        "get_initial_entities", "get_initial_entity", "set_initial_entity", "delete_initial_entity",
+                        "get_output_entity", "get_output_entities", "set_output_entity", "delete_output_entity",
+                        "initiate_call", "get_data_by_bulk_id", "get_data_by_call_group_id", "get_data_by_timeslot",
+                        "get_call_records"
+  ],
+  "PoolApiHeaders": {"Host": "10.129.0.9:8080",
+                        "Connection": "keep-alive"}
+}

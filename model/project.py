@@ -1,8 +1,8 @@
 class Project:
 
-    def __init__(self, name, description, not_before, not_after, delay, count, channel,
-                 flag, api_url, start_unit, record_path,caller_id, before_call_unit,
-                 after_call_unit, routing_channel_limit, total_channel_limit, tts):
+    def __init__(self, name=None, description=None, not_before=None, not_after=None, delay=None, count=None, channel=None,
+                 flag=None, api_url=None, start_unit=None, record_path=None,caller_id=None, before_call_unit=None,
+                 after_call_unit=None, routing_channel_limit=None, total_channel_limit=None, tts=None, asr=None, pool=None):
         self.name = name
         self.description = description
         self.not_before = not_before
@@ -20,5 +20,13 @@ class Project:
         self.routing_channel_limit = routing_channel_limit
         self.total_channel_limit = total_channel_limit
         self.tts = tts
+        self.asr = asr
+        self.pool = pool
 
+
+class Pools:
+    def __init__(self, name=None, description=None, not_before=None, not_after=None, delay=None, count=None, channel=None,
+                 flag=None, api_url=None, start_unit=None, record_path=None,caller_id=None, before_call_unit=None,
+                 after_call_unit=None, routing_channel_limit=None, total_channel_limit=None, tts=None, asr=None, pool=None):
+        self.name = name
 

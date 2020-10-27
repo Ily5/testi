@@ -1,7 +1,19 @@
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.wait import WebDriverWait
+from model.record_entity import RecordEntityFile
+import allure
+import random
+import string
+import re
+import pytest
+import time
+
+
+def generate(prefix):
+    return prefix + "".join([random.choice(string.ascii_letters + string.digits + " ") for i in range(10)])
 
 
 class PageHelper:
@@ -59,6 +71,7 @@ class PageHelper:
         wd.find_element_by_xpath("//option[@value='yandex']").click()
         wd.find_element_by_id("tts").send_keys(project.tts)
         wd.find_element_by_id("btn_add_project_save").click()
+
 
     def edit(self, project):
         wd = self.app.wd
@@ -151,7 +164,6 @@ class PageHelper:
         Select(wd.find_element_by_id("language-feild")).select_by_visible_text("Russian (Russia)-ru-RU")
         wd.find_element_by_xpath("//option[@value='ru-RU']").click()
         wd.find_element_by_id("file").send_keys(r"/tmp/audio.wav")
-        #wd.find_element_by_id("file").send_keys(r"C:\tets_prompt_hello.wav")
         wd.find_element_by_id("btn-add-form-subm").click()
         # wd.find_element_by_id("btn-edit-file-form-subm").click()
         # app.wd.find_element_by_xpath("// div[ @ id = 'file_add_modal'] / div").click()
@@ -169,11 +181,11 @@ class PageHelper:
         wd.find_element_by_id("description").send_keys(desc)
         wd.find_element_by_id("btn-add-form-subm").submit()
 
-    def open_prompts_page(self):
+    def open_prompts_page(self, p):
         wd = self.app.wd
-        wd.get("https://cms-test.neuro.net/promts_manage")
+        wd.get(self.app.cms_url)
         wd.find_element_by_link_text("Records").click()
-        wd.find_element_by_link_text("Prompts").click()
+        wd.find_element_by_link_text(p).click()
 
     def get_report(self):
         wd = self.app.wd
@@ -189,6 +201,152 @@ class PageHelper:
 
     def get_log(self):
         wd = self.app.wd
+        with allure.step("Открываем страницу с отчётами о звонках"):
+            wd.find_element_by_link_text("Call Logs").click()
+        with allure.step("Задаём промежуток времени"):
+            wd.find_element_by_id("date_start").send_keys("09/06/2020 08:25")
+            wd.find_element_by_id("date_end").send_keys("09/07/2020 08:25")
+        with allure.step("Выгружаем полученную выборку"):
+            wd.find_element_by_xpath("//button[@type='submit']").click()
+            wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button/span").click()
+            wd.find_element_by_xpath("(//button[@type='button'])[2]").click()
+            wd.find_element_by_xpath("//div[@id='call_list_table_wrapper']/div/button[3]/span").click()
+            wd.find_element_by_xpath("//table[@id='call_list_table']/tbody/tr/td[5]/button/span").click()
+
+    def open_prompts_entity(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("Records").click()
+        wd.find_element_by_xpath("//a[contains(@href, '/promts_entity_manage')]").click()
+
+    def create_record_entity(self, entity):
+        wd = self.app.wd
+        self.open_prompts_entity()
+        wd.find_element_by_id("add_promt_entity").click()
+        wd.find_element_by_id("name").send_keys(entity.name)
+        wd.find_element_by_id("value").send_keys(entity.value)
+        wd.find_element_by_id("description").send_keys(entity.desc)
+        wd.find_element_by_id("btn-add-form-subm").click()
+
+    def add_file_to_entity(self, file):
+        wd = self.app.wd
+        self.open_prompts_entity()
+        wd.find_element_by_xpath("//i").click()
+        time.sleep(3)
+        wd.find_element_by_xpath("(//button[@type='button'])[4]").click()
+        # wd.find_element_by_id("text").click()
+        # wd.find_element_by_id("text").send_keys(file.f_txt)
+        # wd.find_element_by_id("flag-feild").click()
+        # wd.find_element_by_id("flag-feild").send_keys(file.f_flag)
+        time.sleep(3)
+        # wd.find_element_by_id("text").click()
+        # wd.find_element_by_id("text").clear()
+        wd.find_element_by_id("text").send_keys(file.f_txt)
+        # wd.find_element_by_id("flag-feild").click()
+        # wd.find_element_by_id("flag-feild").clear()
+        wd.find_element_by_id("flag-feild").send_keys(file.f_flag)
+        # wd.find_element_by_id("file").click()
+        # time.sleep(3)
+        # wd.find_element_by_id("file").clear()
+        # time.sleep(3)
+        wd.find_element_by_name("file").send_keys(file.f)
+        wd.find_element_by_id("language-feild").click()
+        Select(wd.find_element_by_id("language-feild")).select_by_visible_text("Russian (Russia)-ru-RU")
+        wd.find_element_by_xpath("//option[@value='ru-RU']").click()
+        wd.find_element_by_id("btn-add-form-subm").click()
+        wd.find_element_by_id("btn-add-form-subm").click()
+        # WebDriverWait(wd, 2).until(EC.invisibility_of_element_located(
+        #     (By.XPATH, "//div[@class='ivu-modal-wrap vertical-center-modal circuit-loading-modal']")))
+        self.check_element("//table[@id='promt_entity_files_table']/tbody/tr/td")
+        # time.sleep(5)
+        for i in range(60):
+            try:
+                if re.search(r"^[\s\S]*//h4[\s\S]*$", wd.find_element_by_css_selector("BODY").text): break
+            except:
+                wd.find_element_by_id("btn-add-form-subm").click()
+            time.sleep(1)
+        else:
+            self.add_file_to_entity((RecordEntityFile(f=r"/home/ilya/docs/73.wav", f_txt=generate("file_ "),
+                                                      f_flag="test")))
+
+    def check_element(self, xpath):
+        wd = self.app.wd
+        for i in range(60):
+            try:
+                if wd.find_element_by_xpath(
+                        xpath).is_displayed(): break
+            except:
+                pass
+            time.sleep(1)
+        else:
+            self.app.fail("time out")
+
+    def delete_record_entity(self):
+        wd = self.app.wd
+        self.open_prompts_entity()
+        self.check_element("//table[@id='promts_entity_table']/tbody/tr/td")
+        wd.find_element_by_xpath("(//button[@type='button'])[5]").click()
+
+    def recordprompt(self):
+        wd = self.app.wd
+        # wd.get("https://cms-test.neuro.net/login?next=%2F")
+        # wd.set_window_size(1936, 1176)
+        # wd.find_element(By.ID, "username").click()
+        # wd.find_element(By.ID, "username").send_keys("ikoshkin")
+        # wd.find_element(By.ID, "password_field").send_keys("123456")
+        # wd.find_element(By.CSS_SELECTOR, ".btn").click()
+        wd.find_element(By.LINK_TEXT, "Records").click()
+        wd.find_element(By.LINK_TEXT, "Prompts").click()
+        wd.find_element(By.ID, "add_promt").click()
+        wd.find_element(By.ID, "name").click()
+        wd.find_element(By.ID, "name").send_keys("ytuyiyuiyuiyui")
+        wd.find_element(By.ID, "description").click()
+        wd.find_element(By.ID, "description").send_keys("yuiyuiyu")
+        wd.find_element(By.ID, "btn-add-form-subm").click()
+        wd.find_element(By.CSS_SELECTOR, ".odd .btn-edit-promt > .fa").click()
+        wd.find_element(By.CSS_SELECTOR, ".btn:nth-child(1)").click()
+        element = wd.find_element(By.CSS_SELECTOR, ".btn:nth-child(1)")
+        actions = ActionChains(wd)
+        actions.move_to_element(element).perform()
+        element = wd.find_element(By.CSS_SELECTOR, "body")
+        actions = ActionChains(wd)
+        actions.move_to_element(element, 0, 0).perform()
+        wd.find_element(By.ID, "text").click()
+        wd.find_element(By.ID, "text").send_keys("uiuui")
+        wd.find_element(By.ID, "flag-feild").click()
+        wd.find_element(By.ID, "flag-feild").send_keys("uiuiii")
+        wd.find_element(By.ID, "language-feild").click()
+        dropdown = wd.find_element(By.ID, "language-feild")
+        dropdown.find_element(By.XPATH, "//option[. = 'Russian (Russia)-ru-RU']").click()
+        wd.find_element(By.CSS_SELECTOR, "#language-feild > option:nth-child(2)").click()
+        wd.find_element(By.ID, "file").click()
+        wd.find_element(By.ID, "file").send_keys("C:\\fakepath\\6111.wav")
+        wd.find_element(By.ID, "btn-add-form-subm").click()
+        wd.find_element(By.LINK_TEXT, "Records").click()
+        wd.find_element(By.LINK_TEXT, "Prompts").click()
+        wd.find_element(By.CSS_SELECTOR, ".odd .btn-del-promt > .fa").click()
+
+    def go_to_project(self, s):
+        wd = self.app.wd
+        wd.get(self.app.cms_url)
+        self.open_projects_menu()
+        wd.find_element(By.LINK_TEXT, s).click()
+
+    def edit_pool(self, project):
+        wd = self.app.wd
+        self.open_projects_menu()
+        # wd.find_element_by_link_text("Settings").click()
+        # wd.find_element_by_id("pool_id").click()
+        # Select(wd.find_element_by_id("pool_id")).select_by_visible_text(project.pool)
+        # wd.find_element_by_xpath("(//option[@value='1'])[3]").click()
+        # wd.find_element_by_id("btn_edit_project_save").click()
+        wd.find_element_by_link_text("Settings").click()
+        wd.find_element_by_id("pool_id").click()
+        Select(wd.find_element_by_id("pool_id")).select_by_visible_text(project.pool)
+        if project.pool == "main_pool":
+            wd.find_element_by_xpath("(//option[@value='2'])[3]").click()
+        else:
+            wd.find_element_by_xpath("(//option[@value='4'])[3]").click()
+        wd.find_element_by_id("btn_edit_project_save").click()
         wd.find_element_by_link_text("Call Logs").click()
         wd.find_element_by_id("date_start").send_keys("09/06/2020 08:25")
         wd.find_element_by_id("date_end").send_keys("09/07/2020 08:25")

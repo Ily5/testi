@@ -3,8 +3,7 @@ import pytest
 import time
 
 project = 214
-# pools_py = ["test_pool", "main_pool"]
-pools_py = ["test_pool"]
+pools_py = ["test_pool", "main_pool"]
 database = {"rw":
                 {"test_pool": {"database": "test_pool_pbx",
                                "user": "postgres",
@@ -60,6 +59,7 @@ def test_edit_asr(app, pools, db, mdb):
             db.create_connect(database["rw"][str(pools)])
             z = mdb.check_value({"main_id": call_id}, 'result', '+OK')
             detected = list(set(db.get_detected_speech_from_call_id(call_id)))
+            # detected = list(set(detected))
             matches = ["тарифный", "план", "линейки", "новой",  "тарифные", "планы", "при", "этом", "вас"]
             assert any(x in detected for x in matches)
 
