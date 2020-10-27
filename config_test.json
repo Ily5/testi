@@ -15,9 +15,6 @@
   },
   "UsernameCms": "ikoshkin",
   "PasswordCms": "123456",
-  "Pool": "",
-  "Server": "",
-  "Mongo_client": "mongodb://10.129.0.9:27017/",
   "ProjectId": 109,
   "Browser": "firefox",
   "ApiHeaders":
