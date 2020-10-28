@@ -38,7 +38,7 @@ def test_send_call(app, mdb, call):
     global mng_calls
     # initiate call with central api
 
-    resp = app.api.initiate_call(app.project, call.number)
+    resp = app.api.initiate_call(app.project, call.number, "google", "ru-RU-Wavenet-A@google")
     time.sleep(7)
     logging.info("api_response : %s " % (resp.json()))
     logging.info("number: %s   human_transcript : %s " % (call.number, call.transcript))

@@ -36,26 +36,26 @@ def app(request):
     return fixture
 
 
-@pytest.fixture(scope="session")
-def app_3(request):
-    global fixture
-    if fixture is None:
-        browser = request.config.getoption("--browser")
-        with open(request.config.getoption("--config")) as cfg:
-            config = json.load(cfg)
-            fixture = ApplicationNewVersion(browser=browser, cms_url=config["CmsUrl"], api_url=config["ApiEndpoint"],
-                                  api_headers=config["ApiHeaders"], api_methods=config["ApiMethods"],
-                                  pool_api=config["PoolApiUrl"], p_api_headers=config["PoolApiHeaders"],
-                                  project=config["ProjectId"], rwdb=config["Postgres"]["RW"],
-                                  cms_db=config["Postgres"]["CMS"], mdb=config["Mongo_client"])
-            fixture.session.login(username=config["UsernameCms"], password=config["PasswordCms"])
-
-    def done():
-        try:
-            fixture.session.logout(username=config["UsernameCms"])
-            fixture.cancel()
-        except:
-            pass
+# @pytest.fixture(scope="session")
+# def app_3(request):
+#     global fixture
+#     if fixture is None:
+#         browser = request.config.getoption("--browser")
+#         with open(request.config.getoption("--config")) as cfg:
+#             config = json.load(cfg)
+#             fixture = ApplicationNewVersion(browser=browser, cms_url=config["CmsUrl"], api_url=config["ApiEndpoint"],
+#                                   api_headers=config["ApiHeaders"], api_methods=config["ApiMethods"],
+#                                   pool_api=config["PoolApiUrl"], p_api_headers=config["PoolApiHeaders"],
+#                                   project=config["ProjectId"], rwdb=config["Postgres"]["RW"],
+#                                   cms_db=config["Postgres"]["CMS"], mdb=config["Mongo_client"])
+#             fixture.session.login(username=config["UsernameCms"], password=config["PasswordCms"])
+#
+#     def done():
+#         try:
+#             fixture.session.logout(username=config["UsernameCms"])
+#             fixture.cancel()
+#         except:
+#             pass
 
     request.addfinalizer(done)
     return fixture
