@@ -37,6 +37,7 @@ def app(request):
 
 
 @pytest.fixture(scope="session")
+# @pytest.fixture()
 def app_3(request):
     global fixture
     if fixture is None:
@@ -77,5 +78,5 @@ def mdb(request):
 
 
 def pytest_addoption(parser):
-    parser.addoption("--browser", action="store", default="firefox")
+    parser.addoption("--browser", action="store", default="remote")
     parser.addoption("--config", action="store", default=ROOT_DIR + "\config_test.json")

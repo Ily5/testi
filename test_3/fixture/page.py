@@ -23,7 +23,6 @@ class PageHelper:
 
     def check_menu(self):
         wd = self.app.wd
-        wd.find_element_by_css_selector("svg").click()
         wd.find_element_by_xpath("//a[3]/div/span").click()
         wd.find_element_by_xpath("//a[4]/div/span").click()
         wd.find_element_by_xpath("//a[5]/div/span").click()
