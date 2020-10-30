@@ -2,23 +2,21 @@ from selenium import webdriver
 import sys
 import logging
 
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from test_3.fixture.session import SessionHelper
+from test_3.fixture.page import PageHelper
 
-from fixture.session import SessionHelper
-from fixture.page import PageHelper
-from fixture.asr import AsrHelper
-from fixture.api import ApiHelper, PoolApiHelper
+from test_3.fixture.api import ApiHelper
 
 
 class ApplicationNewVersion:
 
-    def __init__(self, browser, cms_url, api_url, api_headers, api_methods, pool_api, p_api_headers,
-                 project, rwdb, cms_db, mdb):
+    # def __init__(self, browser, cms_url, api_url, api_headers, api_methods, pool_api, p_api_headers,
+    #              project, rwdb, cms_db, mdb):
+    def __init__(self, browser, cms_url):
+
         if browser == 'firefox':
-            # self.wd = webdriver.Firefox()
-            self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
+            self.wd = webdriver.Firefox()
+            # self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
 
         elif browser == 'chrome':
             self.wd = webdriver.Chrome()
@@ -38,7 +36,9 @@ class ApplicationNewVersion:
             )
 
         self.verificationErrors = []
-
+        self.wd.implicitly_wait(10)
+        self.cms_url = cms_url
+        self.api = ApiHelper(self)
         self.session = SessionHelper(self)
         self.page = PageHelper(self)
 
@@ -46,14 +46,9 @@ class ApplicationNewVersion:
                             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         logging.info("Fixture created")
 
-
     def open_login_page(self):
         wd = self.wd
-        wd.get(self.cms_url + "login")
-
-    def edit_logic_unit(self):
-        wd = self.wd
-        wd.find_element_by_xpath("//*[@id='add_action']").click()
+        wd.get(self.cms_url)
 
     def cancel(self):
         self.wd.quit()

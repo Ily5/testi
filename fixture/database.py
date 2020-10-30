@@ -42,6 +42,29 @@ class Connector:
             else:
                 continue
 
+    def wait_for_done(self, dialog_uuid):
+        timeout = time.time() + 600
+        conn = self.db_conn("SELECT result FROM dialog WHERE uuid = '%s'" % str(dialog_uuid))
+        while True:
+            if len(conn) > 0:
+                break
+            elif time.time() > timeout:
+                raise TimeoutError
+            else:
+                conn = self.db_conn("SELECT result FROM dialog WHERE uuid = '%s'" % str(dialog_uuid))
+                time.sleep(1)
+                continue
+        while True:
+            timeout = time.time() + 600
+            if conn[0][0] == "done":
+                break
+            elif time.time() > timeout:
+                raise TimeoutError
+            else:
+                conn = self.db_conn("SELECT result FROM dialog WHERE uuid = '%s'" % str(dialog_uuid))
+                time.sleep(1)
+                continue
+
     def get_detected_speech(self, call_id):
         detected = list(self.db_conn("SELECT action_data FROM call_stats WHERE ACTION = 'detected_speech' and uuid = '"
                                      + str(
@@ -70,12 +93,14 @@ class Connector:
             "UPDATE projects SET pool_id = 2 where id = 214")
 
     def select_data(self, table, column, sdata, data):
+
         return self.db_conn(
             "select {sdata} from {table} where {column} = '{data}'".format(table=table, sdata=sdata, column=column,
                                                                            data=data))
-        # return self.db_conn("select pool_id from projects where id = 214")
 
-# select id from server_pools where name = main_pool
+    def execute_call_data(self, table, data):
+        return self.db_conn(
+            "select action, data from {table} where dialog_id = {data} and data is not null".format(table=table, data=data))
 
 
 class MongoConnector:

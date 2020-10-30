@@ -100,7 +100,7 @@ class MediaApi:
 async def test_request(pid):
     print('#{pid} process started'.format(pid=pid))
     await asyncio.sleep(0.5)
-    a = MediaApi(pid, 'http://10.129.0.108:8088')
+    a = MediaApi(pid, 'http://10.129.0.12:8088')
     await a.originate()
     await a.write()
     # a.wait_for_answer()
