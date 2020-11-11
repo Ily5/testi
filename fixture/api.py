@@ -186,6 +186,7 @@ class PoolApiHelper:
     def queue_clean(self, p_id):
         parameters = {'project_id': str(p_id)}
         answer = requests.delete(self.url + '/queue', params=parameters)
+        # TODO assert
         return answer
 
     def queue_clean_call(self, p_id, c_id):

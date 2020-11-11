@@ -2,16 +2,16 @@
   "CmsUrl": "https://cms.neuro.net/",
   "ApiEndpoint": "https://api.neuro.net/api/v1/",
   "PoolApiUrl": "http://10.129.0.9:8080",
-  "Postgres": {"RW":{"database": "pbx",
+  "Postgres": {"RW":{"database": "test_pool_pbx",
                       "user": "postgres",
                       "password": "",
-                      "host": "10.129.0.9",
-                      "port": 5436},
+                      "host": "10.129.0.33",
+                      "port": 5432},
               "CMS": {"database": "pbx",
                       "user": "postgres",
                       "password": "",
-                      "host": "10.129.0.9",
-                      "port": 5433}
+                      "host": "10.129.0.7",
+                      "port": 5432}
   },
   "UsernameCms": "ikoshkin",
   "PasswordCms": "12345678",
@@ -35,6 +35,6 @@
                         "initiate_call", "get_data_by_bulk_id", "get_data_by_call_group_id", "get_data_by_timeslot",
                         "get_call_records"
   ],
-  "PoolApiHeaders": {"Host": "10.129.0.9:8080",
+  "PoolApiHeaders": {"Host": "10.129.0.26:8080",
                         "Connection": "keep-alive"}
 }

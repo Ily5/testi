@@ -1,7 +1,9 @@
 from fixture.application import Application
 from fixture.database import Connector, MongoConnector
+from test_3.fixture.application_3 import ApplicationNewVersion
 import pytest
 import json
+import sys
 import os
 
 fixture = None
@@ -35,6 +37,28 @@ def app(request):
 
 
 @pytest.fixture(scope="session")
+# @pytest.fixture()
+def app_3(request):
+    global fixture
+    if fixture is None:
+        browser = request.config.getoption("--browser")
+        with open(request.config.getoption("--config")) as cfg:
+            config = json.load(cfg)
+            fixture = ApplicationNewVersion(browser=browser, cms_url=config["CmsUrl3"])
+            # fixture.session.login(username=config["UsernameCms"], password=config["PasswordCms"])
+
+    def done():
+        try:
+            # fixture.session.logout(username=config["UsernameCms"])
+            fixture.cancel()
+        except:
+            pass
+
+    request.addfinalizer(done)
+    return fixture
+
+
+@pytest.fixture(scope="session")
 def db(request):
     with open(request.config.getoption("--config")) as cfg:
         config = json.load(cfg)
@@ -54,5 +78,5 @@ def mdb(request):
 
 
 def pytest_addoption(parser):
-    parser.addoption("--browser", action="store", default="firefox")
-    parser.addoption("--config", action="store", default=ROOT_DIR + "/config_test.json")
+    parser.addoption("--browser", action="store", default="remote")
+    parser.addoption("--config", action="store", default=ROOT_DIR + "\config_test.json")

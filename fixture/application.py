@@ -48,7 +48,7 @@ class Application:
             #     command_executor="http://selenoid:4444/wd/hub",
             #     desired_capabilities=capabilities)
 
-        # self.wd.implicitly_wait(120)
+        self.wd.implicitly_wait(10)
         self.cms_url = cms_url
         self.api_url = api_url
         self.api_headers = api_headers
@@ -92,11 +92,3 @@ class Application:
     def cancel(self):
         self.wd.quit()
 
-# def log():
-#     logger = logging.getLogger("Test_app")
-#     logger.setLevel(logging.INFO)
-#     fh = logging.FileHandler("test_app.log")
-#     formatter = logging.Formatter()
-#     fh.setFormatter(formatter)
-#     logger.addHandler(fh)
-#     logger.info("test started")

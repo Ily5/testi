@@ -36,5 +36,6 @@
                         "get_call_records"
   ],
   "PoolApiHeaders": {"Host": "10.129.0.9:8080",
-                        "Connection": "keep-alive"}
+                        "Connection": "keep-alive"},
+  "CmsUrl3": "https://cms-test-v3.neuro.net/auth/login?lng=en"
 }

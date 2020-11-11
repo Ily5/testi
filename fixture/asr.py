@@ -11,9 +11,9 @@ class AsrHelper:
         self.detect = []
         self.val = 0
 
-    def get_data(self, response):
+    def get_data(self, response, data):
         json = self.app.api.get_json(response.json())
-        return json["result"]["call_id"]
+        return json["result"][data]
 
     def get_wer(self, known, detected):
         extend = len(known)
