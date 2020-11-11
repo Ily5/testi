@@ -18,6 +18,13 @@ mng_calls = {}
 # open json file send params to call_py
 
 
+# open json file send params to call_py
+with open(sys.path[1] + "/data.json", encoding='utf-8') as json_file:
+    call = json.load(json_file)
+    call_py = []
+    for i in range(len(call)):
+        call_py.append(Numbers(number=call[i]["number"], transcript=call[i]["transcript"]))
+
 
 # with open("data_test.json", encoding='utf-8') as json_file:
 #     call_test = json.load(json_file)
@@ -45,8 +52,10 @@ def test_send_call(app, mdb, call):
     calls.append(call.number)
     mng_calls = dict(zip(calls, ids))
 
+
 def test_sleep():
     time.sleep(40)
+
 
 @pytest.mark.parametrize("call", call_py, ids=[repr(x.number) for x in call_py])
 def test_asr(app, db, call):
@@ -116,4 +125,3 @@ def test_asr(app, db, call):
 #     logging.info("call count : %s " % div)
 #     logging.info("stream error rate : %s " % (gwer / div))
 #     print(gwer / div)
-
