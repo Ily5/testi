@@ -82,7 +82,11 @@
       "agent_language": "ru-RU",
       "agent_tts": "oksana@yandex",
       "agent_pool_name": "test-pool",
-      "agent_trunk_name": "sip-client"
+      "agent_trunk_name": "sip-client",
+      "recall_count": 1,
+      "asr": "yandex",
+      "tts": "jane@yandex",
+      "language": "ru-RU"
     }
   }
 }
