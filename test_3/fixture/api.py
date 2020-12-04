@@ -81,25 +81,27 @@ class ApiHelper:
 
 class APIClientV3:
 
-    def __init__(self, base_url=None, token=None, company_uuid=None):
+    def __init__(self, base_url=None, token=None, refresh_token=None, test_data=None, path_end_point=None):
         self.base_url = base_url
         self.token = token
-        self.company_uuid = company_uuid
+        self.refresh_token = refresh_token
+        self.test_data = test_data
+        self.path_end_point = path_end_point
 
-    def request_send(self, method='GET', path=None, params=None, data=None):
+    def request_send(self, method='GET', path=None, **kwargs):
         if path is None:
             request_url = self.base_url
         else:
             request_url = self.base_url + path
         if method != 'GET':
             headers = {**{'content-type': "application/json"}, **self.token}
-            print(headers)
         else:
             headers = self.token
-        return requests.request(method=method, url=request_url, params=params, data=data, headers=headers)
+        return requests.request(method=method, url=request_url, headers=headers, **kwargs)
 
-    def get_token(self, login, password):
-        response = requests.request(url=self.base_url + '/api/v2/ext/auth', method='POST', auth=(login, password))
+    def get_api_token(self, login, password):
+        response = requests.request(method='POST', url=self.base_url + '/api/v2/ext/auth', auth=(login, str(password)))
         token = response.json()['token']
-        return {'Authorization': "Bearer %s" % token}
+        refresh_token = response.json()['refresh_token']
+        return {'Authorization': "Bearer %s" % token}, refresh_token
         # print(response)
