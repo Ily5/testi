@@ -64,7 +64,13 @@
     },
     "api": {
       "api_base_url": "https://api-test-v3.neuro.net",
-      "methods_end_point": {}
+      "methods_end_point": {
+        "post_auth": "/api/v2/ext/auth",
+        "post_update_token": "/api/v2/ext/auth/refresh",
+        "get_all_agents_company": "/api/v2/ext/company-agents",
+        "get_agent_settings": "/api/v2/ext/agent-settings/general",
+        "put_change_agent_settings": "/api/v2/ext/agent-settings/general"
+      }
     },
     "test_data": {
       "agent_uuid": "b0186434-7f0a-4778-9a2c-609f84342184",
