@@ -35,7 +35,7 @@ class Connector:
         timeout = time.time() + 600
         while True:
             conn = self.db_conn("SELECT result FROM calls WHERE main_id = %s" % call_id)
-            if conn[0][0] == "+OK":
+            if conn[0][0] == "+OK" and len(conn) > 0:
                 break
             elif time.time() > timeout:
                 raise TimeoutError
@@ -84,6 +84,8 @@ class Connector:
 
     def change_project_data(self, column, data, project_id):
         # print(self.conn)
+        if type(data) == str:
+            data = "'"+data+"'"
         return self.db_conn(
             "UPDATE projects SET {column}={data} where id = {id}".format(column=column, data=data, id=project_id))
 

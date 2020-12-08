@@ -5,7 +5,7 @@ import json
 import logging
 import os
 import sys
-
+from jiwer import wer
 logging.basicConfig(filename=sys.path[1] + "/log/test_asr.log", level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
@@ -17,7 +17,7 @@ mng_calls = {}
 
 # open json file send params to call_py
 # with open("data_test.json", encoding='utf-8') as json_file:
-with open(sys.path[1] + "/data.json", encoding='utf-8') as json_file:
+with open(sys.path[1] + "/data_test_asr.json", encoding='utf-8') as json_file:
     call = json.load(json_file)
     call_py = []
     for i in range(len(call)):
@@ -55,7 +55,7 @@ def test_asr(app, db, call, mdb):
     global gwer
     global div
     global mng_calls
-    time.sleep(7)
+    time.sleep(27)
     # check call status == "+OK" in rw base
     db.check_call_status(mng_calls[call.number])
     # mdb.check_value({"main_id": mng_calls[call.number]}, 'result', '+OK')
@@ -65,10 +65,26 @@ def test_asr(app, db, call, mdb):
     # get_detected_speech_from_call_id()
     logging.info("detected speech  %s" % detected)
     known = list(call.transcript.split(" "))
-    gwer += app.asr.get_wer(known, detected)
+
+
+    # gwer += app.asr.get_wer(known, detected)
+    # div += 1
+    # logging.info("call count : %s " % div)
+    # logging.info("stream error rate : %s " % (gwer / div))
+
+    print(wer(known,detected))
+    gwer += wer(known, detected)
     div += 1
+    print(gwer / div)
+    cer = wer(list("".join(known)), list("".join(detected)))
+    logging.info("call charachter error rate :%s " % cer)
+    print("cer is %s" % cer)
+    # print(list("".join(known)))
     logging.info("call count : %s " % div)
+    logging.info("call error rate: %s" % wer(known, detected))
     logging.info("stream error rate : %s " % (gwer / div))
+    # print(wer(known, detected))
+    # print((wer(known, detected))/div)
 
 
 # @pytest.mark.parametrize("call", call_py, ids=[repr(x.number) for x in call_py])

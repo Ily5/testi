@@ -37,7 +37,8 @@ class MediaApi:
     async def playback(self):
         await asyncio.sleep(random.randint(1, 3))
         json = {
-            "action": {"playback": "/neuro-files/22222.wav"},
+            # "action": {"playback": "/neuro-files/22222.wav"},
+            "action": {"playback": "/22222.wav"},
             "call": {"uuid": "%s" % str(self.uuid)}}
         response = await self.request('/calls/execute', method='PUT', json_body=dict(json))
         print('#{pid} {uuid} playback done, response: {response}'.format(pid=self.pid, uuid=self.uuid,
@@ -46,7 +47,7 @@ class MediaApi:
     async def set_background(self):
         await asyncio.sleep(random.randint(1, 3))
         json = {
-            "action": {"set_background": "/neuro-files/back.wav"},
+            "action": {"set_background": "/back.wav"},
             "call": {"uuid": "%s" % str(self.uuid)}}
         response = await self.request('/calls/execute', method='PUT', json_body=dict(json))
         print('#{pid} {uuid} set_background done, response: {response}'.format(pid=self.pid, uuid=self.uuid,
@@ -100,7 +101,7 @@ class MediaApi:
 async def test_request(pid):
     print('#{pid} process started'.format(pid=pid))
     await asyncio.sleep(0.5)
-    a = MediaApi(pid, 'http://10.129.0.12:8088')
+    a = MediaApi(pid, 'http://10.129.0.108:8088')
     await a.originate()
     await a.write()
     # a.wait_for_answer()

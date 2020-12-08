@@ -19,10 +19,10 @@ database = {"rw":
                  },
             "cms":
                 {"database": "pbx",
-                    "user": "postgres",
-                    "password": "",
-                    "host": "10.129.0.7",
-                    "port": 5432
+                 "user": "postgres",
+                 "password": "",
+                 "host": "10.129.0.7",
+                 "port": 5432
                  }
             }
 speech_engine = {"yandex": "oksana@yandex", "google": "ru-RU-Wavenet-A@google"}
@@ -46,7 +46,8 @@ def test_edit_asr(app, pools, db, mdb):
         db.create_connect(database["cms"])
         pool_id = [i[0] for i in (db.select_data('server_pools', 'name', 'id', pools))][0]
         db.change_project_data("pool_id", pool_id, app.project)
-
+    with allure.step("Задаём logic unit"):
+        db.change_project_data("start_unit", "Test_Unit", app.project)
     with allure.step("Убираем звонки из queue api"):
         app.p_api.queue_clean(app.project)
     for asr, tts in speech_engine.items():
@@ -60,10 +61,29 @@ def test_edit_asr(app, pools, db, mdb):
             z = mdb.check_value({"main_id": call_id}, 'result', '+OK')
             detected = list(set(db.get_detected_speech_from_call_id(call_id)))
             # detected = list(set(detected))
-            matches = ["тарифный", "план", "линейки", "новой",  "тарифные", "планы", "при", "этом", "вас"]
+            matches = ["тарифный", "план", "линейки", "новой", "тарифные", "планы", "при", "этом", "вас"]
             assert any(x in detected for x in matches)
 
         with allure.step("Проверяем результаты синтеза %s из mongodb" % asr):
             mongo_array = mdb.request({"main_id": call_id})
             speak = mdb.parse(result=mongo_array, array="actions", key="speak", value="action_data")
             assert speak == '"Hello"'
+
+
+@allure.feature("Проверка корректности работы распознавания для без входящего потока")
+def test_silence(app, db, mdb):
+    with allure.step("Задаём logic unit"):
+        db.create_connect(database["cms"])
+        db.change_project_data("start_unit", "test_unit_silence", app.project)
+        # pool_id = [i[0] for i in (db.select_data('server_pools', 'name', 'id', pools))][0]
+        # db.change_project_data("pool_id", pool_id, app.project)
+    with allure.step("Убираем звонки из queue api"):
+        app.p_api.queue_clean(app.project)
+    with allure.step("Отправляем звонок на api"):
+        resp = app.api.initiate_call(app.project, "test_asr_silence")
+        assert resp.status_code == 200
+        call_id = app.asr.get_data(resp, "call_id")
+        db.create_connect(database["rw"]["main_pool"])
+        z = mdb.check_value({"main_id": call_id}, 'result', '+OK')
+# ну сделать звонок в котором ансвер и всё проверить что выходит
+# если норм сделать ещё два лоджик юнита

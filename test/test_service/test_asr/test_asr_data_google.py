@@ -38,7 +38,7 @@ def test_send_call(app, mdb, call):
     global mng_calls
     # initiate call with central api
 
-    resp = app.api.initiate_call(app.project, call.number, "google", "ru-RU-Wavenet-A@google")
+    resp = app.api.initiate_release_call(app.project, call.number, "google", "ru-RU-Wavenet-A@google")
     time.sleep(7)
     logging.info("api_response : %s " % (resp.json()))
     logging.info("number: %s   human_transcript : %s " % (call.number, call.transcript))
@@ -63,6 +63,7 @@ def test_asr(app, db, call, mdb):
     # time.sleep(40)
     detected = db.get_detected_speech(mng_calls[call.number])
     # get_detected_speech_from_call_id()
+    logging.info("number is %s" % mng_calls[call.number])
     logging.info("detected speech  %s" % detected)
     known = list(call.transcript.split(" "))
     gwer += app.asr.get_wer(known, detected)
