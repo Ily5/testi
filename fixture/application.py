@@ -15,7 +15,7 @@ from fixture.api import ApiHelper, PoolApiHelper
 class Application:
 
     def __init__(self, browser, cms_url, api_url, api_headers, api_methods, pool_api, p_api_headers,
-                 project, rwdb, cms_db, mdb):
+                 project, rwdb, cms_db, mdb, speech_engine, database):
         if browser == 'firefox':
             # self.wd = webdriver.Firefox()
             self.wd = webdriver.Firefox(executable_path=r'/home/ilya/PycharmProjects/geckodriver')
@@ -37,17 +37,6 @@ class Application:
                 desired_capabilities=capabilities
                     )
 
-            # capabilities = {
-            #     "browserName": "firefox",
-            #     "version": "78.0",
-            #     "platform": "LINUX",
-            #     "enableVNC": True,
-            # }
-            #
-            # self.wd = webdriver.Remote(
-            #     command_executor="http://selenoid:4444/wd/hub",
-            #     desired_capabilities=capabilities)
-
         self.wd.implicitly_wait(10)
         self.cms_url = cms_url
         self.api_url = api_url
@@ -59,9 +48,9 @@ class Application:
         self.rwdb = rwdb
         self.cms_db = cms_db
         self.mongo_client = mdb
-
-        # self.wd.implicitly_wait(10)
+        self.speech_engine = speech_engine
         self.verificationErrors = []
+        self.database = database
 
         self.session = SessionHelper(self)
         self.page = PageHelper(self)
