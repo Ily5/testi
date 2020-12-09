@@ -4,7 +4,7 @@ import time
 import pytest
 import allure
 
-result = None
+result = []
 
 
 @allure.feature("Smoke 3.0")
@@ -24,6 +24,7 @@ def test_v3_cms(app_3, db):
 @allure.feature("Smoke 3.0")
 @allure.story("Yandex")
 def test_v3_init_call_yandex(app_3, db):
+    global result
     db.create_connect(app_3.database["rw"]["test"])
     with allure.step("Авторизация в external_api"):
         token = app_3.api.auth()
@@ -38,7 +39,8 @@ def test_v3_init_call_yandex(app_3, db):
 
 @allure.feature("Smoke 3.0")
 @allure.story("Проверка медиа части Yandex")
-def test_v3_media_part_yandex(app_3, db, result):
+def test_v3_media_part_yandex(app_3, db):
+    global result
     with allure.step("nv_say"):
         for res in result:
             if 'nv.say' in res:
@@ -90,8 +92,9 @@ def test_v3_media_part_yandex(app_3, db, result):
 
 
 @allure.feature("Smoke 3.0")
-@allure.story("Yandex")
+@allure.story("Google")
 def test_v3_init_call_google(app_3, db):
+    global result
     db.create_connect(app_3.database["rw"]["test"])
     with allure.step("Авторизация в external_api"):
         token = app_3.api.auth()
@@ -106,8 +109,9 @@ def test_v3_init_call_google(app_3, db):
 
 
 @allure.feature("Smoke 3.0")
-@allure.story("Проверка медиа части Yandex")
-def test_v3_media_part_google(app_3, db, result):
+@allure.story("Проверка медиа части Google")
+def test_v3_media_part_google(app_3, db):
+    global result
     with allure.step("nv_say"):
         for res in result:
             if 'nv.say' in res:
@@ -156,6 +160,7 @@ def test_v3_media_part_google(app_3, db, result):
                 assert '555555' in res[1]
         if not any('nv.bridge' in d for d in result):
             assert False
+
 
 @allure.feature("Silence")
 @allure.story("Тишина + тишина")
