@@ -45,7 +45,7 @@ def app_3(request):
         browser = request.config.getoption("--browser")
         with open(request.config.getoption("--config")) as cfg:
             config = json.load(cfg)
-            fixture = ApplicationNewVersion(browser=browser, cms_url=config["CmsUrl3"])
+            fixture = ApplicationNewVersion(browser=browser, cms_url=config["CmsUrl3"], database=config["database"])
             # fixture.session.login(username=config["UsernameCms"], password=config["PasswordCms"])
 
     def done():

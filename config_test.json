@@ -37,5 +37,33 @@
   ],
   "PoolApiHeaders": {"Host": "10.129.0.9:8080",
                         "Connection": "keep-alive"},
-  "CmsUrl3": "https://cms-test-v3.neuro.net/auth/login?lng=en"
+  "CmsUrl3": "https://cms-test-v3.neuro.net/auth/login?lng=en",
+  "database": {"rw":
+                {"test": {"database": "pbx_refactor",
+                          "user": "postgres",
+                          "password": "",
+                          "host": "10.131.0.116",
+                          "port": 5001},
+                 "prod": {"database": "pbx_main_pool",
+                          "user": "postgres",
+                          "password": "",
+                          "host": "10.129.0.26",
+                          "port": 5432
+                          }
+                 },
+            "ro":
+                {"test": {"database": "pbx_refactor",
+                          "user": "postgres",
+                          "password": "",
+                          "host": "10.131.0.116",
+                          "port": 5000},
+                 "prod": {"database": "pbx_main_pool",
+                          "user": "postgres",
+                          "password": "",
+                          "host": "10.129.0.26",
+                          "port": 5432
+                          }
+                 },
+            }
+
 }
