@@ -69,7 +69,10 @@
         "post_update_token": "/api/v2/ext/auth/refresh",
         "get_all_agents_company": "/api/v2/ext/company-agents",
         "get_agent_settings": "/api/v2/ext/agent-settings/general",
-        "put_change_agent_settings": "/api/v2/ext/agent-settings/general"
+        "put_change_agent_settings": "/api/v2/ext/agent-settings/general",
+        "agent_call_rules": "/api/v2/ext/agent-settings/time-slot",
+        "agent_initial_entities": "/api/v2/ext/initial-entity",
+        "agent_output_entities": "/api/v2/ext/output-entity"
       }
     },
     "test_data": {
