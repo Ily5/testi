@@ -2,6 +2,8 @@ import pytest
 import allure
 import requests
 from random import randint
+import time
+import uuid
 
 
 @pytest.mark.parametrize('login', ['rdevetiarov@neuro.net', 'sddsf@neuro.net'])
@@ -202,8 +204,6 @@ def test_add_delete_new_initial_entity_agent_valid(api_v3, params_agent_uuid, ra
     path = api_v3.path_end_point['agent_output_entities']
     data = {"name": random_str_generator, "number_cell": randint(2, 9), "entity_type": entity_type}
     response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)
-    print(response)
-    print(response.text)
     assert response.status_code == 201
     resp_del = api_v3.request_send(method='DELETE', path=path,
                                    json={'output_entity_uuid': response.json()['output_entity_uuid']})
@@ -228,3 +228,120 @@ def test_edit_output_entity_agent_valid(api_v3, random_str_generator, create_new
     assert response.json()['agent_uuid'] == api_v3.test_data['agent_uuid']
     assert response.json()['name'] == data['name']
     assert response.json()['entity_type'] == data['entity_type']
+
+
+@allure.feature('Загрузка диалога, валидные данные')
+def test_upload_dialog(api_v3, params_agent_uuid, remove_queue_dialogs):
+    path = api_v3.path_end_point['upload_dialog']
+    data = {'msisdn': str(randint(00000000000, 99999999999))}
+    response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)
+    assert response.status_code == 200
+    assert 'dialog_uuid' in response.json()
+
+
+@allure.feature('Множественная загрузка диалога, получение статуса, валидные данные')
+def test_upload_group_dialogs(api_v3, params_agent_uuid, remove_queue_dialogs):
+    path = api_v3.path_end_point['upload_group_dialogs']
+    data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
+    iterations = randint(1, 10)
+    for i in range(iterations):
+        data.append(data[0])
+    response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)
+    assert response.status_code == 202
+    assert 'bulk_uuid' in response.json()
+    assert 'task_uuid' in response.json()
+
+
+@allure.feature('Получение статуса множественной загрузки параметров диалога, валидные данные')
+def test_get_status_upload_group_dialogs_valid(api_v3, upload_group_dialogs):
+    params = {'task_uuid': upload_group_dialogs['task_uuid']}
+    path = api_v3.path_end_point['get_dialogs_group_upload_status']
+    response = api_v3.request_send(path=path, params=params)
+    assert response.status_code == 200
+    assert 'state' in response.json()
+    assert 'info' in response.json()
+    assert response.json()['state'] in ['SUCCESS', 'PENDING']
+    assert response.json()['info'] == 'True'
+
+
+@allure.feature('Получение результата множественной загрузки параметров диалога, валидные данные')
+def test_get_result_upload_group_dialogs_valid(api_v3, upload_group_dialogs):
+    # todo тест переодически падает, т.к. диалог не успевает создаться, как решить без паузы?
+    time.sleep(2)
+    params = {'task_uuid': upload_group_dialogs['task_uuid']}
+    path = api_v3.path_end_point['get_dialogs_group_upload_result']
+    response = api_v3.request_send(path=path, params=params)
+    result = response.json()
+    assert response.status_code == 200
+    assert 'status' in result[0]
+    assert 'msisdn' in result[0]
+    assert 'message' in result[0]
+    assert 'dialog_uuid' in result[0]
+
+
+@allure.feature('Получение статистики по одному диалогу, валидный dialog_uuid')
+def test_get_dialog_statistic(api_v3, upload_dialog):
+    path = api_v3.path_end_point['get_dialog_statistic']
+    params = {"dialog_uuid": upload_dialog['dialog_uuid']}
+    response = api_v3.request_send(path=path, params=params)
+    assert response.status_code == 200
+    # todo как можно дожидаться окончания звонка?
+
+
+@allure.feature('Получение статистики по группе диалогов, валидные bulk_uuid')
+def test_get_group_dialogs_statistic(api_v3, upload_group_dialogs):
+    path = api_v3.path_end_point['get_group_dialogs_statistic']
+    bulk_uuid = upload_group_dialogs['bulk_uuid']
+    params = {'bulk_uuid': bulk_uuid}
+    response = api_v3.request_send(path=path, params=params)
+    assert response.status_code in [200, 404]
+
+
+@allure.feature('Получение output entities статистики по заданомму временному интервалу, валидные данные')
+def test_get_output_entities_time_slot_valid(api_v3):
+    path = api_v3.path_end_point['get_statistic_output_entities']
+    agent_uuid = api_v3.test_data['agent_uuid']
+    data = {'agent_uuid': agent_uuid, 'start': "2020-11-26 10:08:05.0", 'end': "2020-12-10 12:08:05.0"}
+    response = api_v3.request_send(method='POST', path=path, json=data)
+    assert response.status_code == 200
+    assert 'result' in response.json()
+
+
+@allure.feature('Получение записи звнока, несуществующий uuid')
+def test_get_call_record_does_not_exist_uuid(api_v3):
+    path = api_v3.path_end_point['get_download_call_record']
+    params = {'call_uuid': uuid.uuid4()}
+    response = api_v3.request_send(path=path, params=params)
+    assert response.status_code == 404
+
+
+@allure.feature('Получение списка диалогов агента, валидные данные')
+def test_get_agent_dialogs_valid(api_v3, params_agent_uuid):
+    path = api_v3.path_end_point['get_dialogs_agent']
+    response = api_v3.request_send(path=path, params=params_agent_uuid)
+    assert response.status_code == 200
+    assert 'msisdn' in response.json()
+    assert 'dialog_uuid' in response.json()
+    assert 'result' in response.json()
+    assert 'date_added' in response.json()
+
+
+@allure.feature('Получение списка звонков агента, валидные данные')
+def test_get_agent_dialogs_valid(api_v3, params_agent_uuid):
+    path = api_v3.path_end_point['get_calls_agent']
+    response = api_v3.request_send(path=path, params=params_agent_uuid)
+    assert response.status_code == 200
+    assert 'msisdn' in response.json()
+    assert 'call_uuid' in response.json()
+    assert 'result' in response.json()
+    assert 'date_added' in response.json()
+    assert 'date_processed' in response.json()
+
+
+@allure.feature('Остановка диалогов в очереди, валидные agent_uuid')
+def test_stop_queue_dialogs_valid(api_v3, params_agent_uuid):
+    path = api_v3.path_end_point['stop_queue_dialogs']
+    response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid)
+    print(response.url)
+    print(response)
+    print(response.text)
