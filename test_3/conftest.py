@@ -91,6 +91,31 @@ def create_new_output_entity_agent(request, api_v3, random_str_generator, params
     return output_entity_uuid
 
 
+@pytest.fixture()
+def remove_queue_dialogs(request, api_v3, params_agent_uuid):
+    def fin():
+        path = api_v3.path_end_point['remove_queue_dialogs']
+        api_v3.request_send(method='POST', path=path, params=params_agent_uuid)
+
+    request.addfinalizer(fin)
+    # todo интегрироваться с базой cms, удалять диалоги от туда
+
+
+@pytest.fixture()
+def upload_group_dialogs(api_v3, params_agent_uuid, remove_queue_dialogs):
+    path = api_v3.path_end_point['upload_group_dialogs']
+    data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"},
+            {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
+    return (api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)).json()
+
+
+@pytest.fixture
+def upload_dialog(api_v3, params_agent_uuid, remove_queue_dialogs):
+    path = api_v3.path_end_point['upload_dialog']
+    data = {'msisdn': str(randint(00000000000, 99999999999))}
+    return (api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)).json()
+
+
 @pytest.fixture
 def random_str_generator(size=random.randint(3, 129),
                          chars=string.ascii_uppercase + string.digits + string.ascii_lowercase + '\t'):
