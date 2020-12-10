@@ -23,11 +23,24 @@ class PageHelper:
 
     def check_menu(self):
         wd = self.app.wd
+        # ---prod
+        # wd.find_element_by_xpath("//a[3]/div/span").click()
+        # wd.find_element_by_xpath("//a[4]/div/span").click()
+        # wd.find_element_by_xpath("//a[5]/div/span").click()
+        # wd.find_element_by_xpath("//a[6]/div").click()
+        # wd.find_element_by_xpath("//a[7]/div/span").click()
+        # wd.find_element_by_xpath("//a[8]/div/span").click()
+        # wd.find_element_by_xpath("//a[9]/div/span").click()
+        # wd.find_element_by_xpath("//a[10]/div").click()
+        # ---test
+        wd.find_element_by_xpath("//a[2]/div/span").click()
         wd.find_element_by_xpath("//a[3]/div/span").click()
         wd.find_element_by_xpath("//a[4]/div/span").click()
-        wd.find_element_by_xpath("//a[5]/div/span").click()
-        wd.find_element_by_xpath("//a[6]/div").click()
-        wd.find_element_by_xpath("//a[7]/div/span").click()
-        wd.find_element_by_xpath("//a[8]/div/span").click()
-        wd.find_element_by_xpath("//a[9]/div/span").click()
-        wd.find_element_by_xpath("//a[10]/div").click()
+        wd.find_element_by_xpath("//a[5]/div").click()
+        wd.find_element_by_xpath("//a[6]/div/span").click()
+        wd.find_element_by_xpath("//a[7]/div").click()
+        wd.find_element_by_xpath("//a[8]/div").click()
+        wd.find_element_by_xpath("//a[9]/div").click()
+        wd.find_element_by_xpath("//a[10]/div/span").click()
+        wd.find_element_by_xpath("//a[11]/div").click()
+        # wd.find_element_by_xpath("//div/span").click()

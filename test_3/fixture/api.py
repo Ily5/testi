@@ -12,6 +12,8 @@ class ApiHelper:
         self.headers = None
 
     def auth(self):
+        self.url = "https://api-test-v3.neuro.net/api/v2/ext/auth"
+        self.payload = ""
         self.headers = {
             'content-type': "multipart/form-data; boundary=---011000010111000001101001",
             'authorization': "Basic aWtvc2hraW5AbmV1cm8ubmV0Omlrb3Noa2lu"
@@ -73,7 +75,7 @@ class ApiHelper:
 
         response = requests.request("PUT", self.url, data=json.dumps(self.payload), headers=self.headers)
 
-        print(response.text)
+        # print(response.text)
 
     def get_value(self, response, value):
         return response[value]
@@ -116,7 +118,8 @@ json_yandex = {
     "company": {
         "uuid": "9db4c04b-deca-480f-ad1f-9399a28ecffa",
         "name": "QA Team",
-        "timezone": None
+        "timezone": None,
+        "currency": "RUB"
     },
     "flag": "test_release",
     "language": "ru-RU"
@@ -159,7 +162,8 @@ json_google = {
     "company": {
         "uuid": "9db4c04b-deca-480f-ad1f-9399a28ecffa",
         "name": "QA Team",
-        "timezone": None
+        "timezone": None,
+        "currency": "RUB"
     },
     "flag": "test_release",
     "language": "ru-RU"
