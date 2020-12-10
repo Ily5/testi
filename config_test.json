@@ -72,7 +72,19 @@
         "put_change_agent_settings": "/api/v2/ext/agent-settings/general",
         "agent_call_rules": "/api/v2/ext/agent-settings/time-slot",
         "agent_initial_entities": "/api/v2/ext/initial-entity",
-        "agent_output_entities": "/api/v2/ext/output-entity"
+        "agent_output_entities": "/api/v2/ext/output-entity",
+        "remove_queue_dialogs": "/api/v2/ext/queue/remove",
+        "upload_dialog": "/api/v2/ext/dialog/dialog-initial",
+        "upload_group_dialogs": "/api/v2/ext/dialog/dialogs-group-initial",
+        "get_dialogs_group_upload_result": "/api/v2/ext/dialog/dialogs-group-initial-result",
+        "get_dialogs_group_upload_status": "/api/v2/ext/dialog/dialogs-group-initial-status",
+        "get_dialog_statistic": "/api/v2/ext/statistic/dialog",
+        "get_group_dialogs_statistic": "/api/v2/ext/statistic/dialog-group",
+        "get_statistic_output_entities": "/api/v2/ext/statistic/dialog-report",
+        "get_download_call_record": "/api/v2/ext/statistic/download/call",
+        "get_dialogs_agent": "/api/v2/ext/queue/dialog",
+        "get_calls_agent": "/api/v2/ext/queue/call",
+        "stop_queue_dialogs": "/api/v2/ext/queue/stop"
       }
     },
     "test_data": {
