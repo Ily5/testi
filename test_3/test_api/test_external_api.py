@@ -284,7 +284,6 @@ def test_get_dialog_statistic(api_v3, upload_dialog):
     params = {"dialog_uuid": upload_dialog['dialog_uuid']}
     print(params['dialog_uuid'])
     response = api_v3.request_send(path=path, params=params)
-    time.sleep(10)
     assert response.status_code in [200, 404]
     # todo как можно дожидаться окончания звонка?
 
