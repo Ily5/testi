@@ -84,7 +84,8 @@
         "get_download_call_record": "/api/v2/ext/statistic/download/call",
         "get_dialogs_agent": "/api/v2/ext/queue/dialog",
         "get_calls_agent": "/api/v2/ext/queue/call",
-        "stop_queue_dialogs": "/api/v2/ext/queue/stop"
+        "stop_queue_dialogs": "/api/v2/ext/queue/stop",
+        "return_queue_dialogs": "/api/v2/ext/queue/return"
       }
     },
     "test_data": {
