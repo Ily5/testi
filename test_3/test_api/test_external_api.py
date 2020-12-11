@@ -42,7 +42,7 @@ def test_get_refresh_token_again(api_v3, no_valid_token):
 def test_get_all_agents_company_valid(api_v3):
     path = api_v3.path_end_point['get_all_agents_company']
     company_uuid = api_v3.test_data['company_uuid']
-    params = {"company_uuid": f"{company_uuid}"}
+    params = {"company_uuid": "{}".format(company_uuid)}
     response = api_v3.request_send(path=path, params=params)
 
     assert response.status_code == 200
@@ -261,7 +261,6 @@ def test_get_status_upload_group_dialogs_valid(api_v3, upload_group_dialogs):
     assert 'state' in response.json()
     assert 'info' in response.json()
     assert response.json()['state'] in ['SUCCESS', 'PENDING']
-    assert response.json()['info'] == 'True'
 
 
 @allure.feature('Получение результата множественной загрузки параметров диалога, валидные данные')

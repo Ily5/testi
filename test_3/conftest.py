@@ -26,7 +26,7 @@ def api_v3(request):
 @pytest.fixture
 def params_agent_uuid(api_v3):
     agent_uuid = api_v3.test_data['agent_uuid']
-    params = {"agent_uuid": f"{agent_uuid}"}
+    params = {"agent_uuid": "{}".format(agent_uuid)}
     return params
 
 
@@ -34,13 +34,13 @@ def params_agent_uuid(api_v3):
 def default_settings_agent(api_v3, params_agent_uuid):
     yield
     test_data = api_v3.test_data
-    data = {"flag": f"{test_data['agent_flag']}",
-            "name": f"{test_data['agent_name']}",
-            "recall_count": f"{test_data['recall_count']}",
+    data = {"flag": "{}".format(test_data['agent_flag']),
+            "name": "{}".format(test_data['agent_name']),
+            "recall_count": "{}".format(test_data['recall_count']),
             "routing_channel_limit": None,
-            "asr": f"{test_data['asr']}",
-            "tts": f"{test_data['tts']}",
-            "language": f"{test_data['language']}"}
+            "asr": "{}".format(test_data['asr']),
+            "tts": "{}".format(test_data['tts']),
+            "language": "{}".format(test_data['language'])}
 
     path = api_v3.path_end_point['put_change_agent_settings']
     api_v3.request_send(method="PUT", path=path, json=data, params=params_agent_uuid)
