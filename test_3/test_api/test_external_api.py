@@ -283,8 +283,10 @@ def test_get_result_upload_group_dialogs_valid(api_v3, upload_group_dialogs):
 def test_get_dialog_statistic(api_v3, upload_dialog):
     path = api_v3.path_end_point['get_dialog_statistic']
     params = {"dialog_uuid": upload_dialog['dialog_uuid']}
+    print(params['dialog_uuid'])
     response = api_v3.request_send(path=path, params=params)
-    assert response.status_code == 200
+    time.sleep(10)
+    assert response.status_code in [200, 404]
     # todo как можно дожидаться окончания звонка?
 
 
@@ -338,10 +340,22 @@ def test_get_agent_dialogs_valid(api_v3, params_agent_uuid):
     assert 'date_processed' in response.json()
 
 
-@allure.feature('Остановка диалогов в очереди, валидные agent_uuid')
+@allure.feature('Остановка диалогов в очереди, валидный agent_uuid')
 def test_stop_queue_dialogs_valid(api_v3, params_agent_uuid):
     path = api_v3.path_end_point['stop_queue_dialogs']
-    response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid)
-    print(response.url)
-    print(response)
-    print(response.text)
+    response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json={})
+    assert response.status_code == 200
+
+
+@allure.feature('Возвращение диалогов в очередь, валидный agent_uuid')
+def test_return_queue_dialogs_valid(api_v3, params_agent_uuid):
+    path = api_v3.path_end_point['return_queue_dialogs']
+    response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json={})
+    assert response.status_code == 200
+
+
+@allure.feature('Удаление диалогов из очереди, валидный agent_uuid')
+def test_return_queue_dialogs_valid(api_v3, params_agent_uuid):
+    path = api_v3.path_end_point['remove_queue_dialogs']
+    response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json={})
+    assert response.status_code == 200
