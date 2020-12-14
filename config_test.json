@@ -91,7 +91,13 @@
           "get_calls": "/get_calls",
           "get_progress_calls": "/pending",
           "get_list_queue_calls": "/queue",
-          "defer_all_calls": "/queue/defer"
+          "defer_calls": "/queue/defer",
+          "return_calls": "/queue/return",
+          "drop_queue_calls": "/queue/flush",
+          "get_full_queue": "/get_full_queue",
+          "get_all_valid_calls": "/valid_calls",
+          "get_all_dialog_queue": "/dialog_queue"
+
         }
       }
     },
@@ -109,7 +115,8 @@
       "recall_count": 1,
       "asr": "yandex",
       "tts": "jane@yandex",
-      "language": "ru-RU"
+      "language": "ru-RU",
+      "total_channel_limit": 2
     }
   }
 }
