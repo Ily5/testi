@@ -24,7 +24,7 @@ def api_v3(request):
 
 
 @pytest.fixture(scope='session')
-def poll_api_v3(request):
+def pool_api_v3(request):
     fixture = None
     if fixture is None:
         with open(request.config.getoption("--config")) as cfg:
@@ -43,8 +43,8 @@ def params_agent_uuid(api_v3):
 
 
 @pytest.fixture
-def params_agent_id(poll_api_v3):
-    agent_id = poll_api_v3.test_data['agent_id']
+def params_agent_id(pool_api_v3):
+    agent_id = pool_api_v3.test_data['agent_id']
     params = {"agent_id": "{}".format(agent_id)}
     return params
 
