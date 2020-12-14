@@ -23,10 +23,29 @@ def api_v3(request):
     return fixture
 
 
+@pytest.fixture(scope='session')
+def poll_api_v3(request):
+    fixture = None
+    if fixture is None:
+        with open(request.config.getoption("--config")) as cfg:
+            config = json.load(cfg)
+            fixture = APIClientV3(base_url=config['v3']['api']['poll_api_v3_url'],
+                                  test_data=config['v3']['test_data'],
+                                  path_end_point=config['v3']['api']['methods_end_point']["poll_api"])
+    return fixture
+
+
 @pytest.fixture
 def params_agent_uuid(api_v3):
     agent_uuid = api_v3.test_data['agent_uuid']
     params = {"agent_uuid": "{}".format(agent_uuid)}
+    return params
+
+
+@pytest.fixture
+def params_agent_id(poll_api_v3):
+    agent_id = poll_api_v3.test_data['agent_id']
+    params = {"agent_id": "{}".format(agent_id)}
     return params
 
 
