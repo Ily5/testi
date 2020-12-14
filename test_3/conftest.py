@@ -59,7 +59,8 @@ def default_settings_agent(api_v3, params_agent_uuid):
             "routing_channel_limit": None,
             "asr": "{}".format(test_data['asr']),
             "tts": "{}".format(test_data['tts']),
-            "language": "{}".format(test_data['language'])}
+            "language": "{}".format(test_data['language']),
+            'total_channel_limit': "{}".format(test_data['total_channel_limit'])}
 
     path = api_v3.path_end_point['put_change_agent_settings']
     api_v3.request_send(method="PUT", path=path, json=data, params=params_agent_uuid)
