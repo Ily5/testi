@@ -93,10 +93,8 @@ class APIClientV3:
             request_url = self.base_url
         else:
             request_url = self.base_url + path
-        if method != 'GET':
-            headers = {**{'content-type': "application/json"}, **self.token}
-        else:
-            headers = self.token
+
+        headers = self.token
         return requests.request(method=method, url=request_url, headers=headers, **kwargs)
 
     def get_api_token(self, login, password):
@@ -104,4 +102,3 @@ class APIClientV3:
         token = response.json()['token']
         refresh_token = response.json()['refresh_token']
         return {'Authorization': "Bearer %s" % token}, refresh_token
-        # print(response)
