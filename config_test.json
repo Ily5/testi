@@ -64,6 +64,7 @@
     },
     "api": {
       "api_base_url": "https://api-test-v3.neuro.net",
+      "poll_api_v3_url": "http://10.131.0.84:8083",
       "methods_end_point": {
         "post_auth": "/api/v2/ext/auth",
         "post_update_token": "/api/v2/ext/auth/refresh",
@@ -85,7 +86,13 @@
         "get_dialogs_agent": "/api/v2/ext/queue/dialog",
         "get_calls_agent": "/api/v2/ext/queue/call",
         "stop_queue_dialogs": "/api/v2/ext/queue/stop",
-        "return_queue_dialogs": "/api/v2/ext/queue/return"
+        "return_queue_dialogs": "/api/v2/ext/queue/return",
+        "poll_api": {
+          "get_calls": "/get_calls",
+          "get_progress_calls": "/pending",
+          "get_list_queue_calls": "/queue",
+          "defer_all_calls": "/queue/defer"
+        }
       }
     },
     "test_data": {
