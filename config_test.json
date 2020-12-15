@@ -96,7 +96,12 @@
           "drop_queue_calls": "/queue/flush",
           "get_full_queue": "/get_full_queue",
           "get_all_valid_calls": "/valid_calls",
-          "get_all_dialog_queue": "/dialog_queue"
+          "get_all_dialog_queue": "/dialog_queue",
+          "get_dialog_queue_size": "/dialog_queue_size",
+          "cancel_all_dialogs": "/cancel_dialog",
+          "defer_dialog": "/dialog_queue/defer",
+          "return_dialog": "/dialog_queue/return",
+          "get_dialogs": "/get_dialogs"
 
         }
       }
