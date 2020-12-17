@@ -5,6 +5,8 @@ import pytest
 import json
 import sys
 import os
+import random
+import string
 
 fixture = None
 
@@ -77,6 +79,12 @@ def mdb(request):
     return fixture
 
 
+@pytest.fixture
+def random_str_generator(size=random.randint(3, 129),
+                         chars=string.ascii_uppercase + string.digits + string.ascii_lowercase + '\t'):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="remote")
-    parser.addoption("--config", action="store", default=ROOT_DIR + "\config_test.json")
+    parser.addoption("--config", action="store", default=ROOT_DIR + "/config_test.json")
