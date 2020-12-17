@@ -80,18 +80,20 @@ def test_get_all_valid_calls(pool_api_v3, params_agent_id):
 
 
 @allure.feature('Получение объекта очереди диалогов агента, валидный agent_id')
-def test_all_dialog_queue_valid(pool_api_v3, params_agent_id):
-    params_agent_id = {'agent_id': '97'}
+def test_all_dialog_queue_valid(pool_api_v3, params_agent_id, creation_queue_dialog):
     params = {**{"page": "1",
-                 "by_count": "3"}, **params_agent_id}
+                 "by_count": "100"}, **params_agent_id}
     path = pool_api_v3.path_end_point['get_all_dialog_queue']
     response = pool_api_v3.request_send(path=path, params=params)
+    print(response.text)
     assert response.status_code == 200
+    assert len(response.json()['dialogs']) == response.json()['total']
+    assert response.json()['total'] == len(creation_queue_dialog)
+    assert len(response.json()['dialogs']) == len(creation_queue_dialog)
 
 
 @allure.feature('Получение размера очереди диалогов агента, валидный agent_id')
 def test_get_dialog_queue_size_valid(pool_api_v3, params_agent_id):
-    params_agent_id = {'agent_id': '97'}
     path = pool_api_v3.path_end_point['get_dialog_queue_size']
     response = pool_api_v3.request_send(path=path, params=params_agent_id)
     assert response.status_code == 200
