@@ -19,7 +19,7 @@
   "Server": "",
   "Mongo_client": "mongodb://10.129.0.14:27017/",
   "ProjectId": 214,
-  "Browser": "Remote",
+  "Browser": "firefox",
   "ApiHeaders":
                         {
                         "Content-type": "application/json",
@@ -36,5 +36,27 @@
                         "get_call_records"
   ],
   "PoolApiHeaders": {"Host": "10.129.0.26:8080",
-                        "Connection": "keep-alive"}
+                        "Connection": "keep-alive"},
+  "speech_engine": {"yandex": "oksana@yandex", "google": "ru-RU-Wavenet-A@google"},
+  "database": {"rw":
+                {"test_pool": {"database": "test_pool_pbx",
+                               "user": "postgres",
+                               "password": "",
+                               "host": "10.129.0.33",
+                               "port": 5432},
+                 "main_pool": {"database": "pbx_main_pool",
+                               "user": "postgres",
+                               "password": "",
+                               "host": "10.129.0.26",
+                               "port": 5432
+                               }
+                 },
+            "cms":
+                {"database": "pbx",
+                 "user": "postgres",
+                 "password": "",
+                 "host": "10.129.0.7",
+                 "port": 5432
+                 }
+            }
 }

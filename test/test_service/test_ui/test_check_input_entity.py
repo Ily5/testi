@@ -1,9 +1,11 @@
 import allure
+import time
 
 
 @allure.feature("Работа с entities")
 @allure.story("Создание сущности")
 def test_create_in_entity(app):
+    time.sleep(60)
     app.page.create_in_entity("py_test_entity", "run_entity")
 
 

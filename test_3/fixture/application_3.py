@@ -12,7 +12,7 @@ class ApplicationNewVersion:
 
     # def __init__(self, browser, cms_url, api_url, api_headers, api_methods, pool_api, p_api_headers,
     #              project, rwdb, cms_db, mdb):
-    def __init__(self, browser, cms_url):
+    def __init__(self, browser, cms_url, database):
 
         if browser == 'firefox':
             self.wd = webdriver.Firefox()
@@ -42,6 +42,7 @@ class ApplicationNewVersion:
         self.api = ApiHelper(self)
         self.session = SessionHelper(self)
         self.page = PageHelper(self)
+        self.database = database
 
         logging.basicConfig(filename=sys.path[1] + "/log/test_asr.log", level=logging.INFO,
                             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')

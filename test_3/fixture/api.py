@@ -12,6 +12,8 @@ class ApiHelper:
         self.headers = None
 
     def auth(self):
+        self.url = "https://api-test-v3.neuro.net/api/v2/ext/auth"
+        self.payload = ""
         self.headers = {
             'content-type': "multipart/form-data; boundary=---011000010111000001101001",
             'authorization': "Basic aWtvc2hraW5AbmV1cm8ubmV0Omlrb3Noa2lu"
@@ -47,7 +49,7 @@ class ApiHelper:
         }
         response = requests.request("PUT", self.url, data=json.dumps(self.payload), headers=self.headers,
                                     params=self.querystring)
-        print(response.text)
+        # print(response.text)
 
     def set_yandex(self, token):
         self.url = "https://api-test-v3.neuro.net/api/v2/rbac/agent/b5b2a743-259b-4641-a007-0dd2abe3e0fa"
@@ -60,7 +62,7 @@ class ApiHelper:
 
         response = requests.request("PUT", self.url, data=json.dumps(self.payload), headers=self.headers)
 
-        print(response.text)
+        # print(response.text)
 
     def set_google(self, token):
         self.url = "https://api-test-v3.neuro.net/api/v2/rbac/agent/b5b2a743-259b-4641-a007-0dd2abe3e0fa"
@@ -73,7 +75,7 @@ class ApiHelper:
 
         response = requests.request("PUT", self.url, data=json.dumps(self.payload), headers=self.headers)
 
-        print(response.text)
+        # print(response.text)
 
     def get_value(self, response, value):
         return response[value]
