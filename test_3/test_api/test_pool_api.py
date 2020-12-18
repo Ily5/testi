@@ -5,7 +5,7 @@ from random import randint
 class TestPoolApiCalls:
 
     @allure.feature('Получение звонка из очереди')
-    def test_get_calls_queue(self,pool_api_v3):
+    def test_get_calls_queue(self, pool_api_v3):
         path = pool_api_v3.path_end_point['get_calls']
         response = pool_api_v3.request_send(path=path)
         assert response.status_code == 200
@@ -80,10 +80,11 @@ class TestPoolApiDialog:
                      "by_count": "100"}, **params_agent_id}
         path = pool_api_v3.path_end_point['get_all_dialog_queue']
         response = pool_api_v3.request_send(path=path, params=params)
+
         assert response.status_code == 200
         assert len(response.json()['dialogs']) == response.json()['total']
-        assert response.json()['total'] == len(creation_queue_dialog)
-        assert len(response.json()['dialogs']) == len(creation_queue_dialog)
+        assert response.json()['total'] > 0
+        assert len(response.json()['dialogs']) > 0
 
     @allure.feature('Получение размера очереди диалогов агента, валидный agent_id')
     def test_get_dialog_queue_size_valid(self, pool_api_v3, params_agent_id):
@@ -112,8 +113,8 @@ class TestPoolApiDialog:
                                             params={**{"page": "1",
                                                        "by_count": "100"}, **params_agent_id})
         assert len(response.json()['dialogs']) == response.json()['total']
-        assert response.json()['total'] == len(creation_queue_dialog)
-        assert len(response.json()['dialogs']) == len(creation_queue_dialog)
+        assert response.json()['total'] > 0
+        assert len(response.json()['dialogs']) > 0
 
     @allure.feature('Отменить все далоги для проекта, валидный agent_id')
     def test_cancel_all_dialog_valid(self, pool_api_v3, params_agent_id, creation_queue_dialog):
