@@ -134,7 +134,7 @@ def upload_dialog(api_v3, params_agent_uuid, remove_queue_dialogs):
     return (api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)).json()
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='class')
 def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, params_agent_id, remove_queue_dialogs):
     path_agent_setting = api_v3.path_end_point['put_change_agent_settings']
     api_v3.request_send(method="PUT", path=path_agent_setting,
