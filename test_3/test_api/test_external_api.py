@@ -6,12 +6,12 @@ import time
 import uuid
 
 
-@pytest.mark.parametrize('login', ['rdevetiarov@neuro.net', 'sddsf@neuro.net'])
-@pytest.mark.parametrize('password', [randint(21341231, 312423234234)])
+@pytest.mark.parametrize('login', ['sddsf@neuro.net'])
+@pytest.mark.parametrize('password', ['12312113113121'])
 @allure.feature('Получение токена невалидный данные')
 def test_get_token_no_valid(api_v3, login, password):
     request_url = api_v3.base_url + api_v3.path_end_point['post_auth']
-    response = requests.request(method='POST', url=request_url, auth=(login, str(password)))
+    response = requests.request(method='POST', url=request_url, auth=(login, password))
 
     assert response.status_code == 401, 'Проверка кода ответа от сервера'
 
