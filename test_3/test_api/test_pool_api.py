@@ -43,6 +43,7 @@ class TestPoolApiCalls:
         assert response.json()['total'] > 0
         assert response.json()['total'] == len(response.json()['calls'])
         upload_msisdn_list = [item['msisdn'] for item in creation_queue_calls]
+        print(upload_msisdn_list)
         for call in response.json()['calls']:
             assert call['msisdn'] in upload_msisdn_list
 
@@ -94,7 +95,6 @@ class TestPoolApiDialog:
         path = pool_api_v3.path_end_point['get_all_dialog_queue']
         response = pool_api_v3.request_send(path=path, params=params)
         assert response.status_code == 200
-        print(response.text)
         assert len(response.json()['dialogs']) == response.json()['total']
         assert response.json()['total'] > 0
         assert len(response.json()['dialogs']) > 0

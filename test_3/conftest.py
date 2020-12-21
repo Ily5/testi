@@ -151,7 +151,7 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_id, params_a
     clear_queue(api_v3, params_agent_id, params_agent_uuid, pool_api_v3)
 
     path = api_v3.path_end_point['upload_group_dialogs']
-    data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
+    data = []
     for i in range(randint(2, 15)):
         data.append({'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"})
     api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)
@@ -167,6 +167,7 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_id, params_a
         set_default_settings_agent(api_v3, params_agent_uuid)
 
     request.addfinalizer(default_setting)
+    print('len_data = ', len(data))
     return data
 
 
