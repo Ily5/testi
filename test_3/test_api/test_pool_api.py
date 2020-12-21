@@ -41,7 +41,7 @@ class TestPoolApiCalls:
         assert 'trunk_id' in response.json()['calls'][0]
         assert 'uuid' in response.json()['calls'][0]
         assert response.json()['total'] > 0
-        assert response.json()['total'] == len(response.json()['calls'])
+        assert response.json()['total'] >= len(response.json()['calls'])
         upload_msisdn_list = [item['msisdn'] for item in creation_queue_calls]
         print(upload_msisdn_list)
         for call in response.json()['calls']:
