@@ -4,9 +4,6 @@ from random import randint
 
 class TestPoolApiCalls:
 
-    def test_001(self, creation_queue_calls):
-        pass
-
     @allure.feature('Получение звонка из очереди')
     def test_get_calls_queue(self, pool_api_v3):
         path = pool_api_v3.path_end_point['get_calls']
@@ -14,14 +11,14 @@ class TestPoolApiCalls:
         assert response.status_code == 200
 
     @allure.feature('Получение звонка из очереди с лимитом')
-    def test_get_calls_queue(self, pool_api_v3):
+    def test_get_calls_queue(self, pool_api_v3, creation_queue_calls):
         path = pool_api_v3.path_end_point['get_calls']
         params = {'limit': str(randint(2, 10))}
         response = pool_api_v3.request_send(path=path, params=params)
         assert response.status_code == 200
 
     @allure.feature('Получение списка выполняющихся звонков')
-    def test_get_progress_calls(self, pool_api_v3, params_agent_id):
+    def test_get_progress_calls(self, pool_api_v3, params_agent_id, creation_queue_calls):
         path = pool_api_v3.path_end_point['get_progress_calls']
         response = pool_api_v3.request_send(path=path, params=params_agent_id)
         assert response.status_code in [200, 400]
@@ -33,9 +30,18 @@ class TestPoolApiCalls:
                      "by_count": "100"}, **params_agent_id}
         response = pool_api_v3.request_send(path=path, params=params)
         print(response.text)
+
         assert response.status_code == 200
         assert 'calls' in response.json()
         assert 'total' in response.json()
+        assert 'id' in response.json()['calls'][0]
+        assert 'msisdn' in response.json()['calls'][0]
+        assert 'date_added' in response.json()['calls'][0]
+        assert 'trunk_id' in response.json()['calls'][0]
+        assert 'uuid' in response.json()['calls'][0]
+        assert response.json()['total'] > 0
+        assert response.json()['total'] == len(response.json()['calls'])
+        assert response.json()['calls'][0]['msisdn'] == creation_queue_calls[0]['msisdn']
 
     @allure.feature('Отложить все звонки в очереди')
     def test_defer_all_calls(self, pool_api_v3, params_agent_id):
