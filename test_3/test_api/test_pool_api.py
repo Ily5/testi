@@ -42,10 +42,10 @@ class TestPoolApiCalls:
         assert 'uuid' in response.json()['calls'][0]
         assert response.json()['total'] > 0
         assert response.json()['total'] >= len(response.json()['calls'])
-        upload_msisdn_list = [item['msisdn'] for item in creation_queue_calls]
-        print(upload_msisdn_list)
-        for call in response.json()['calls']:
-            assert call['msisdn'] in upload_msisdn_list
+        calls_msisdn_list = [call['msisdn'] for call in response.json()['calls']]
+        print(calls_msisdn_list)
+        for msisdn in creation_queue_calls:
+            assert msisdn['msisdn'] in calls_msisdn_list
 
     @allure.feature('Отложить все звонки в очереди')
     def test_defer_all_calls(self, pool_api_v3, params_agent_id):
