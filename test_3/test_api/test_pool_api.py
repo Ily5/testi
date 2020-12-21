@@ -27,9 +27,10 @@ class TestPoolApiCalls:
     def test_get_list_queue_calls(self, pool_api_v3, params_agent_id, creation_queue_calls):
         path = pool_api_v3.path_end_point['get_list_queue_calls']
         params = {**{"page": "1",
-                     "by_count": "100"}, **params_agent_id}
+                     "by_count": "50"}, **params_agent_id}
         response = pool_api_v3.request_send(path=path, params=params)
-        print(response.text)
+        print(response.json()['total'])
+        print(len(response.json()['calls']))
 
         assert response.status_code == 200
         assert 'calls' in response.json()
@@ -41,7 +42,9 @@ class TestPoolApiCalls:
         assert 'uuid' in response.json()['calls'][0]
         assert response.json()['total'] > 0
         assert response.json()['total'] == len(response.json()['calls'])
-        assert response.json()['calls'][0]['msisdn'] == creation_queue_calls[0]['msisdn']
+        upload_msisdn_list = [item['msisdn'] for item in creation_queue_calls]
+        for call in response.json()['calls']:
+            assert call['msisdn'] in upload_msisdn_list
 
     @allure.feature('Отложить все звонки в очереди')
     def test_defer_all_calls(self, pool_api_v3, params_agent_id):
@@ -91,9 +94,13 @@ class TestPoolApiDialog:
         path = pool_api_v3.path_end_point['get_all_dialog_queue']
         response = pool_api_v3.request_send(path=path, params=params)
         assert response.status_code == 200
+        print(response.text)
         assert len(response.json()['dialogs']) == response.json()['total']
         assert response.json()['total'] > 0
         assert len(response.json()['dialogs']) > 0
+        upload_msisdn_list = [item['msisdn'] for item in creation_queue_dialog]
+        for call in response.json()['dialogs']:
+            assert call['msisdn'] in upload_msisdn_list
 
     @allure.feature('Получение размера очереди диалогов агента, валидный agent_id')
     def test_get_dialog_queue_size_valid(self, pool_api_v3, params_agent_id):
