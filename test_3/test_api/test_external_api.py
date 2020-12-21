@@ -231,7 +231,7 @@ def test_edit_output_entity_agent_valid(api_v3, random_str_generator, create_new
 
 
 @allure.feature('Загрузка диалога, валидные данные')
-def test_upload_dialog(api_v3, params_agent_uuid, remove_queue_dialogs):
+def test_upload_dialog(api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
     path = api_v3.path_end_point['upload_dialog']
     data = {'msisdn': str(randint(00000000000, 99999999999))}
     response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)
@@ -240,7 +240,7 @@ def test_upload_dialog(api_v3, params_agent_uuid, remove_queue_dialogs):
 
 
 @allure.feature('Множественная загрузка диалога, получение статуса, валидные данные')
-def test_upload_group_dialogs(api_v3, params_agent_uuid, remove_queue_dialogs):
+def test_upload_group_dialogs(api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
     path = api_v3.path_end_point['upload_group_dialogs']
     data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
     iterations = randint(1, 10)

@@ -4,6 +4,9 @@ from random import randint
 
 class TestPoolApiCalls:
 
+    def test_001(self, creation_queue_calls):
+        pass
+
     @allure.feature('Получение звонка из очереди')
     def test_get_calls_queue(self, pool_api_v3):
         path = pool_api_v3.path_end_point['get_calls']
@@ -24,11 +27,12 @@ class TestPoolApiCalls:
         assert response.status_code in [200, 400]
 
     @allure.feature('Получение списков звонков в очереди')
-    def test_get_list_queue_calls(self, pool_api_v3, params_agent_id):
+    def test_get_list_queue_calls(self, pool_api_v3, params_agent_id, creation_queue_calls):
         path = pool_api_v3.path_end_point['get_list_queue_calls']
         params = {**{"page": "1",
-                     "by_count": "3"}, **params_agent_id}
+                     "by_count": "100"}, **params_agent_id}
         response = pool_api_v3.request_send(path=path, params=params)
+        print(response.text)
         assert response.status_code == 200
         assert 'calls' in response.json()
         assert 'total' in response.json()
