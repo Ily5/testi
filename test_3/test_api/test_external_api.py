@@ -7,9 +7,9 @@ import uuid
 
 
 @pytest.mark.parametrize('login', ['rdevetiarov@neuro.net', 'sddsf@neuro.net'])
-@pytest.mark.parametrize('password', [randint(21341231, 312423234234)])
 @allure.feature('Получение токена невалидный данные')
-def test_get_token_no_valid(api_v3, login, password):
+def test_get_token_no_valid(api_v3, login):
+    password = str([randint(21341231, 312423234234)])
     request_url = api_v3.base_url + api_v3.path_end_point['post_auth']
     response = requests.request(method='POST', url=request_url, auth=(login, str(password)))
 
@@ -28,7 +28,7 @@ def test_get_refresh_token(api_v3):
     assert 'refresh_token' in response.json()
 
 
-@pytest.mark.parametrize('no_valid_token', [str(randint(12123, 45345343543)), 'sdfgagsdfgaa', '   '])
+@pytest.mark.parametrize('no_valid_token', ['12345354346436', '23fdw234fw34', 'ывфавывапывп', 'sdfgagsdfgaa', '   '])
 @allure.feature('Обновление токена, невалидный токен')
 def test_get_refresh_token_again(api_v3, no_valid_token):
     request_url = api_v3.base_url + api_v3.path_end_point['post_update_token']
