@@ -1,6 +1,6 @@
 class ModelToExternal:
 
     def __init__(self):
-        self.url =
+        self.url = ''
         self.data = {}
-        self.method =
+        self.method = ''
