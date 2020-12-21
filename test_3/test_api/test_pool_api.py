@@ -80,7 +80,6 @@ class TestPoolApiDialog:
                      "by_count": "100"}, **params_agent_id}
         path = pool_api_v3.path_end_point['get_all_dialog_queue']
         response = pool_api_v3.request_send(path=path, params=params)
-
         assert response.status_code == 200
         assert len(response.json()['dialogs']) == response.json()['total']
         assert response.json()['total'] > 0
@@ -90,14 +89,19 @@ class TestPoolApiDialog:
     def test_get_dialog_queue_size_valid(self, pool_api_v3, params_agent_id):
         path = pool_api_v3.path_end_point['get_dialog_queue_size']
         response = pool_api_v3.request_send(path=path, params=params_agent_id)
-
-        assert response.status_code == 200
+        try:
+            assert response.status_code == 200
+        except AssertionError:
+            print(response.text)
 
     @allure.feature('Отложить все диалоги для проекта')
-    def test_defer_all_dialogs(self, pool_api_v3, params_agent_id, creation_queue_dialog):
+    def test_defer_all_dialogs(self, pool_api_v3, params_agent_id):
         path = pool_api_v3.path_end_point['defer_dialog']
         response = pool_api_v3.request_send(method='POST', path=path, params=params_agent_id)
-        assert response.status_code == 200
+        try:
+            assert response.status_code == 200
+        except AssertionError:
+            print(response.text)
         response = pool_api_v3.request_send(path=pool_api_v3.path_end_point['get_all_dialog_queue'],
                                             params={**{"page": "1",
                                                        "by_count": "100"}, **params_agent_id})
@@ -105,7 +109,7 @@ class TestPoolApiDialog:
         assert len(response.json()['dialogs']) == 0
 
     @allure.feature('Вернуть все диалоги из отложенных, валидный agent_id')
-    def test_return_all_dialog_valid(self, pool_api_v3, params_agent_id, creation_queue_dialog):
+    def test_return_all_dialog_valid(self, pool_api_v3, params_agent_id):
         path = pool_api_v3.path_end_point['return_dialog']
         response = pool_api_v3.request_send(method='POST', path=path, params=params_agent_id)
         assert response.status_code == 200
@@ -117,7 +121,7 @@ class TestPoolApiDialog:
         assert len(response.json()['dialogs']) > 0
 
     @allure.feature('Отменить все далоги для проекта, валидный agent_id')
-    def test_cancel_all_dialog_valid(self, pool_api_v3, params_agent_id, creation_queue_dialog):
+    def test_cancel_all_dialog_valid(self, pool_api_v3, params_agent_id):
         path = pool_api_v3.path_end_point['cancel_all_dialogs']
         response = pool_api_v3.request_send(method='DELETE', path=path, params=params_agent_id)
         assert response.status_code == 200
