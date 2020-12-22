@@ -21,12 +21,6 @@ class TestPoolApiCalls:
         assert 'uuid' in response.json()['calls'][0]
         assert response.json()['total'] > 0
         assert response.json()['total'] >= len(response.json()['calls'])
-        calls_msisdn_list = [call['msisdn'] for call in response.json()['calls']]
-        print(len(calls_msisdn_list))
-        print('-'*100)
-        print(len(creation_queue_calls))
-        for msisdn in creation_queue_calls:
-            assert msisdn['msisdn'] in calls_msisdn_list
 
     @allure.feature('Получение звонка из очереди')
     def test_get_calls_queue(self, pool_api_v3, creation_queue_calls):
