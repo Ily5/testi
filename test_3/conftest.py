@@ -167,7 +167,6 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_id, params_a
         set_default_settings_agent(api_v3, params_agent_uuid)
 
     request.addfinalizer(default_setting)
-    print('len_data = ', len(data))
     return data
 
 
