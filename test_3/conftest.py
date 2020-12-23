@@ -110,14 +110,14 @@ def upload_group_dialogs(api_v3, params_agent_uuid, remove_queue_dialogs_and_cal
     path = api_v3.path_end_point['upload_group_dialogs']
     data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"},
             {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
-    return (api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)).json()
+    return (api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)).json()
 
 
 @pytest.fixture(scope='module')
 def upload_dialog(api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
     path = api_v3.path_end_point['upload_dialog']
     data = {'msisdn': str(randint(00000000000, 99999999999))}
-    return (api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)).json()
+    return (api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)).json()
 
 
 @pytest.fixture(scope='class')
@@ -134,7 +134,7 @@ def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, param
     data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
     for i in range(randint(2, 15)):
         data.append({'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"})
-    api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)
+    api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
 
     check_queue(params_agent_id, pool_api_v3, path_name='get_all_dialog_queue', queue_name='dialogs')
 
@@ -154,7 +154,7 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_id, params_a
     data = []
     for i in range(randint(2, 15)):
         data.append({'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"})
-    api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)
+    api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
 
     check_queue(params_agent_id, pool_api_v3, path_name='get_list_queue_calls', queue_name='calls')
 
@@ -172,8 +172,9 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_id, params_a
 
 def clear_queue(api_v3, params_agent_id, params_agent_uuid, pool_api_v3):
     api_v3.request_send(method='POST', path=api_v3.path_end_point['return_queue_dialogs'],
-                        params=params_agent_uuid, json={})
-    api_v3.request_send(method='POST', path=api_v3.path_end_point['remove_queue_dialogs'], params=params_agent_uuid)
+                        params=params_agent_uuid, json={}, status_code=409)
+    api_v3.request_send(method='POST', path=api_v3.path_end_point['remove_queue_dialogs'], params=params_agent_uuid,
+                        status_code=409)
     pool_api_v3.request_send(method='POST', path=pool_api_v3.path_end_point['return_calls'], params=params_agent_id,
                              json={})
     pool_api_v3.request_send(method='DELETE', path=pool_api_v3.path_end_point['get_list_queue_calls'],
