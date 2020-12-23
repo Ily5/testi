@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 
 
 class ApiHelper:
@@ -90,14 +91,29 @@ class APIClientV3:
         self.test_data = test_data
         self.path_end_point = path_end_point
 
-    def request_send(self, method='GET', path=None, **kwargs):
+    def request_send(self, method='GET', path=None, status_code=480, waiting_queue_sec=300, **kwargs):
         if path is None:
             request_url = self.base_url
         else:
             request_url = self.base_url + path
 
         headers = self.token
-        return requests.request(method=method, url=request_url, headers=headers, **kwargs)
+
+        count = 0
+        while True:
+            count += 1
+            response = requests.request(method=method, url=request_url, headers=headers, **kwargs)
+            if response.status_code != int(status_code):
+                break
+            if count % 10 == 0:
+                print('\n Код ответа от сервера = {}'.format(response.status_code),
+                      '-- попытка № {}'.format(count))
+            time.sleep(0.1)
+            if count > waiting_queue_sec * 10:
+                print('Очередь занята более {} секунд '.format(waiting_queue_sec))
+                raise Exception('Time Limit Error , превышено время отправки запроса')
+
+        return response
 
     def get_api_token(self, login, password):
         response = requests.request(method='POST', url=self.base_url + '/api/v2/ext/auth', auth=(login, str(password)))
