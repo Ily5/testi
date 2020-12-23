@@ -340,7 +340,7 @@ def test_get_agent_dialogs_valid(api_v3, params_agent_uuid):
 @allure.feature('Остановка диалогов в очереди, валидный agent_uuid')
 def test_stop_queue_dialogs_valid(api_v3, params_agent_uuid):
     path = api_v3.path_end_point['stop_queue_dialogs']
-    response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json={})
+    response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json={}, status_code=409)
     assert response.status_code == 200
 
 
@@ -354,5 +354,5 @@ def test_return_queue_dialogs_valid(api_v3, params_agent_uuid):
 @allure.feature('Удаление диалогов из очереди, валидный agent_uuid')
 def test_return_queue_dialogs_valid(api_v3, params_agent_uuid):
     path = api_v3.path_end_point['remove_queue_dialogs']
-    response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json={})
+    response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json={}, status_code=409)
     assert response.status_code == 200
