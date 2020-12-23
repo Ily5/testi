@@ -264,7 +264,7 @@ class TestPoolApiDialog:
             params = {**{'dialog_id': str(dialog_id)}, **params_agent_id}
             pool_api_v3.request_send(method='POST', path=path, params=params)
 
-        with allure.step(''):
+        with allure.step('Возвращаем с паузы диалог'):
             path = pool_api_v3.path_end_point['return_dialog']
             params = {**{'dialog_id': str(dialog_id)}, **params_agent_id}
             response = pool_api_v3.request_send(method='POST', path=path, params=params)
