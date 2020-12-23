@@ -94,7 +94,6 @@ class TestPoolApiCalls:
         with allure.step('Ставим все звонки на паузу'):
             path = pool_api_v3.path_end_point['defer_calls']
             response = pool_api_v3.request_send(method='POST', path=path, params=params_agent_id, json={})
-            print(response.text)
             assert response.status_code == 200
 
         with allure.step('Получаем список звонков в очереди, проверяем, что он пуст'):
@@ -137,7 +136,6 @@ class TestPoolApiCalls:
             path = pool_api_v3.path_end_point['defer_calls']
             params = {**{'call_id': str(call_id)}, **params_agent_id}
             response = pool_api_v3.request_send(method='POST', path=path, params=params, json={})
-            print(response.text)
             assert response.status_code == 200
 
         with allure.step('Получаем список звонков, поверяем, что отложеного звонка там нет, возвращяем его в очередь'):
@@ -151,7 +149,7 @@ class TestPoolApiCalls:
             assert call_id not in list_active_call_id
 
     @allure.feature('Отменить один звонок в очереди')
-    def test_cancel_one_call_valid(self, pool_api_v3, params_agent_id, creation_queue_calls):
+    def test_cancel_one_call_valid(self, pool_api_v3, params_agent_id):
         with allure.step('Получаем список звонков в очереди'):
             response_list_queue_calls = pool_api_v3.request_send(
                 path=pool_api_v3.path_end_point['get_list_queue_calls'],
@@ -162,7 +160,6 @@ class TestPoolApiCalls:
             path = pool_api_v3.path_end_point['get_list_queue_calls']
             params = {**{'call_id': str(call_id)}, **params_agent_id}
             response = pool_api_v3.request_send(method='DELETE', path=path, params=params, json={})
-            print(response.text)
             assert response.status_code == 200
 
         with allure.step('Получаем список звонков в очереди, проверяем, что отмененного нет в списке'):
@@ -174,10 +171,10 @@ class TestPoolApiCalls:
             assert call_id not in list_call_id
 
     @allure.feature('Отменить все звонки в очереди, валидный')
-    def test_cancel_all_calls_valid(self, pool_api_v3, params_agent_id, creation_queue_calls):
+    def test_cancel_all_calls_valid(self, pool_api_v3, params_agent_id):
         path = pool_api_v3.path_end_point['get_list_queue_calls']
         response = pool_api_v3.request_send(method='DELETE', path=path, params=params_agent_id, json={})
-        print(response.text)
+
         assert response.status_code == 200
         response = pool_api_v3.request_send(path=pool_api_v3.path_end_point['get_list_queue_calls'],
                                             params={**{"page": "1",
@@ -281,7 +278,7 @@ class TestPoolApiDialog:
             assert dialog_id in list_dialog_id
 
     @allure.feature('Отменить все далоги для проекта, валидный agent_id')
-    def test_cancel_all_dialog_valid(self, pool_api_v3, params_agent_id):
+    def test_cancel_all_dialog_valid(self, pool_api_v3, params_agent_id, creation_queue_dialog):
         path = pool_api_v3.path_end_point['cancel_all_dialogs']
         response = pool_api_v3.request_send(method='DELETE', path=path, params=params_agent_id)
         assert response.status_code == 200
