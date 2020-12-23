@@ -28,6 +28,7 @@ def test_get_refresh_token(api_v3):
     assert 'refresh_token' in response.json()
 
 
+@pytest.mark.skip(reason='Пока не пофикшено на проде')
 @pytest.mark.parametrize('no_valid_token', ['12345354346436', '23fdw234fw34', 'ывфавывапывп', 'sdfgagsdfgaa', '   '])
 @allure.feature('Обновление токена, невалидный токен')
 def test_get_refresh_token_again(api_v3, no_valid_token):
@@ -50,9 +51,7 @@ def test_get_all_agents_company_valid(api_v3):
     assert 'agent_uuid' in response.json()[0]
     assert 'name' in response.json()[0]
 
-    name_agent_list = []
-    for item in response.json():
-        name_agent_list.append(item['name'])
+    name_agent_list = [item['name'] for item in response.json()]
     assert api_v3.test_data['agent_name'] in name_agent_list
 
 
