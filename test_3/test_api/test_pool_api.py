@@ -192,7 +192,7 @@ class TestPoolApiDialog:
         path = pool_api_v3.path_end_point['get_all_dialog_queue']
         response = pool_api_v3.request_send(path=path, params=params)
         assert response.status_code == 200
-        assert len(response.json()['dialogs']) == response.json()['total']
+        assert len(response.json()['dialogs']) <= response.json()['total']
         assert response.json()['total'] > 0
         assert len(response.json()['dialogs']) > 0
         upload_msisdn_list = [item['msisdn'] for item in creation_queue_dialog]
