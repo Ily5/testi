@@ -199,7 +199,18 @@ def check_queue(params_agent_id, pool_api_v3, path_name, queue_name):
     params = {**{"page": "1",
                  "by_count": "100"}, **params_agent_id}
     path = pool_api_v3.path_end_point[path_name]
+
     while True:
-        response = pool_api_v3.request_send(path=path, params=params)
-        if len(response.json()[queue_name]) > 0:
-            break
+
+        if queue_name == 'calls':
+            queue_name_2 = 'dialogs'
+            path_2 = pool_api_v3.path_end_point['get_all_dialog_queue']
+            response_1 = pool_api_v3.request_send(path=path, params=params)
+            response_2 = pool_api_v3.request_send(path=path_2, params=params)
+
+            if len(response_1.json()[queue_name]) > 0 and len(response_2.json()[queue_name_2]) == 0:
+                break
+        else:
+            response = pool_api_v3.request_send(path=path, params=params)
+            if len(response.json()[queue_name]) > 0:
+                break
