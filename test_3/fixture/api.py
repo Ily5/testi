@@ -12,11 +12,11 @@ class ApiHelper:
         self.headers = None
 
     def auth(self):
-        self.url = "https://api-test-v3.neuro.net/api/v2/ext/auth"
+        self.url = "https://api-v3.neuro.net/api/v2/ext/auth"
         self.payload = ""
         self.headers = {
             'content-type': "multipart/form-data; boundary=---011000010111000001101001",
-            'authorization': "Basic aWtvc2hraW5AbmV1cm8ubmV0Omlrb3Noa2lu"
+            'authorization': "Basic aWtvc2hraW5AbmV1cm8ubmV0OjEyMzQ1Ng=="
         }
 
         response = requests.request("POST", self.url, data=self.payload, headers=self.headers)
@@ -25,8 +25,8 @@ class ApiHelper:
         return token
 
     def init_dialog(self, token, number):
-        self.url = "https://api-test-v3.neuro.net/api/v2/ext/dialog/dialog-initial"
-        self.querystring = {"agent_uuid": "b5b2a743-259b-4641-a007-0dd2abe3e0fa"}
+        self.url = "https://api-v3.neuro.net/api/v2/ext/dialog/dialog-initial"
+        self.querystring = {"agent_uuid": "f29c639f-f3ff-46bb-9425-fe2ffb27796c"}
         self.payload = "{\n\"msisdn\": \"%s\",\n\"script_entry_point\": \"main\"\n}" % number
         self.headers = {
             'content-type': "application/json",
@@ -39,8 +39,8 @@ class ApiHelper:
         return uuid
 
     def set_params(self, token, asr, tts):
-        self.url = "https://api-test-v3.neuro.net/api/v2/ext/agent-settings/general"
-        self.querystring = {"agent_uuid": "b5b2a743-259b-4641-a007-0dd2abe3e0fa"}
+        self.url = "https://api-v3.neuro.net/api/v2/ext/agent-settings/general"
+        self.querystring = {"agent_uuid": "f29c639f-f3ff-46bb-9425-fe2ffb27796c"}
 
         self.payload = {"asr": asr, "tts": tts}
         self.headers = {
@@ -52,7 +52,7 @@ class ApiHelper:
         # print(response.text)
 
     def set_yandex(self, token):
-        self.url = "https://api-test-v3.neuro.net/api/v2/rbac/agent/b5b2a743-259b-4641-a007-0dd2abe3e0fa"
+        self.url = "https://api-v3.neuro.net/api/v2/rbac/agent/f29c639f-f3ff-46bb-9425-fe2ffb27796c"
 
         # self.payload = json_yandex
         self.headers = {
@@ -65,7 +65,7 @@ class ApiHelper:
         # print(response.text)
 
     def set_google(self, token):
-        self.url = "https://api-test-v3.neuro.net/api/v2/rbac/agent/b5b2a743-259b-4641-a007-0dd2abe3e0fa"
+        self.url = "https://api-v3.neuro.net/api/v2/rbac/agent/f29c639f-f3ff-46bb-9425-fe2ffb27796c"
 
         # self.payload = json_google
         self.headers = {

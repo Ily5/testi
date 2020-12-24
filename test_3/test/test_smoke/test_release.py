@@ -15,7 +15,8 @@ def test_v3_cms(app_3, db):
         app_3.session.login()
     with allure.step("Переходим в проект release_run"):
         time.sleep(3)
-        app_3.page.go_to_project("b5b2a743-259b-4641-a007-0dd2abe3e0fa")
+        # app_3.page.go_to_project("b5b2a743-259b-4641-a007-0dd2abe3e0fa")
+        app_3.page.go_to_project("f29c639f-f3ff-46bb-9425-fe2ffb27796c")
         time.sleep(5)
     with allure.step("Наличие элементов меню"):
         app_3.page.check_menu()
@@ -27,7 +28,7 @@ def test_v3_cms(app_3, db):
 @allure.story("Yandex")
 def test_v3_init_call_yandex(app_3, db):
     global result
-    db.create_connect(app_3.database["rw"]["test"])
+    db.create_connect(app_3.database["rw"]["prod"])
     with allure.step("Авторизация в external_api"):
         token = app_3.api.auth()
         assert type(token) == str
@@ -100,7 +101,7 @@ def test_v3_media_part_yandex(app_3, db):
 @allure.story("Google")
 def test_v3_init_call_google(app_3, db):
     global result
-    db.create_connect(app_3.database["rw"]["test"])
+    db.create_connect(app_3.database["rw"]["prod"])
     with allure.step("Авторизация в external_api"):
         token = app_3.api.auth()
         assert type(token) == str
@@ -173,7 +174,7 @@ def test_v3_media_part_google(app_3, db):
 @allure.feature("Silence")
 @allure.story("Тишина + тишина")
 def test_v3_silence(app_3, db):
-    db.create_connect(app_3.database["rw"]["test"])
+    db.create_connect(app_3.database["rw"]["prod"])
     # with allure.step("Авторизация в external_api"):
     #     token = app_3.api.auth()
     with allure.step("Изменение параметров в cms_api"):

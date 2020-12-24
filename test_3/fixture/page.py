@@ -15,7 +15,7 @@ class PageHelper:
 
     def go_to_project(self, uuid):
         wd = self.app.wd
-        wd.get("https://cms-test-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=%s" % uuid)
+        wd.get("https://cms-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=%s" % uuid)
 
     def return_to_main(self):
         wd = self.app.wd

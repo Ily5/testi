@@ -47,7 +47,7 @@ def app_3(request):
         browser = request.config.getoption("--browser")
         with open(request.config.getoption("--config")) as cfg:
             config = json.load(cfg)
-            fixture = ApplicationNewVersion(browser=browser, cms_url=config["CmsUrl3"], database=config["database"])
+            fixture = ApplicationNewVersion(browser=browser, cms_url=config["CmsUrl3"], database=config["databasev3"])
             # fixture.session.login(username=config["UsernameCms"], password=config["PasswordCms"])
 
     def done():
@@ -88,4 +88,4 @@ def random_str_generator(size=random.randint(3, 129),
 
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="remote")
-    parser.addoption("--config", action="store", default=ROOT_DIR + "/config_test.json")
+    parser.addoption("--config", action="store", default=ROOT_DIR + "/config_prod.json")
