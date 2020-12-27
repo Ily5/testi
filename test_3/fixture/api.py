@@ -91,7 +91,7 @@ class APIClientV3:
         self.test_data = test_data
         self.path_end_point = path_end_point
 
-    def request_send(self, method='GET', path=None, status_code=480, waiting_queue_sec=300, **kwargs):
+    def request_send(self, method='GET', path=None, status_code=480, waiting_queue_sec=600, **kwargs):
         if path is None:
             request_url = self.base_url
         else:
