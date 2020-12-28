@@ -1,10 +1,9 @@
 from test_3.fixture.BasePage import BasePage
 
 
-# todo переписать локаторы на нормальные
 class AnyPage(BasePage):
-    __account_button = '/html/body/app-root/app-base-layout/mat-drawer-container/mat-drawer-content/div/mat-toolbar/mat-toolbar-row/div[2]/app-user-menu/button/span[1]/div'
-    __sing_out_button = '//*[@id="mat-menu-panel-0"]/div/div/button'
+    __account_button = '//app-user-menu[@class="app-user-menu"]'
+    __sing_out_button = '//*[@id="mat-menu-panel-0"]//button'
 
     def logout(self):
         self._click_by_account_button()

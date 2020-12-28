@@ -35,11 +35,11 @@ class BasePage:
             self.scroll_to_element(locator)
             self.driver.find_element_by_xpath(locator).click()
         except ElementNotVisibleException as e:
-            self.allure_ElementNotVisibleException(e)
+            self.allure_ElementNotVisibleException()
         except NoSuchElementException as e:
-            self.allure_NoSuchElementException(e)
+            self.allure_NoSuchElementException()
         except StaleElementReferenceException as e:
-            self.allure_StaleElementReferenceException(e)
+            self.allure_StaleElementReferenceException()
 
     @allure.step("Навести на элемент")
     def move_to_element(self, locator):
@@ -54,11 +54,11 @@ class BasePage:
             self.scroll_to_element(locator)
             self.driver.find_element_by_xpath(locator).send_keys(text)
         except ElementNotVisibleException as e:
-            self.allure_ElementNotVisibleException(e)
+            self.allure_ElementNotVisibleException()
         except NoSuchElementException as e:
-            self.allure_NoSuchElementException(e)
+            self.allure_NoSuchElementException()
         except StaleElementReferenceException as e:
-            self.allure_StaleElementReferenceException(e)
+            self.allure_StaleElementReferenceException()
 
     @allure.step('Очистка текстовго поля и ввод текста')
     def clear_and_send_keys_by_xpath(self, locator, text):
@@ -70,11 +70,11 @@ class BasePage:
             self.clear_by_xpath(locator)
             self.driver.find_element_by_xpath(locator).send_keys(text)
         except ElementNotVisibleException as e:
-            self.allure_ElementNotVisibleException(e)
+            self.allure_ElementNotVisibleException()
         except NoSuchElementException as e:
-            self.allure_NoSuchElementException(e)
+            self.allure_NoSuchElementException()
         except StaleElementReferenceException as e:
-            self.allure_StaleElementReferenceException(e)
+            self.allure_StaleElementReferenceException()
 
     @allure.step('Получение текста из тега')
     def get_tag_text(self, locator):
@@ -82,9 +82,9 @@ class BasePage:
             text = self.driver.find_element_by_xpath(locator).text
             return text
         except ElementNotVisibleException as e:
-            self.allure_ElementNotVisibleException(e)
+            self.allure_ElementNotVisibleException()
         except NoSuchElementException as e:
-            self.allure_NoSuchElementException(e)
+            self.allure_NoSuchElementException()
 
     def scroll_to_element(self, locator):
         try:
@@ -93,16 +93,16 @@ class BasePage:
                 temp['y'] - self.window_scroll_Y) + ")"
             self.driver.execute_script(text)
         except StaleElementReferenceException as e:
-            self.allure_ElementNotVisibleException(e)
+            self.allure_ElementNotVisibleException()
 
     @allure.step('Очистка текстового поля')
     def clear_by_xpath(self, locator):
         try:
             self.driver.find_element_by_xpath(locator).clear()
         except ElementNotVisibleException as e:
-            self.allure_ElementNotVisibleException(e)
+            self.allure_ElementNotVisibleException()
         except NoSuchElementException as e:
-            self.allure_NoSuchElementException(e)
+            self.allure_NoSuchElementException()
 
     def get_current_url(self):
         return self.driver.current_url
@@ -113,9 +113,9 @@ class BasePage:
             action_chains = ActionChains(self.driver)
             action_chains.context_click(self.driver.find_element_by_xpath(locator)).perform()
         except ElementNotVisibleException as e:
-            self.allure_ElementNotVisibleException(e)
+            self.allure_ElementNotVisibleException()
         except NoSuchElementException as e:
-            self.allure_NoSuchElementException(e)
+            self.allure_NoSuchElementException()
 
     @allure.step('Обновление страницы')
     def refresh_the_page(self):
@@ -135,9 +135,9 @@ class BasePage:
                 time.sleep(waiting_time)
                 self.driver.find_element_by_xpath(locator).send_keys(symbol)
         except ElementNotVisibleException as e:
-            self.allure_ElementNotVisibleException(e)
+            self.allure_ElementNotVisibleException()
         except NoSuchElementException as e:
-            self.allure_NoSuchElementException(e)
+            self.allure_NoSuchElementException()
 
     def waiting_element_to_be_clickable(self, locator):
         try:
@@ -151,7 +151,7 @@ class BasePage:
             self.driver.find_element_by_xpath(locator)
             return True
         except NoSuchElementException as e:
-            self.allure_NoSuchElementException(e)
+            self.allure_NoSuchElementException()
             return False
 
     @allure.step('screenshot')

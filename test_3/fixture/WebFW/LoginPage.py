@@ -2,13 +2,12 @@ import allure
 from test_3.fixture.WebFW.AnyPage import AnyPage
 
 
-# todo переписать локаторы на нормальные
 class LoginPage(AnyPage):
     __set_username = '//*[@id="mat-input-0"]'
     __set_password = '//*[@id="mat-input-1"]'
     __show_password_button = ''
     __remember_me_button = ''
-    __login_button = '/html/body/app-root/app-login/div/mat-card/form/div/button'
+    __login_button = '//button'
 
     @allure.step('Логин в систему')
     def login_in_cms(self, username, password):

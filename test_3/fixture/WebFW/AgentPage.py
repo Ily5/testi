@@ -13,7 +13,7 @@ class AnyAgentPage(AnyPage):
     __logs_button = ''
     __contacts_button = ''
     __analytics_button = ''
-    __data_uploading_button = '/html/body/app-root/app-base-layout/mat-drawer-container/mat-drawer[1]/div/div[2]/div/mat-nav-list/a[10]'
+    __data_uploading_button = '//span[contains(text(),"data uploading")]'
     __queue_button = ''
     __test_nlu_button = ''
 
@@ -23,8 +23,9 @@ class AnyAgentPage(AnyPage):
 
 
 class DataUploadingPage(AnyAgentPage):
-    __input_select_file = '/html/body/app-root/app-base-layout/mat-drawer-container/mat-drawer-content/div/div/main/app-tabs-layout/div/app-data-uploading/app-initial-data/app-content/div/div/div[2]/div[1]/div/div/div[1]/app-dnd-file-uploader/input'
-    __select_file_button = '/html/body/app-root/app-base-layout/mat-drawer-container/mat-drawer-content/div/div/main/app-tabs-layout/div/app-data-uploading/app-initial-data/app-content/div/div/div[2]/div[1]/div/div/div[1]/app-dnd-file-uploader/div/button'
+    __input_select_file = '//input[@type="file"]'
+    __select_file_button = '//span[contains(text(),"select file")]/..'
+    __upload_file_button = '//span[text()="upload "]'
     __download_example = ''
     __select_another_file = ''
     __sorting_time_uploading = ''
@@ -34,6 +35,6 @@ class DataUploadingPage(AnyAgentPage):
 
     def uploading_file(self, file_path):
         self.send_keys_by_xpath(self.__input_select_file, file_path)
-        self.click_by_xpath(self.__select_file_button)
-        # todo дожидаться окончания загрузки файла
+        self.click_by_xpath(self.__upload_file_button)
+        # todo добавить ожидание окончания загрузки файла без тайм слип
         time.sleep(10)
