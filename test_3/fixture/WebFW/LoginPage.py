@@ -2,6 +2,7 @@ import allure
 from test_3.fixture.WebFW.AnyPage import AnyPage
 
 
+# todo переписать локаторы на нормальные
 class LoginPage(AnyPage):
     __set_username = '//*[@id="mat-input-0"]'
     __set_password = '//*[@id="mat-input-1"]'

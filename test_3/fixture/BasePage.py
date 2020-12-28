@@ -22,8 +22,11 @@ class BasePage:
     def __init__(self, app_3):
         self.driver = app_3.wd
 
-    def go_to_project(self, uuid):
-        self.driver.get("https://cms-test-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=%s" % uuid)
+    @allure.step('Прямой переход по ссылке)')
+    def goto_page(self, page):
+        title = self.driver.title
+        if page != title:
+            self.driver.get(page)
 
     @allure.step('Клик по элементу')
     def click_by_xpath(self, locator):
@@ -182,8 +185,6 @@ class BasePage:
     def get_count_elements(self, locator):
         result = len(self.driver.find_elements_by_xpath(locator))
         return result
-
-    # TODO доработать методы, как понять какое по счету окно браузера по индексу?
 
     @allure.step('Переключение между вкладками в браузере')
     def switch_to_window_in_browser(self, i):
