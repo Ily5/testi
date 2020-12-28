@@ -69,7 +69,7 @@ class TestPoolApiCalls:
             list_active_call_id = [call['id'] for call in response_list_queue_calls.json()['calls']]
             assert call_id in list_active_call_id
 
-    @allure.feature('Сбросить очередь')
+    @allure.feature('Сбросить очередь звонков')
     def test_drop_queue_calls(self, pool_api_v3, params_agent_id):
         path = pool_api_v3.path_end_point['drop_queue_calls']
         response = pool_api_v3.request_send(method='POST', path=path, params=params_agent_id, json={})
