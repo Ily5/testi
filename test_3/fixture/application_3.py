@@ -8,6 +8,7 @@ from test_3.fixture.BasePage import BasePage
 from test_3.fixture.WebFW.AnyPage import AnyPage
 from test_3.fixture.WebFW.LoginPage import LoginPage
 from test_3.fixture.WebFW.MainPage import MainPage
+from test_3.fixture.WebFW.AgentPage import AnyAgentPage, DataUploadingPage
 
 from test_3.fixture.api import ApiHelper
 
@@ -53,6 +54,8 @@ class ApplicationNewVersion:
         self.LoginPage = LoginPage(self)
         self.AnyPage = AnyPage(self)
         self.MainPage = MainPage(self)
+        self.AnyAgentPage = AnyAgentPage(self)
+        self.DataUploadingPage = DataUploadingPage(self)
 
         logging.basicConfig(filename=sys.path[1] + "/log/test_asr.log", level=logging.INFO,
                             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
