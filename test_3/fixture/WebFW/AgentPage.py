@@ -1,9 +1,9 @@
-import allure
-from test_3.fixture.WebFW.AnyPage import AnyPage
 import time
+import allure
+from selenium.common.exceptions import NoSuchElementException
+from test_3.fixture.WebFW.AnyPage import AnyPage
 
 
-# todo поменять локаторы на нормальые
 class AnyAgentPage(AnyPage):
     __main_page_button = ''
     __dashboard_button = ''
@@ -28,12 +28,23 @@ class DataUploadingPage(AnyAgentPage):
     __upload_file_button = '//span[text()="upload "]'
     __download_example = '//div[contains(text(),"download example")]'
 
-    __container_all_uploading_file = '//div[@class="app-initial-data__container__info ng-star-inserted"]'
-    __sorting_time_uploading_button = __container_all_uploading_file + '/div/div/button'
-    __delete_all_menu_button = __container_all_uploading_file + '/div/button'
+    __menu_all_uploading_file = '//div[@class="app-initial-data__container__info ng-star-inserted"]'
+    __all_uploading_file_list = __menu_all_uploading_file + '/../div[3]'
+    __delete_download_menu = '//div[@class="ng-star-inserted"]'
+    __delete_valid_file = __delete_download_menu + '/button[2]'
+    __delete_no_valid_file = __delete_download_menu + '/button'
+    __sure_delete_file = '//span[contains(text(), "delete")]/..'
+    __download_valid_file = __delete_download_menu + '/button[1]'
 
-    #__filer_status_button = __container_all_uploading_file + '//div[@class="mat-form-field-wrapper ng-tns-c161-85"]'
-    __filer_status_button = '/html/body/app-root/app-base-layout/mat-drawer-container/mat-drawer-content/div/div/main/app-tabs-layout/div/app-data-uploading/app-initial-data/app-content/div/div/div[2]/div[1]/div/div/div[2]/div/div/mat-form-field/div'
+    __status_file = '/*[1]'
+    __name_file = '/div/div[1]'
+    __time_uploading_file = '/div/div[2]/div'
+    __error_message_file = '/div/div[2]/div[3]/div'
+    __count_contact = '/div/div[2]/div[3]'
+
+    __sorting_time_uploading_button = __menu_all_uploading_file + '/div/div/button'
+
+    __filer_status_button = __menu_all_uploading_file + '//mat-form-field/div'
     __filter_all_statuses = '//span[contains(text(),"All statuses")]'
     __filer_success = '//span[text()=" Success "]'
     __filter_failed = '//span[contains(text(),"Failed")]'
@@ -41,42 +52,106 @@ class DataUploadingPage(AnyAgentPage):
     __filter_loading = '//span[contains(text(),"Loading")]'
 
     __select_another_file = ''
+
+    __delete_all_menu_button = __menu_all_uploading_file + '/div/button'
     __delete_all_completed_button = '//div[contains(@class, "overlay-connected")]//button'
 
+    @allure.step('Загрузка файла')
     def uploading_file(self, file_path):
         self.send_keys_by_xpath(self.__input_select_file, file_path)
+        self.waiting_element_to_be_clickable(self.__filter_all_statuses)
         self.click_by_xpath(self.__upload_file_button)
-        # todo добавить ожидание окончания загрузки файла без тайм слип
-        time.sleep(10)
+        data_now = self.return_data_time_now()
+        while True:
+            result = self.get_info_n_file(1)
+            if result['status'] in [None, "STARTED"] and data_now in result['data_uploading']:
+                time.sleep(0.5)
+            break
 
+    @allure.step('Скачивание образца загрузочного файла')
     def download_example(self):
         self.click_by_xpath(self.__download_example)
 
+    @allure.step('Удаление всех успешно загрудежнных файлов')
     def delete_all_completed_uploading(self):
         self.click_by_xpath(self.__delete_all_menu_button)
         self.click_by_xpath(self.__delete_all_completed_button)
 
+    @allure.step('Измениение сортировки по времени загрузки файла')
     def click_button_sorting_list(self):
         self.click_by_xpath(self.__sorting_time_uploading_button)
 
+    @allure.step('Изменение фильтра по статусам')
     def set_filer_status(self, status):
         self.click_by_xpath(self.__filer_status_button)
         locator = None
         if status == 'all_statuses':
             locator = self.__filter_all_statuses
-            print(locator)
         if status == 'success':
             locator = self.__filer_success
-            print(locator)
         if status == 'failed':
             locator = self.__filter_failed
-            print(locator)
         if status == 'warning':
             locator = self.__filer_warning
-            print(locator)
         if status == 'loading':
             locator = self.__filter_loading
-            print(locator)
         self.click_by_xpath(locator)
-        print(locator)
 
+    @allure.step('Удаление n-ого сверху файла из списка')
+    def delete_n_file(self, number):
+        base_locator = self.__all_uploading_file_list + '/div[{}]'.format(number)
+        delete_file_locator = None
+        if self.get_info_n_file(number)['status'] == 'SUCCESS':
+            delete_file_locator = base_locator + self.__delete_valid_file
+        if self.get_info_n_file(number)['status'] == 'FAILED':
+            delete_file_locator = base_locator + self.__delete_no_valid_file
+
+        self.click_by_xpath(delete_file_locator)
+        self.click_by_xpath(self.__sure_delete_file)
+
+    @allure.step('Скачивание n-ого сверху валидного файла из списка')
+    def download_valid_n_file(self, number):
+        base_locator = self.__all_uploading_file_list + '/div[{}]'.format(number)
+        if self.get_info_n_file(number)['status'] == 'SUCCESS':
+            download_file_locator = base_locator + self.__download_valid_file
+            self.click_by_xpath(download_file_locator)
+        if self.get_info_n_file(number)['status'] == 'FAILED':
+            pass
+
+    @allure.step('Получение информации из n-ого сверху файла из списка')
+    def get_info_n_file(self, number):
+        error_message = None
+        count_contact = None
+
+        base_locator = self.__all_uploading_file_list + '/div[{}]'.format(number)
+
+        status_locator = base_locator + self.__status_file
+        status = self.get_attribute_test(locator=status_locator, attribute='ng-reflect-state')
+
+        name_locator = base_locator + self.__name_file
+        name = self.get_tag_text(name_locator)
+
+        time_uploading_locator = base_locator + self.__time_uploading_file
+        time_uploading = self.get_tag_text(time_uploading_locator)
+
+        if status == "FAILED":
+            try:
+                error_message_locator = base_locator + self.__error_message_file
+                error_message = self.get_tag_text(error_message_locator)
+            except:
+                pass
+
+        if status == "SUCCESS":
+            try:
+                count_contact_locator = base_locator + self.__count_contact
+                count_contact = self.get_tag_text(count_contact_locator)
+            except:
+                pass
+
+        dict_info = {"name": name,
+                     "status": status,
+                     "time_uploading": time_uploading,
+                     "count_contact": count_contact,
+                     "error_message": error_message}
+
+        return dict_info
