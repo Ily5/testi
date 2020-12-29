@@ -1,28 +1,33 @@
 import time
+import allure
 
 
 class TestWebDataUploading:
 
-    def test_2(self, agent_settings_page):
-        time.sleep(3)
-        time.sleep(3)
-
-    def test_3(self, agent_settings_page):
-        time.sleep(3)
+    @allure.feature('Загрузка валидного файла')
+    def test_data_uploading_valid_file(self, agent_settings_page, remove_queue_dialogs_and_calls):
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
-        path_no_valid_file = agent_settings_page.test_data['path_to_uploading_file']['no_valid_file']
-        agent_settings_page.DataUploadingPage.uploading_file(path_no_valid_file)
 
-    def test_sorting(self, agent_settings_page):
+        valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['valid_file']
+        data_now = agent_settings_page.BasePage.return_data_time_now()
+        agent_settings_page.DataUploadingPage.uploading_file(valid_file_path)
+
+        result = agent_settings_page.DataUploadingPage.get_info_n_file(1)
+        assert result['status'] == 'SUCCESS'
+        assert result['name'] == agent_settings_page.test_data['name_uploading_file']['valid_file']
+        assert data_now in result['time_uploading']
+
+    @allure.feature('Загрузка невалидного файла')
+    def test_data_uploading_no_valid_file(self, agent_settings_page):
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
-        time.sleep(15)
-        agent_settings_page.DataUploadingPage.set_filer_status(status='success')
-        time.sleep(7)
-        agent_settings_page.DataUploadingPage.set_filer_status(status='all_statuses')
-        time.sleep(7)
-        agent_settings_page.DataUploadingPage.set_filer_status(status='failed')
-        time.sleep(7)
-        agent_settings_page.DataUploadingPage.set_filer_status(status='warning')
-        time.sleep(7)
-        agent_settings_page.DataUploadingPage.set_filer_status(status='loading')
-        time.sleep(7)
+
+        no_valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['no_valid_file']
+        data_now = agent_settings_page.BasePage.return_data_time_now()
+        agent_settings_page.DataUploadingPage.uploading_file(no_valid_file_path)
+
+        result = agent_settings_page.DataUploadingPage.get_info_n_file(1)
+        assert result['status'] == 'FAILED'
+        assert result['name'] == agent_settings_page.test_data['name_uploading_file']['no_valid_file']
+        assert data_now in result['time_uploading']
+
+
