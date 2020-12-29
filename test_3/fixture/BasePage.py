@@ -1,4 +1,5 @@
 import os
+import datetime
 import time
 import allure
 from allure_commons.types import AttachmentType
@@ -86,6 +87,15 @@ class BasePage:
         except NoSuchElementException as e:
             self.allure_NoSuchElementException()
 
+    @allure.step('Получение текста из атрибута тега')
+    def get_attribute_test(self, locator, attribute):
+        try:
+            element = self.driver.find_element_by_xpath(locator)
+            test = element.get_attribute(attribute)
+            return test
+        except:
+            pass
+
     def scroll_to_element(self, locator):
         try:
             temp = self.driver.find_element_by_xpath(locator).location_once_scrolled_into_view
@@ -94,6 +104,11 @@ class BasePage:
             self.driver.execute_script(text)
         except StaleElementReferenceException as e:
             self.allure_ElementNotVisibleException()
+
+    @allure.step('Получаем список элементов с заданным локатором')
+    def find_elements(self, locator):
+        elements_list = self.driver.find_elements_by_xpath(locator)
+        return elements_list
 
     @allure.step('Очистка текстового поля')
     def clear_by_xpath(self, locator):
@@ -166,6 +181,10 @@ class BasePage:
     def select_element_by_visible_text(self, select_locator, text):
         select = Select(self.driver.find_element_by_xpath(select_locator))
         select.select_by_visible_text(text)
+
+    @staticmethod
+    def return_data_time_now():
+        return datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
 
     @allure.step('ElementNotVisibleException')
     def allure_ElementNotVisibleException(self):
