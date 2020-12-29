@@ -6,6 +6,7 @@ import random
 from aiohttp import ClientSession, ClientTimeout
 
 array = []
+durations = []
 
 
 class MediaApi:
@@ -80,6 +81,7 @@ class MediaApi:
         print('#{pid} {uuid}, call duration is {duration}'.format(pid=self.pid, uuid=self.uuid,
                                                                   duration=response['call']['duration']))
         array.append(response['call']['duration'])
+        get_report(response['call']['duration'])
         return {'result': 'done'}
 
     async def request(self, url, method='GET', json_body: dict = None):
@@ -96,6 +98,10 @@ class MediaApi:
             raise ValueError('Invalid response: %s' % str(response['error']))
 
         return response
+
+
+def get_report(duration):
+    durations.append(duration)
 
 
 async def test_request(pid):
@@ -119,7 +125,7 @@ async def test_request(pid):
 async def test_requests_asynchronous():
     start = time.time()
     # futures = []
-    futures = [test_request(i) for i in range(1, 2)]
+    futures = [test_request(i) for i in range(1)]
     # for i in range(1, 2):
     #     futures.append(test_request(i))
     #     time.sleep(1)
