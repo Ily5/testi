@@ -11,7 +11,7 @@ def app_3_web(request):
         browser = request.config.getoption("--browser")
         with open(request.config.getoption("--config")) as cfg:
             config = json.load(cfg)
-        fixture = ApplicationNewVersion(browser='chrome', cms_url=config["CmsUrl3"], test_data=config['v3'],
+        fixture = ApplicationNewVersion(browser=browser, cms_url=config["CmsUrl3"], test_data=config['v3'],
                                         database=None)
         fixture.wd.get(fixture.cms_url)
         fixture.LoginPage.login_in_cms(username=fixture.test_data['auth']['login'],
