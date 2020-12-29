@@ -59,18 +59,20 @@ class DataUploadingPage(AnyAgentPage):
     @allure.step('Загрузка файла')
     def uploading_file(self, file_path):
         self.send_keys_by_xpath(self.__input_select_file, file_path)
-        self.waiting_element_to_be_clickable(self.__filter_all_statuses)
         self.click_by_xpath(self.__upload_file_button)
-        data_now = self.return_data_time_now()
+        self.waiting_element_to_be_clickable(self.__filter_all_statuses)
+        # todo убрать рефреш, как пофиксят загрузку файлов
+        self.refresh_the_page()
         while True:
             result = self.get_info_n_file(1)
-            if result['status'] in [None, "STARTED"] and data_now in result['data_uploading']:
+            if result['status'] in [None, "STARTED"]:
                 time.sleep(0.5)
             break
 
     @allure.step('Скачивание образца загрузочного файла')
     def download_example(self):
         self.click_by_xpath(self.__download_example)
+        self.waiting_element_to_be_clickable(self.__filter_all_statuses)
 
     @allure.step('Удаление всех успешно загрудежнных файлов')
     def delete_all_completed_uploading(self):
