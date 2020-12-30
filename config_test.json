@@ -85,7 +85,19 @@
             },
   "CmsUrl3": "https://cms-test-v3.neuro.net/auth/login?lng=en",
   "api_v3_url": "https://api-test-v3.neuro.net",
-  "v3": {
+  "v3":
+  {
+    "agent_setting_url": "https://cms-test-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=",
+    "main_page_url": "https://cms-test-v3.neuro.net/agents?lng=en",
+    "path_to_uploading_file": {
+        "valid_file": "/home/rdevetiarov/valid_file.xlsx",
+        "no_valid_file": "/home/rdevetiarov/no_valid_file.xlsx"
+    },
+    "name_uploading_file": {
+      "valid_file": "valid_file.xlsx",
+      "no_valid_file": "no_valid_file.xlsx"
+    },
+
     "auth": {
       "login": "rdevetiarov@neuro.net",
       "pass": "123456"

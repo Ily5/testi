@@ -28,7 +28,6 @@ def test_get_refresh_token(api_v3):
     assert 'refresh_token' in response.json()
 
 
-@pytest.mark.skip(reason='Пока не пофикшено на проде')
 @pytest.mark.parametrize('no_valid_token', ['12345354346436', '23fdw234fw34', 'ывфавывапывп', 'sdfgagsdfgaa', '   '])
 @allure.feature('Обновление токена, невалидный токен')
 def test_get_refresh_token_again(api_v3, no_valid_token):
