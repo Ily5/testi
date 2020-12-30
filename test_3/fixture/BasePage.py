@@ -183,8 +183,8 @@ class BasePage:
         select.select_by_visible_text(text)
 
     @staticmethod
-    def return_data_time_now():
-        return datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
+    def return_data_time_now_utc():
+        return datetime.datetime.utcnow().strftime("%d.%m.%Y %H:%M")
 
     @allure.step('ElementNotVisibleException')
     def allure_ElementNotVisibleException(self):
@@ -199,11 +199,6 @@ class BasePage:
     @allure.step('StaleElementReferenceException')
     def allure_StaleElementReferenceException(self):
         assert True is False
-
-    @allure.step('Получение количества элементов')
-    def get_count_elements(self, locator):
-        result = len(self.driver.find_elements_by_xpath(locator))
-        return result
 
     @allure.step('Переключение между вкладками в браузере')
     def switch_to_window_in_browser(self, i):

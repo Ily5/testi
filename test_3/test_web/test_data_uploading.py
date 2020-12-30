@@ -9,29 +9,36 @@ class TestWebDataUploading:
     def test_data_uploading_valid_file(self, agent_settings_page, remove_queue_dialogs_and_calls):
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
 
+        count = agent_settings_page.DataUploadingPage.count_list_files()
+        agent_settings_page.DataUploadingPage.count_list_files()
+
         valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['valid_file']
-        data_now = agent_settings_page.BasePage.return_data_time_now()
         agent_settings_page.DataUploadingPage.uploading_file(valid_file_path)
+
+        count_new = agent_settings_page.DataUploadingPage.count_list_files()
 
         result = agent_settings_page.DataUploadingPage.get_info_n_file(1)
         assert result['status'] == 'SUCCESS'
         assert result['name'] == agent_settings_page.test_data['name_uploading_file']['valid_file']
         assert result['count_contact'] is not None
-        assert data_now in result['time_uploading']
+        assert count_new == count + 1
 
     @allure.feature('Загрузка невалидного файла')
     def test_data_uploading_no_valid_file(self, agent_settings_page):
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
 
+        count = agent_settings_page.DataUploadingPage.count_list_files()
+
         no_valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['no_valid_file']
-        data_now = agent_settings_page.BasePage.return_data_time_now()
         agent_settings_page.DataUploadingPage.uploading_file(no_valid_file_path)
+
+        count_new = agent_settings_page.DataUploadingPage.count_list_files()
 
         result = agent_settings_page.DataUploadingPage.get_info_n_file(1)
         assert result['status'] == 'FAILED'
         assert result['name'] == agent_settings_page.test_data['name_uploading_file']['no_valid_file']
         assert result['error_message'] is not None
-        assert data_now in result['time_uploading']
+        assert count_new == count + 1
 
     @allure.feature('Изменение сортировки списка загруженных файлов')
     def test_edit_sorted(self, agent_settings_page):
@@ -113,11 +120,11 @@ class TestWebDataUploading:
     def test_delete_one_valid_file(self, agent_settings_page):
         agent_settings_page.DataUploadingPage.open_data_uploading_page()
         agent_settings_page.DataUploadingPage.set_filer_status(status='success')
-        before = agent_settings_page.DataUploadingPage.get_info_n_file(1)
+        count = agent_settings_page.DataUploadingPage.count_list_files()
         agent_settings_page.DataUploadingPage.delete_n_file(1)
-        after = agent_settings_page.DataUploadingPage.get_info_n_file(1)
+        count_new = agent_settings_page.DataUploadingPage.count_list_files()
 
-        assert before['time_uploading'] != after['time_uploading']
+        assert count == count_new + 1
 
     @allure.feature('Удаление одного успешно загруженного файла со статусом failed из списка')
     def test_delete_one_no_valid_file(self, agent_settings_page):
@@ -146,6 +153,10 @@ class TestWebDataUploading:
     @allure.feature('Скачивание валидного успешно загруженного файла')
     def test_download_valid_file(self, agent_settings_page):
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
+
+        valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['valid_file']
+        agent_settings_page.DataUploadingPage.uploading_file(valid_file_path)
+
         agent_settings_page.DataUploadingPage.set_filer_status(status='success')
 
         locator = agent_settings_page.DataUploadingPage._DataUploadingPage__all_uploading_file_list + '/div[1]'
