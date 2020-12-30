@@ -9,12 +9,13 @@ class TestWebDataUploading:
     def test_data_uploading_valid_file(self, agent_settings_page, remove_queue_dialogs_and_calls):
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
 
-        count = agent_settings_page.AnyAgentPage.count_list_files()
+        count = agent_settings_page.DataUploadingPage.count_list_files()
+        agent_settings_page.DataUploadingPage.count_list_files()
 
         valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['valid_file']
         agent_settings_page.DataUploadingPage.uploading_file(valid_file_path)
 
-        count_new = agent_settings_page.AnyAgentPage.count_list_files()
+        count_new = agent_settings_page.DataUploadingPage.count_list_files()
 
         result = agent_settings_page.DataUploadingPage.get_info_n_file(1)
         assert result['status'] == 'SUCCESS'
@@ -26,12 +27,12 @@ class TestWebDataUploading:
     def test_data_uploading_no_valid_file(self, agent_settings_page):
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
 
-        count = agent_settings_page.AnyAgentPage.count_list_files()
+        count = agent_settings_page.DataUploadingPage.count_list_files()
 
         no_valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['no_valid_file']
         agent_settings_page.DataUploadingPage.uploading_file(no_valid_file_path)
 
-        count_new = agent_settings_page.AnyAgentPage.count_list_files()
+        count_new = agent_settings_page.DataUploadingPage.count_list_files()
 
         result = agent_settings_page.DataUploadingPage.get_info_n_file(1)
         assert result['status'] == 'FAILED'
