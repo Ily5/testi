@@ -65,8 +65,8 @@
     "agent_setting_url": "https://cms-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=",
     "main_page_url": "https://cms-v3.neuro.net/agents?lng=en",
     "path_to_uploading_file": {
-        "valid_file": "/home/rdevetiarov/valid_file.xlsx",
-        "no_valid_file": "/home/rdevetiarov/no_valid_file.xlsx"
+        "valid_file": "test_3/test_web/uploading_files/valid_file.xlsx",
+        "no_valid_file": "test_3/test_web/uploading_files/no_valid_file.xlsx"
     },
     "name_uploading_file": {
       "valid_file": "valid_file.xlsx",
