@@ -10,7 +10,7 @@ class TestWebDataUploading:
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
 
         valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['valid_file']
-        data_now = agent_settings_page.BasePage.return_data_time_now()
+        data_now = agent_settings_page.BasePage.return_data_time_now_utc()
         agent_settings_page.DataUploadingPage.uploading_file(valid_file_path)
 
         result = agent_settings_page.DataUploadingPage.get_info_n_file(1)
@@ -24,7 +24,7 @@ class TestWebDataUploading:
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
 
         no_valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['no_valid_file']
-        data_now = agent_settings_page.BasePage.return_data_time_now()
+        data_now = agent_settings_page.BasePage.return_data_time_now_utc()
         agent_settings_page.DataUploadingPage.uploading_file(no_valid_file_path)
 
         result = agent_settings_page.DataUploadingPage.get_info_n_file(1)

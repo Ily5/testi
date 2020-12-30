@@ -183,8 +183,8 @@ class BasePage:
         select.select_by_visible_text(text)
 
     @staticmethod
-    def return_data_time_now():
-        return datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
+    def return_data_time_now_utc():
+        return datetime.datetime.utcnow().strftime("%d.%m.%Y %H:%M")
 
     @allure.step('ElementNotVisibleException')
     def allure_ElementNotVisibleException(self):
