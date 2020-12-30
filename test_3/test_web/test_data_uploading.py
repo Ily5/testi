@@ -9,29 +9,35 @@ class TestWebDataUploading:
     def test_data_uploading_valid_file(self, agent_settings_page, remove_queue_dialogs_and_calls):
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
 
+        count = agent_settings_page.BasePage.get_count_elements()
+
         valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['valid_file']
-        data_now = agent_settings_page.BasePage.return_data_time_now_utc()
         agent_settings_page.DataUploadingPage.uploading_file(valid_file_path)
+
+        count_new = agent_settings_page.BasePage.get_count_elements()
 
         result = agent_settings_page.DataUploadingPage.get_info_n_file(1)
         assert result['status'] == 'SUCCESS'
         assert result['name'] == agent_settings_page.test_data['name_uploading_file']['valid_file']
         assert result['count_contact'] is not None
-        assert data_now in result['time_uploading']
+        assert count_new == count + 1
 
     @allure.feature('Загрузка невалидного файла')
     def test_data_uploading_no_valid_file(self, agent_settings_page):
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
 
+        count = agent_settings_page.BasePage.get_count_elements()
+
         no_valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['no_valid_file']
-        data_now = agent_settings_page.BasePage.return_data_time_now_utc()
         agent_settings_page.DataUploadingPage.uploading_file(no_valid_file_path)
+
+        count_new = agent_settings_page.BasePage.get_count_elements()
 
         result = agent_settings_page.DataUploadingPage.get_info_n_file(1)
         assert result['status'] == 'FAILED'
         assert result['name'] == agent_settings_page.test_data['name_uploading_file']['no_valid_file']
         assert result['error_message'] is not None
-        assert data_now in result['time_uploading']
+        assert count_new == count + 1
 
     @allure.feature('Изменение сортировки списка загруженных файлов')
     def test_edit_sorted(self, agent_settings_page):
