@@ -8,11 +8,13 @@ class TestWebDataUploading:
     @allure.feature('Загрузка валидного файла')
     def test_data_uploading_valid_file(self, agent_settings_page, remove_queue_dialogs_and_calls):
         agent_settings_page.AnyAgentPage.open_data_uploading_page()
+        # agent_settings_page.DataUploadingPage.download_example()
+        # time.sleep(10)
 
         valid_file_path = agent_settings_page.test_data['path_to_uploading_file']['valid_file']
         data_now = agent_settings_page.BasePage.return_data_time_now()
-        agent_settings_page.DataUploadingPage.uploading_file(valid_file_path)
-
+        agent_settings_page.DataUploadingPage.uploading_file('test_3/test_web/valid_file.xlsx')
+        time.sleep(30)
         result = agent_settings_page.DataUploadingPage.get_info_n_file(1)
         assert result['status'] == 'SUCCESS'
         assert result['name'] == agent_settings_page.test_data['name_uploading_file']['valid_file']
