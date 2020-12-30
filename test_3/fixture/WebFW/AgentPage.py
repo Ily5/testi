@@ -74,10 +74,11 @@ class DataUploadingPage(AnyAgentPage):
         self.click_by_xpath(self.__download_example)
         self.waiting_element_to_be_clickable(self.__filter_all_statuses)
 
-    @allure.step('Удаление всех успешно загрудежнных файлов')
+    @allure.step('Удаление всех успешно загруженных файлов')
     def delete_all_completed_uploading(self):
         self.click_by_xpath(self.__delete_all_menu_button)
         self.click_by_xpath(self.__delete_all_completed_button)
+        self.click_by_xpath(self.__sure_delete_file)
 
     @allure.step('Измениение сортировки по времени загрузки файла')
     def click_button_sorting_list(self):
@@ -85,19 +86,21 @@ class DataUploadingPage(AnyAgentPage):
 
     @allure.step('Изменение фильтра по статусам')
     def set_filer_status(self, status):
-        self.click_by_xpath(self.__filer_status_button)
-        locator = None
-        if status == 'all_statuses':
-            locator = self.__filter_all_statuses
-        if status == 'success':
-            locator = self.__filer_success
-        if status == 'failed':
-            locator = self.__filter_failed
-        if status == 'warning':
-            locator = self.__filer_warning
-        if status == 'loading':
-            locator = self.__filter_loading
-        self.click_by_xpath(locator)
+        if self.count_list_files() == 0: raise Exception('Пустой список загруженных файлов')
+        if self.count_list_files() > 0:
+            self.click_by_xpath(self.__filer_status_button)
+            locator = None
+            if status == 'all_statuses':
+                locator = self.__filter_all_statuses
+            if status == 'success':
+                locator = self.__filer_success
+            if status == 'failed':
+                locator = self.__filter_failed
+            if status == 'warning':
+                locator = self.__filer_warning
+            if status == 'loading':
+                locator = self.__filter_loading
+            self.click_by_xpath(locator)
 
     @allure.step('Удаление n-ого сверху файла из списка')
     def delete_n_file(self, number):
@@ -113,12 +116,15 @@ class DataUploadingPage(AnyAgentPage):
 
     @allure.step('Скачивание n-ого сверху валидного файла из списка')
     def download_valid_n_file(self, number):
-        base_locator = self.__all_uploading_file_list + '/div[{}]'.format(number)
-        if self.get_info_n_file(number)['status'] == 'SUCCESS':
-            download_file_locator = base_locator + self.__download_valid_file
-            self.click_by_xpath(download_file_locator)
-        if self.get_info_n_file(number)['status'] == 'FAILED':
-            pass
+        if self.count_list_files() > 0:
+            base_locator = self.__all_uploading_file_list + '/div[{}]'.format(number)
+            if self.get_info_n_file(number)['status'] == 'SUCCESS':
+                download_file_locator = base_locator + self.__download_valid_file
+                self.click_by_xpath(download_file_locator)
+                self.waiting_element_to_be_clickable(self.__filter_all_statuses)
+            else:
+                raise Exception('Возможно скачать только файлы со статусом загрузки success')
+        if self.count_list_files() == 0: raise Exception('Пустой список загруженных файлов')
 
     @allure.step('Получение информации из n-ого сверху файла из списка')
     def get_info_n_file(self, number):
@@ -157,3 +163,8 @@ class DataUploadingPage(AnyAgentPage):
                      "error_message": error_message}
 
         return dict_info
+
+    @allure.step('Получение количества загруженных файлов в списке ')
+    def count_list_files(self):
+        locator = self.__all_uploading_file_list + '/div'
+        return len(self.find_elements(locator))
