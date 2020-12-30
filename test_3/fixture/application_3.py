@@ -40,7 +40,7 @@ class ApplicationNewVersion:
                 desired_capabilities=capabilities
             )
 
-        self.wd.set_window_size(1936, 1176)
+        self.wd.maximize_window()
         self.verificationErrors = []
         self.wd.implicitly_wait(10)
         self.cms_url = cms_url
