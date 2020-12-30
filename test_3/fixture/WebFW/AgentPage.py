@@ -116,6 +116,7 @@ class DataUploadingPage(AnyAgentPage):
 
     @allure.step('Скачивание n-ого сверху валидного файла из списка')
     def download_valid_n_file(self, number):
+        if self.count_list_files() == 0: raise Exception('Пустой список загруженных файлов')
         if self.count_list_files() > 0:
             base_locator = self.__all_uploading_file_list + '/div[{}]'.format(number)
             if self.get_info_n_file(number)['status'] == 'SUCCESS':
@@ -124,7 +125,6 @@ class DataUploadingPage(AnyAgentPage):
                 self.waiting_element_to_be_clickable(self.__filter_all_statuses)
             else:
                 raise Exception('Возможно скачать только файлы со статусом загрузки success')
-        if self.count_list_files() == 0: raise Exception('Пустой список загруженных файлов')
 
     @allure.step('Получение информации из n-ого сверху файла из списка')
     def get_info_n_file(self, number):
