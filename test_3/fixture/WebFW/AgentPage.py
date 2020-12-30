@@ -111,11 +111,11 @@ class DataUploadingPage(AnyAgentPage):
         if self.get_info_n_file(number)['status'] == 'FAILED':
             delete_file_locator = base_locator + self.__delete_no_valid_file
 
-        count = self.get_count_elements()
+        count = self.count_list_files()
         self.click_by_xpath(delete_file_locator)
         self.click_by_xpath(self.__sure_delete_file)
         while True:
-            if self.get_count_elements() < count:
+            if self.count_list_files() < count:
                 break
             time.sleep(0.5)
 
