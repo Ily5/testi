@@ -200,11 +200,6 @@ class BasePage:
     def allure_StaleElementReferenceException(self):
         assert True is False
 
-    @allure.step('Получение количества элементов')
-    def get_count_elements(self, locator):
-        result = len(self.driver.find_elements_by_xpath(locator))
-        return result
-
     @allure.step('Переключение между вкладками в браузере')
     def switch_to_window_in_browser(self, i):
         windows_list = self.driver.window_handles
