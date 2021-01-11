@@ -54,8 +54,8 @@ class Connector:
                 conn = self.db_conn("SELECT result FROM dialog WHERE uuid = '%s'" % str(dialog_uuid))
                 time.sleep(1)
                 continue
+        #   TODO 1 cycle
         while True:
-            timeout = time.time() + 600
             if conn[0][0] == "done":
                 break
             elif time.time() > timeout:
