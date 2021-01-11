@@ -59,32 +59,84 @@
                  "port": 5432
                  }
             },
-  "databasev3" : {"rw":
-                {"test": {"database": "pbx_refactor",
-                          "user": "postgres",
-                          "password": "",
-                          "host": "10.131.0.116",
-                          "port": 5001},
-                 "prod": {"database": "pbx_refactor",
-                          "user": "postgres",
-                          "password": "",
-                          "host": "10.131.0.80",
-                          "port": 5001
-                          }
-                 },
-            "ro":
-                {"test": {"database": "pbx_refactor",
-                          "user": "postgres",
-                          "password": "",
-                          "host": "10.131.0.116",
-                          "port": 5000},
-                 "prod": {"database": "pbx_refactor",
-                          "user": "postgres",
-                          "password": "",
-                          "host": "10.131.0.80",
-                          "port": 5000
-                          }
-                 }
-            },
-  "CmsUrl3": "https://cms-v3.neuro.net/auth/login?lng=en"
+  "CmsUrl3": "https://cms-v3.neuro.net/auth/login?lng=en",
+  "api_v3_url": "https://api-v3.neuro.net",
+  "v3": {
+    "agent_setting_url": "https://cms-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=",
+    "main_page_url": "https://cms-v3.neuro.net/agents?lng=en",
+    "path_to_uploading_file": {
+        "valid_file": "test_3/test_web/uploading_files/valid_file.xlsx",
+        "no_valid_file": "test_3/test_web/uploading_files/no_valid_file.xlsx"
+    },
+    "name_uploading_file": {
+      "valid_file": "valid_file.xlsx",
+      "no_valid_file": "no_valid_file.xlsx"
+    },
+
+    "auth": {
+      "login": "rdevetiarov@neuro.net",
+      "pass": "123456"
+    },
+    "api": {
+      "api_base_url": "https://api-v3.neuro.net",
+      "poll_api_v3_url": "http://10.129.0.171:8083",
+      "methods_end_point": {
+        "post_auth": "/api/v2/ext/auth",
+        "post_update_token": "/api/v2/ext/auth/refresh",
+        "get_all_agents_company": "/api/v2/ext/company-agents",
+        "get_agent_settings": "/api/v2/ext/agent-settings/general",
+        "put_change_agent_settings": "/api/v2/ext/agent-settings/general",
+        "agent_call_rules": "/api/v2/ext/agent-settings/time-slot",
+        "agent_initial_entities": "/api/v2/ext/initial-entity",
+        "agent_output_entities": "/api/v2/ext/output-entity",
+        "remove_queue_dialogs": "/api/v2/ext/queue/remove",
+        "upload_dialog": "/api/v2/ext/dialog/dialog-initial",
+        "upload_group_dialogs": "/api/v2/ext/dialog/dialogs-group-initial",
+        "get_dialogs_group_upload_result": "/api/v2/ext/dialog/dialogs-group-initial-result",
+        "get_dialogs_group_upload_status": "/api/v2/ext/dialog/dialogs-group-initial-status",
+        "get_dialog_statistic": "/api/v2/ext/statistic/dialog",
+        "get_group_dialogs_statistic": "/api/v2/ext/statistic/dialog-group",
+        "get_statistic_output_entities": "/api/v2/ext/statistic/dialog-report",
+        "get_download_call_record": "/api/v2/ext/statistic/download/call",
+        "get_dialogs_agent": "/api/v2/ext/queue/dialog",
+        "get_calls_agent": "/api/v2/ext/queue/call",
+        "stop_queue_dialogs": "/api/v2/ext/queue/stop",
+        "return_queue_dialogs": "/api/v2/ext/queue/return",
+        "poll_api": {
+          "get_calls": "/get_calls",
+          "get_progress_calls": "/pending",
+          "get_list_queue_calls": "/queue",
+          "defer_calls": "/queue/defer",
+          "return_calls": "/queue/return",
+          "drop_queue_calls": "/queue/flush",
+          "get_full_queue": "/get_full_queue",
+          "get_all_valid_calls": "/valid_calls",
+          "get_all_dialog_queue": "/dialog_queue",
+          "get_dialog_queue_size": "/dialog_queue_size",
+          "cancel_all_dialogs": "/cancel_dialog",
+          "defer_dialog": "/dialog_queue/defer",
+          "return_dialog": "/dialog_queue/return",
+          "get_dialogs": "/get_dialogs"
+
+        }
+      }
+    },
+    "test_data": {
+      "agent_uuid": "2fd100a0-5b79-42bd-ae35-fb38c5808e53",
+      "agent_id": "204",
+      "msisdn": "89960652535",
+      "company_uuid": "60e0e833-6ea7-4ac3-8f90-136f2caba1dd",
+      "agent_name": "API_test_agent",
+      "agent_flag": "apiflag",
+      "agent_language": "ru-RU",
+      "agent_tts": "oksana@yandex",
+      "agent_pool_name": "yandex-pool-1-a",
+      "agent_trunk_name": "sip-client-QA",
+      "recall_count": 1,
+      "asr": "yandex",
+      "tts": "jane@yandex",
+      "language": "ru-RU",
+      "total_channel_limit": 2
+    }
+  }
 }
