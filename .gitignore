@@ -105,6 +105,9 @@ celerybeat.pid
 .env
 .venv
 env/
+allure-report/
+allure-results/
+log/
 venv/
 ENV/
 env.bak/
@@ -124,6 +127,7 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
+test_tmp.py
+ttt.py
 # Pyre type checker
 .pyre/

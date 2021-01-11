@@ -59,6 +59,33 @@
                  "port": 5432
                  }
             },
+  "databasev3" : {"rw":
+                  {"test": {"database": "pbx_refactor",
+                          "user": "postgres",
+                          "password": "",
+                          "host": "10.131.0.116",
+                          "port": 5001},
+                 "prod": {"database": "pbx_refactor",
+                          "user": "postgres",
+                          "password": "",
+                          "host": "10.131.0.80",
+                          "port": 5001
+                          }
+                 },
+            "ro":
+                {"test": {"database": "pbx_refactor",
+                          "user": "postgres",
+                          "password": "",
+                          "host": "10.131.0.116",
+                          "port": 5000},
+                 "prod": {"database": "pbx_refactor",
+                          "user": "postgres",
+                          "password": "",
+                          "host": "10.131.0.80",
+                          "port": 5000
+                          }
+                 }
+            },
   "CmsUrl3": "https://cms-v3.neuro.net/auth/login?lng=en",
   "api_v3_url": "https://api-v3.neuro.net",
   "v3": {

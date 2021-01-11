@@ -23,7 +23,6 @@ def test_v3_cms(app_3, db):
         app_3.session.logout()
 
 
-
 @allure.feature("Smoke 3.0")
 @allure.story("Yandex")
 def test_v3_init_call_yandex(app_3, db):
@@ -39,7 +38,7 @@ def test_v3_init_call_yandex(app_3, db):
     db.wait_for_done(dialog_uuid)
     with allure.step("Выгрузка данных по диалогу из rw базы"):
         dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
-    print(db.select_data(table='call', column='dialog_id', sdata='uuid', data = int(dialog_id)))
+    print(db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
     result = db.execute_call_data(table='dialog_stats', data=dialog_id)
 
 
@@ -54,7 +53,7 @@ def test_v3_media_part_yandex(app_3, db):
         if not any('nv.say' in d for d in result):
             assert False
     with allure.step("nv_background"):
-    # ____ nv background
+        # ____ nv background
         for res in result:
             if 'nv.background' in res:
                 assert any('Office_local' in d for d in res)
