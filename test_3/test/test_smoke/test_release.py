@@ -164,7 +164,7 @@ def test_v3_media_part_yandex(app_3, db):
     with allure.step('nlu.extract_person'):
         assert logs_dict['extract_person'] == "{'first': 'иван', 'last': 'петров', 'middle': 'алексеевич'}"
 
-    with allure.step('nlu.extract_person'):
+    with allure.step('nlu.extract_address'):
         assert logs_dict['extract_address'] == "{'city': ['москва', None], 'street': ['ленина', 'улица']," \
                                                " 'building': ['16', None, None], 'appartment': '5'}"
 
@@ -301,7 +301,7 @@ def test_v3_media_part_google(app_3, db):
     with allure.step('nlu.extract_person'):
         assert logs_dict['extract_person'] == "{'first': 'иван', 'last': 'петров', 'middle': 'алексеевич'}"
 
-    with allure.step('nlu.extract_person'):
+    with allure.step('nlu.extract_address'):
         assert logs_dict['extract_address'] == "{'city': ['москва', None], 'street': ['ленина', 'улица']," \
                                                " 'building': ['16', None, None], 'appartment': '5'}"
 
