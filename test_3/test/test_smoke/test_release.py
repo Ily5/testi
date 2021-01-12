@@ -187,6 +187,7 @@ def test_v3_silence(app_3, db):
         dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
         result = db.execute_call_data(table='dialog_stats', data=dialog_id)
         print(db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
+
     # with allure.step("Изменение параметров в cms_api"):
     #     app_3.api.set_google(token)
     # with allure.step("Иницализация диалога в external_api"):
