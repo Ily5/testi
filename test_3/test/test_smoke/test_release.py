@@ -42,34 +42,34 @@ def test_v3_init_call_yandex(app_3, db):
     result = db.execute_call_data(table='dialog_stats', data=dialog_id)
 
 
-def test_test(app_3, db):
-    global result
-    db.create_connect(app_3.database["rw"]["prod"])
-    result = db.execute_call_data(table='dialog_stats', data='474679')
-    # print('\n', result)
-    listen_list = [res[1].split(',') for res in result if 'nv.listen' in res]
-    utterance_listen_list = [i[i.find(':') + 2:] for res in listen_list for i in res if
-                             'utterance' in i]
-
-    # print('\n', utterance_listen_list)
-    log_list = [res[1] for res in result if 'nn.log' in res]
-    extract_person = None
-    extract_address = None
-    dict_log = {}
-    for item in [res[1] for res in result if 'nn.log' in res]:
-        if 'city' in item:
-            dict_log['extract_address'] = item
-        if 'first' in item:
-            dict_log['extract_person'] = item
-        if 'bot' in item:
-            dict_log['call_transcription'] = item
-        if len(item) <= 4:
-            dict_log['call_duration'] = item
-    # print(dict_log)
-    tut = 'FdfsDD dfgdfg DFFFGF'
-    for item in [res[1] for res in result if 'nn.dump' in res]:
-        print(item.lower())
-        assert 'error' not in item.lower()
+# def test_test(app_3, db):
+#     global result
+#     db.create_connect(app_3.database["rw"]["prod"])
+#     result = db.execute_call_data(table='dialog_stats', data='474679')
+#     # print('\n', result)
+#     listen_list = [res[1].split(',') for res in result if 'nv.listen' in res]
+#     utterance_listen_list = [i[i.find(':') + 2:] for res in listen_list for i in res if
+#                              'utterance' in i]
+#
+#     # print('\n', utterance_listen_list)
+#     log_list = [res[1] for res in result if 'nn.log' in res]
+#     extract_person = None
+#     extract_address = None
+#     dict_log = {}
+#     for item in [res[1] for res in result if 'nn.log' in res]:
+#         if 'city' in item:
+#             dict_log['extract_address'] = item
+#         if 'first' in item:
+#             dict_log['extract_person'] = item
+#         if 'bot' in item:
+#             dict_log['call_transcription'] = item
+#         if len(item) <= 4:
+#             dict_log['call_duration'] = item
+#     # print(dict_log)
+#     tut = 'FdfsDD dfgdfg DFFFGF'
+#     for item in [res[1] for res in result if 'nn.dump' in res]:
+#         print(item.lower())
+#         assert 'error' not in item.lower()
 
 
 @allure.feature("Smoke 3.0")
