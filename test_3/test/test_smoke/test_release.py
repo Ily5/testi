@@ -42,6 +42,36 @@ def test_v3_init_call_yandex(app_3, db):
     result = db.execute_call_data(table='dialog_stats', data=dialog_id)
 
 
+def test_test(app_3, db):
+    global result
+    db.create_connect(app_3.database["rw"]["prod"])
+    result = db.execute_call_data(table='dialog_stats', data='474679')
+    # print('\n', result)
+    listen_list = [res[1].split(',') for res in result if 'nv.listen' in res]
+    utterance_listen_list = [i[i.find(':') + 2:] for res in listen_list for i in res if
+                             'utterance' in i]
+
+    # print('\n', utterance_listen_list)
+    log_list = [res[1] for res in result if 'nn.log' in res]
+    extract_person = None
+    extract_address = None
+    dict_log = {}
+    for item in [res[1] for res in result if 'nn.log' in res]:
+        if 'city' in item:
+            dict_log['extract_address'] = item
+        if 'first' in item:
+            dict_log['extract_person'] = item
+        if 'bot' in item:
+            dict_log['call_transcription'] = item
+        if len(item) <= 4:
+            dict_log['call_duration'] = item
+    # print(dict_log)
+    tut = 'FdfsDD dfgdfg DFFFGF'
+    for item in [res[1] for res in result if 'nn.dump' in res]:
+        print(item.lower())
+        assert 'error' not in item.lower()
+
+
 @allure.feature("Smoke 3.0")
 @allure.story("Проверка медиа части Yandex")
 def test_v3_media_part_yandex(app_3, db):
@@ -56,7 +86,7 @@ def test_v3_media_part_yandex(app_3, db):
         # ____ nv background
         for res in result:
             if 'nv.background' in res:
-                assert any('Office_local' in d for d in res)
+                assert any('Office_sound' in d for d in res)
         if not any('nv.background' in d for d in result):
             assert False
     # ____ nv play random sound
@@ -73,7 +103,7 @@ def test_v3_media_part_yandex(app_3, db):
             if 'nv.synthesize' in res:
                 count += 1
                 assert len(res[1]) > 20
-        assert count == 5
+        assert count == 12
         if not any('nv.synthesize' in d for d in result):
             assert False
     with allure.step("nv_listen и перебивание"):
@@ -94,6 +124,69 @@ def test_v3_media_part_yandex(app_3, db):
                 assert '555555' in res[1]
         if not any('nv.bridge' in d for d in result):
             assert False
+
+    synth_phrase_list = [res[1][res[1].find(':') + 4: res[1].find(',') - 1] for res in result if 'nv.synthesize' in res]
+
+    with allure.step("nn.env"):
+        assert 'Вытащили переменную окружения' in synth_phrase_list
+
+    with allure.step('nn.storage'):
+        assert 'Хранилище работает' in synth_phrase_list
+
+    with allure.step('nn.counter'):
+        assert 'Счетчик работает' in synth_phrase_list
+
+    with allure.step('nn.has_record - valid'):
+        assert 'Проверка наличия записи работает' in synth_phrase_list
+
+    with allure.step('nn.has_record - no valid'):
+        assert 'Проверка наличия записи работает некорректно' not in synth_phrase_list
+
+    with allure.step('nn.has_records - valid'):
+        assert 'Работает наличия записей проверка' in synth_phrase_list
+
+    with allure.step('nn.has_records - no valid'):
+        assert 'Проверка наличия записей работает некорректно' not in synth_phrase_list
+
+    logs_dict = {}
+    for item in [res[1] for res in result if 'nn.log' in res]:
+        if 'city' in item:
+            logs_dict['extract_address'] = item
+        if 'first' in item:
+            logs_dict['extract_person'] = item
+        if 'bot' in item:
+            logs_dict['call_transcription'] = item
+        if len(item) <= 4:
+            logs_dict['call_duration'] = item
+        if 'no_input_timeout' in item:
+            logs_dict['get_default'] = item
+
+    with allure.step('nlu.extract_person'):
+        assert logs_dict['extract_person'] == "{'first': 'иван', 'last': 'петров', 'middle': 'алексеевич'}"
+
+    with allure.step('nlu.extract_person'):
+        assert logs_dict['extract_address'] == "{'city': ['москва', None], 'street': ['ленина', 'улица']," \
+                                               " 'building': ['16', None, None], 'appartment': '5'}"
+
+    with allure.step('nv.listen - тишина'):
+        listen_list = [res[1].split(',') for res in result if 'nv.listen' in res]
+        utterance_listen_list = [i[i.find(':') + 2:] for res in listen_list for i in res if
+                                 'utterance' in i]
+        assert 'null' in utterance_listen_list
+        for item in [res[1] for res in result if 'nn.dump' in res]:
+            assert 'error' not in item.lower()
+
+    with allure.step('get_call_transcription'):
+        for synth in synth_phrase_list:
+            assert synth in logs_dict['call_transcription']
+
+    with allure.step('get_call_duration'):
+        assert len(logs_dict['call_duration']) > 0
+        assert int(logs_dict['call_duration']) > 0
+
+    with allure.step('get_default'):
+        assert logs_dict['get_default'] == "{'no_input_timeout': 5000, 'recognition_timeout': 30000," \
+                                           " 'speech_complete_timeout': 5000, 'asr_complete_timeout': 5000}"
 
 
 @allure.feature("Smoke 3.0")
@@ -130,7 +223,7 @@ def test_v3_media_part_google(app_3, db):
         # ____ nv background
         for res in result:
             if 'nv.background' in res:
-                assert any('Office_local' in d for d in res)
+                assert any('Office_sound' in d for d in res)
         if not any('nv.background' in d for d in result):
             assert False
     # ____ nv play random sound
@@ -147,7 +240,7 @@ def test_v3_media_part_google(app_3, db):
             if 'nv.synthesize' in res:
                 count += 1
                 assert len(res[1]) > 20
-        assert count == 5
+        assert count == 12
         if not any('nv.synthesize' in d for d in result):
             assert False
     with allure.step("nv_listen и перебивание"):
@@ -168,6 +261,69 @@ def test_v3_media_part_google(app_3, db):
                 assert '555555' in res[1]
         if not any('nv.bridge' in d for d in result):
             assert False
+
+    synth_phrase_list = [res[1][res[1].find(':') + 4: res[1].find(',') - 1] for res in result if 'nv.synthesize' in res]
+
+    with allure.step("nn.env"):
+        assert 'Вытащили переменную окружения' in synth_phrase_list
+
+    with allure.step('nn.storage'):
+        assert 'Хранилище работает' in synth_phrase_list
+
+    with allure.step('nn.counter'):
+        assert 'Счетчик работает' in synth_phrase_list
+
+    with allure.step('nn.has_record - valid'):
+        assert 'Проверка наличия записи работает' in synth_phrase_list
+
+    with allure.step('nn.has_record - no valid'):
+        assert 'Проверка наличия записи работает некорректно' not in synth_phrase_list
+
+    with allure.step('nn.has_records - valid'):
+        assert 'Работает наличия записей проверка' in synth_phrase_list
+
+    with allure.step('nn.has_records - no valid'):
+        assert 'Проверка наличия записей работает некорректно' not in synth_phrase_list
+
+    logs_dict = {}
+    for item in [res[1] for res in result if 'nn.log' in res]:
+        if 'city' in item:
+            logs_dict['extract_address'] = item
+        if 'first' in item:
+            logs_dict['extract_person'] = item
+        if 'bot' in item:
+            logs_dict['call_transcription'] = item
+        if len(item) <= 4:
+            logs_dict['call_duration'] = item
+        if 'no_input_timeout' in item:
+            logs_dict['get_default'] = item
+
+    with allure.step('nlu.extract_person'):
+        assert logs_dict['extract_person'] == "{'first': 'иван', 'last': 'петров', 'middle': 'алексеевич'}"
+
+    with allure.step('nlu.extract_person'):
+        assert logs_dict['extract_address'] == "{'city': ['москва', None], 'street': ['ленина', 'улица']," \
+                                               " 'building': ['16', None, None], 'appartment': '5'}"
+
+    with allure.step('nv.listen - тишина'):
+        listen_list = [res[1].split(',') for res in result if 'nv.listen' in res]
+        utterance_listen_list = [i[i.find(':') + 2:] for res in listen_list for i in res if
+                                 'utterance' in i]
+        assert 'null' in utterance_listen_list
+        for item in [res[1] for res in result if 'nn.dump' in res]:
+            assert 'error' not in item.lower()
+
+    with allure.step('get_call_transcription'):
+        for synth in synth_phrase_list:
+            assert synth in logs_dict['call_transcription']
+
+    with allure.step('get_call_duration'):
+        assert len(logs_dict['call_duration']) > 0
+        assert int(logs_dict['call_duration']) > 0
+
+    with allure.step('get_default'):
+        assert logs_dict['get_default'] == "{'no_input_timeout': 5000, 'recognition_timeout': 30000," \
+                                           " 'speech_complete_timeout': 5000, 'asr_complete_timeout': 5000}"
 
 
 @allure.feature("Silence")
