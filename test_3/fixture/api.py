@@ -91,7 +91,7 @@ class APIClientV3:
         self.test_data = test_data
         self.path_end_point = path_end_point
 
-    def request_send(self, method='GET', path=None, status_code=480, waiting_queue_sec=600, **kwargs):
+    def request_send(self, method='GET', path=None, status_code=480, waiting_queue_sec=900, **kwargs):
         if path is None:
             request_url = self.base_url
         else:
@@ -109,8 +109,8 @@ class APIClientV3:
                 print('\n Код ответа от сервера = {}'.format(response.status_code),
                       '-- попытка № {}'.format(count))
                 print('\n', 'Message Error - {}'.format(response.text))
-            time.sleep(1)
-            if count > waiting_queue_sec:
+            time.sleep(0.5)
+            if count > waiting_queue_sec * 2:
                 print('Очередь занята более {} секунд '.format(waiting_queue_sec))
                 raise Exception('Time Limit Error , превышено время отправки запроса')
 
