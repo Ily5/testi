@@ -23,53 +23,55 @@ def test_v3_cms(app_3, db):
         app_3.session.logout()
 
 
-@allure.feature("Smoke 3.0")
-@allure.story("Yandex")
-def test_v3_init_call_yandex(app_3, db):
-    global result
-    db.create_connect(app_3.database["rw"]["prod"])
-    with allure.step("Авторизация в external_api"):
-        token = app_3.api.auth()
-        assert type(token) == str
-    with allure.step("Изменение параметров в cms_api"):
-        app_3.api.set_yandex(token)
-    with allure.step("Иницализация диалога в external_api"):
-        dialog_uuid = app_3.api.init_dialog(token, 55555)
-    db.wait_for_done(dialog_uuid)
-    with allure.step("Выгрузка данных по диалогу из rw базы"):
-        dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
-    print(db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
-    result = db.execute_call_data(table='dialog_stats', data=dialog_id)
-
-
-# def test_test(app_3, db):
+# @allure.feature("Smoke 3.0")
+# @allure.story("Yandex")
+# def test_v3_init_call_yandex(app_3, db):
 #     global result
 #     db.create_connect(app_3.database["rw"]["prod"])
-#     result = db.execute_call_data(table='dialog_stats', data='474679')
-#     # print('\n', result)
-#     listen_list = [res[1].split(',') for res in result if 'nv.listen' in res]
-#     utterance_listen_list = [i[i.find(':') + 2:] for res in listen_list for i in res if
-#                              'utterance' in i]
-#
-#     # print('\n', utterance_listen_list)
-#     log_list = [res[1] for res in result if 'nn.log' in res]
-#     extract_person = None
-#     extract_address = None
-#     dict_log = {}
-#     for item in [res[1] for res in result if 'nn.log' in res]:
-#         if 'city' in item:
-#             dict_log['extract_address'] = item
-#         if 'first' in item:
-#             dict_log['extract_person'] = item
-#         if 'bot' in item:
-#             dict_log['call_transcription'] = item
-#         if len(item) <= 4:
-#             dict_log['call_duration'] = item
-#     # print(dict_log)
-#     tut = 'FdfsDD dfgdfg DFFFGF'
-#     for item in [res[1] for res in result if 'nn.dump' in res]:
-#         print(item.lower())
-#         assert 'error' not in item.lower()
+#     with allure.step("Авторизация в external_api"):
+#         token = app_3.api.auth()
+#         assert type(token) == str
+#     with allure.step("Изменение параметров в cms_api"):
+#         app_3.api.set_yandex(token)
+#     with allure.step("Иницализация диалога в external_api"):
+#         dialog_uuid = app_3.api.init_dialog(token, 55555)
+#     db.wait_for_done(dialog_uuid)
+#     with allure.step("Выгрузка данных по диалогу из rw базы"):
+#         dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
+#         print('dialog id - ', dialog_id)
+#     print('call uuid - ', db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
+#     result = db.execute_call_data(table='dialog_stats', data=dialog_id)
+
+@allure.feature("Smoke 3.0")
+@allure.story("Yandex")
+def test_test(app_3, db):
+    global result
+    db.create_connect(app_3.database["rw"]["prod"])
+    result = db.execute_call_data(table='dialog_stats', data='474679')
+    # print('\n', result)
+    listen_list = [res[1].split(',') for res in result if 'nv.listen' in res]
+    utterance_listen_list = [i[i.find(':') + 2:] for res in listen_list for i in res if
+                             'utterance' in i]
+
+    # print('\n', utterance_listen_list)
+    log_list = [res[1] for res in result if 'nn.log' in res]
+    extract_person = None
+    extract_address = None
+    dict_log = {}
+    for item in [res[1] for res in result if 'nn.log' in res]:
+        if 'city' in item:
+            dict_log['extract_address'] = item
+        if 'first' in item:
+            dict_log['extract_person'] = item
+        if 'bot' in item:
+            dict_log['call_transcription'] = item
+        if len(item) <= 4:
+            dict_log['call_duration'] = item
+    # print(dict_log)
+    tut = 'FdfsDD dfgdfg DFFFGF'
+    for item in [res[1] for res in result if 'nn.dump' in res]:
+        print(item.lower())
+        assert 'error' not in item.lower()
 
 
 @allure.feature("Smoke 3.0")
@@ -190,23 +192,30 @@ def test_v3_media_part_yandex(app_3, db):
 
 
 @allure.feature("Smoke 3.0")
-@allure.story("Google")
-def test_v3_init_call_google(app_3, db):
-    global result
-    db.create_connect(app_3.database["rw"]["prod"])
-    with allure.step("Авторизация в external_api"):
-        token = app_3.api.auth()
-        assert type(token) == str
-    with allure.step("Изменение параметров в cms_api"):
-        app_3.api.set_google(token)
-        # print("inside google token" + token)
-    with allure.step("Иницализация диалога в external_api"):
-        dialog_uuid = app_3.api.init_dialog(token, 55555)
-    db.wait_for_done(dialog_uuid)
-    with allure.step("Выгрузка данных по диалогу из rw базы"):
-        dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
-    result = db.execute_call_data(table='dialog_stats', data=dialog_id)
-    print(db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
+@allure.story("Проверка медиа части Yandex")
+@allure.step('Проверка построения отчета')
+def test_test():
+    print('Смотрим как постоился отчет')
+
+
+# @allure.feature("Smoke 3.0")
+# @allure.story("Google")
+# def test_v3_init_call_google(app_3, db):
+#     global result
+#     db.create_connect(app_3.database["rw"]["prod"])
+#     with allure.step("Авторизация в external_api"):
+#         token = app_3.api.auth()
+#         assert type(token) == str
+#     with allure.step("Изменение параметров в cms_api"):
+#         app_3.api.set_google(token)
+#         # print("inside google token" + token)
+#     with allure.step("Иницализация диалога в external_api"):
+#         dialog_uuid = app_3.api.init_dialog(token, 55555)
+#     db.wait_for_done(dialog_uuid)
+#     with allure.step("Выгрузка данных по диалогу из rw базы"):
+#         dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
+#     result = db.execute_call_data(table='dialog_stats', data=dialog_id)
+#     print(db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
 
 
 @allure.feature("Smoke 3.0")
