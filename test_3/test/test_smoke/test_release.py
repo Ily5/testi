@@ -192,7 +192,7 @@ def test_v3_media_part_yandex(app_3, db):
 
 
 @allure.feature("Smoke 3.0")
-@allure.story("Проверка медиа части Yandex")
+# @allure.story("Проверка медиа части Yandex")
 @allure.title('Проверка построения отчета')
 def test_test_01():
     print('Смотрим как постоился отчет')
