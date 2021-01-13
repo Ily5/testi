@@ -108,8 +108,9 @@ class APIClientV3:
             if count % 10 == 0:
                 print('\n Код ответа от сервера = {}'.format(response.status_code),
                       '-- попытка № {}'.format(count))
-            time.sleep(0.1)
-            if count > waiting_queue_sec * 10:
+                print('\n', 'Message Error - {}'.format(response.text))
+            time.sleep(1)
+            if count > waiting_queue_sec:
                 print('Очередь занята более {} секунд '.format(waiting_queue_sec))
                 raise Exception('Time Limit Error , превышено время отправки запроса')
 
