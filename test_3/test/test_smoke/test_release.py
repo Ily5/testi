@@ -1,7 +1,6 @@
 import time
 import pytest
 import allure
-import string
 
 result = []
 synth_phrase_list = []
@@ -12,12 +11,10 @@ logs_dict = {}
 @allure.story("Работа cms")
 @allure.title('Провека UI')
 def test_v3_cms(app_3, db):
-    # token = app_3.api.auth()
     with allure.step("логин в cms v3"):
         app_3.session.login()
     with allure.step("Переходим в проект release_run"):
         time.sleep(3)
-        # app_3.page.go_to_project("b5b2a743-259b-4641-a007-0dd2abe3e0fa")
         app_3.page.go_to_project("f29c639f-f3ff-46bb-9425-fe2ffb27796c")
         time.sleep(5)
     with allure.step("Наличие элементов меню"):
@@ -164,7 +161,6 @@ def test_v3_media_part_yandex_listen_interruption(app_3, db):
             assert "не должна попасть в результаты распознавания" not in r
 
 
-@pytest.mark.skip(reason='not data')
 @allure.feature("Smoke 3.0")
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv.listen прерывание по сущности')
@@ -424,7 +420,6 @@ def test_v3_media_part_google_listen_interruption(app_3, db):
             assert "не должна попасть в результаты распознавания" not in r
 
 
-@pytest.mark.skip(reason='not data')
 @allure.feature("Smoke 3.0")
 @allure.story("Проверка медиа части google")
 @allure.title('nv.listen прерывание по сущности')
