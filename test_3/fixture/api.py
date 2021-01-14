@@ -62,6 +62,7 @@ class ApiHelper:
         }
         data = {"tts_key_uuid": "785f6528-1bfc-441d-8236-d97574af697e",
                 "speed": 1,
+                "pitch": 1,
                 "name": "release_run",
                 "tts_voice": "zahar",
                 "asr_key_uuid": "31b5edd7-4bd6-4968-8346-27d091a68fbf"
@@ -84,6 +85,7 @@ class ApiHelper:
             "asr_key_uuid": "a7f66456-cafe-4d7b-a9b9-3a2c2d72b402",
             "tts_key_uuid": "bbd9323f-0cc4-411c-ae81-58e02b283353",
             "speed": 1,
+            "pitch": 1,
             "name": "release_run",
             "tts_voice": "ru-RU-Wavenet-E"
         }
