@@ -68,8 +68,6 @@ class ApiHelper:
                 "asr_key_uuid": "31b5edd7-4bd6-4968-8346-27d091a68fbf"
                 }
         response = requests.request("PUT", self.url, json=data, headers=self.headers)
-        print('\n', data)
-        print('\n', response.text)
 
         # print(response.text)
 
@@ -90,8 +88,6 @@ class ApiHelper:
             "tts_voice": "ru-RU-Wavenet-E"
         }
         response = requests.request("PUT", self.url, json=data, headers=self.headers)
-        print('\n', data)
-        print('\n', response.text)
         # print(response.text)
 
     def get_value(self, response, value):

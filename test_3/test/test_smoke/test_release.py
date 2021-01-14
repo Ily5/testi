@@ -90,7 +90,6 @@ def test_v3_init_call_yandex(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv_say')
 def test_v3_media_part_yandex_say(app_3, db):
-    global result
     for res in result:
         if 'nv.say' in res:
             assert any('hello' in d for d in res)
@@ -102,7 +101,6 @@ def test_v3_media_part_yandex_say(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv_background')
 def test_v3_media_part_yandex_background(app_3, db):
-    global result
     for res in result:
         if 'nv.background' in res:
             assert any('Office_sound' in d for d in res)
@@ -114,7 +112,6 @@ def test_v3_media_part_yandex_background(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv_random_sound')
 def test_v3_media_part_yandex_play_random_sound(app_3, db):
-    global result
     for res in result:
         if 'nv.play_random_sound' in res:
             for i in res:
@@ -133,7 +130,6 @@ def test_v3_media_part_yandex_play_random_sound(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv_synthesize')
 def test_v3_media_part_yandex_synthesize(app_3, db):
-    global result
     count = 0
     for res in result:
         if 'nv.synthesize' in res:
@@ -148,7 +144,6 @@ def test_v3_media_part_yandex_synthesize(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('listen распознование')
 def test_v3_media_part_yandex_listen_interruption(app_3, db):
-    global result
     for r in [res[1] for res in result if 'nv.listen' in res]:
 
         if "распознование" in r:
@@ -163,7 +158,6 @@ def test_v3_media_part_yandex_listen_interruption(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('listen перебивание по количеству символов')
 def test_v3_media_part_yandex_listen_interruption(app_3, db):
-    global result
     for r in [res[1] for res in result if 'nv.listen' in res]:
         if "перебивание" in r:
             assert "не должна попасть в результаты распознавания" not in r
@@ -173,7 +167,6 @@ def test_v3_media_part_yandex_listen_interruption(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv.listen прерывание по сущности')
 def test_v3_media_part_yandex_nv_listen_stop_entity(app_3, db):
-    global result
     for item in [res for res in result if 'nv.listen' in res]:
         if "сущность" in item:
             assert 'этого текста не должно быть в результатах' not in item
@@ -183,7 +176,6 @@ def test_v3_media_part_yandex_nv_listen_stop_entity(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv_listen тишина')
 def test_v3_media_part_yandex_nlu_extract_person(app_3, db):
-    global logs_dict
     listen_list = [res[1].split(',') for res in result if 'nv.listen' in res]
     utterance_listen_list = [i[i.find(':') + 2:] for res in listen_list for i in res if
                              'utterance' in i]
@@ -195,7 +187,6 @@ def test_v3_media_part_yandex_nlu_extract_person(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv_bridge')
 def test_v3_media_part_yandex_bridge(app_3, db):
-    global result
     for res in result:
         if 'nv.bridge' in res:
             assert '555555' in res[1]
@@ -207,7 +198,6 @@ def test_v3_media_part_yandex_bridge(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nn_env')
 def test_v3_media_part_yandex_nn_env(app_3, db):
-    global synth_phrase_list
     assert 'Вытащили переменную окружения' in synth_phrase_list
 
 
@@ -215,7 +205,6 @@ def test_v3_media_part_yandex_nn_env(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nn_storage')
 def test_v3_media_part_yandex_nn_storage(app_3, db):
-    global synth_phrase_list
     assert 'Хранилище работает' in synth_phrase_list
 
 
@@ -223,7 +212,6 @@ def test_v3_media_part_yandex_nn_storage(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nn_counter')
 def test_v3_media_part_yandex_nn_counter(app_3, db):
-    global synth_phrase_list
     assert 'Счетчик работает' in synth_phrase_list
 
 
@@ -231,7 +219,6 @@ def test_v3_media_part_yandex_nn_counter(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nn_has_record valid')
 def test_v3_media_part_yandex_nn_has_record_valid(app_3, db):
-    global synth_phrase_list
     assert 'Проверка наличия записи работает' in synth_phrase_list
 
 
@@ -239,7 +226,6 @@ def test_v3_media_part_yandex_nn_has_record_valid(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nn_has_record no valid')
 def test_v3_media_part_yandex_nn_has_record_no_valid(app_3, db):
-    global synth_phrase_list
     assert 'Проверка наличия записи работает некорректно' not in synth_phrase_list
 
 
@@ -247,7 +233,6 @@ def test_v3_media_part_yandex_nn_has_record_no_valid(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nn_has_records_valid')
 def test_v3_media_part_yandex_nn_has_records_valid(app_3, db):
-    global synth_phrase_list
     assert 'Работает наличия записей проверка' in synth_phrase_list
 
 
@@ -255,7 +240,6 @@ def test_v3_media_part_yandex_nn_has_records_valid(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nn_has_records no valid')
 def test_v3_media_part_yandex_nn_has_records_no_valid(app_3, db):
-    global synth_phrase_list
     assert 'Проверка наличия записей работает некорректно' not in synth_phrase_list
 
 
@@ -263,7 +247,6 @@ def test_v3_media_part_yandex_nn_has_records_no_valid(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nlu_extract_person')
 def test_v3_media_part_yandex_nlu_extract_person(app_3, db):
-    global logs_dict
     assert logs_dict['extract_person'] == "{'first': 'иван', 'last': 'петров', 'middle': 'алексеевич'}"
 
 
@@ -271,7 +254,6 @@ def test_v3_media_part_yandex_nlu_extract_person(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nlu_extract_address')
 def test_v3_media_part_yandex_nlu_extract_address(app_3, db):
-    global logs_dict
     assert logs_dict['extract_address'] == "{'city': ['москва', None], 'street': ['ленина', 'улица']," \
                                            " 'building': ['16', None, None], 'appartment': None}"
 
@@ -280,7 +262,6 @@ def test_v3_media_part_yandex_nlu_extract_address(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv.get_call_transcription')
 def test_v3_media_part_yandex_nv_get_call_transcription(app_3, db):
-    global logs_dict
     for synth in synth_phrase_list:
         assert synth in logs_dict['call_transcription']
 
@@ -289,7 +270,6 @@ def test_v3_media_part_yandex_nv_get_call_transcription(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv.get_call_duration')
 def test_v3_media_part_yandex_nv_get_call_duration(app_3, db):
-    global logs_dict
     assert len(logs_dict['call_duration']) > 0
     assert int(logs_dict['call_duration']) > 0
 
@@ -298,7 +278,6 @@ def test_v3_media_part_yandex_nv_get_call_duration(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv.get_default')
 def test_v3_media_part_yandex_nv_get_default(app_3, db):
-    global logs_dict
     assert logs_dict['get_default'] == "{'no_input_timeout': 5000, 'recognition_timeout': 30000," \
                                        " 'speech_complete_timeout': 5000, 'asr_complete_timeout': 5000}"
 
@@ -363,7 +342,6 @@ def test_v3_init_call_google(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nv_say')
 def test_v3_media_part_google_say(app_3, db):
-    global result
     for res in result:
         if 'nv.say' in res:
             assert any('hello' in d for d in res)
@@ -375,7 +353,6 @@ def test_v3_media_part_google_say(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nv_background')
 def test_v3_media_part_google_background(app_3, db):
-    global result
     for res in result:
         if 'nv.background' in res:
             assert any('Office_sound' in d for d in res)
@@ -387,7 +364,6 @@ def test_v3_media_part_google_background(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nv_random_sound')
 def test_v3_media_part_google_play_random_sound(app_3, db):
-    global result
     for res in result:
         if 'nv.play_random_sound' in res:
             for i in res:
@@ -406,7 +382,6 @@ def test_v3_media_part_google_play_random_sound(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nv_synthesize')
 def test_v3_media_part_google_synthesize(app_3, db):
-    global result
     count = 0
     for res in result:
         if 'nv.synthesize' in res:
@@ -421,7 +396,6 @@ def test_v3_media_part_google_synthesize(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('listen распознование')
 def test_v3_media_part_google_listen_interruption(app_3, db):
-    global result
     for r in [res[1] for res in result if 'nv.listen' in res]:
 
         if "распознование" in r:
@@ -436,7 +410,6 @@ def test_v3_media_part_google_listen_interruption(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('listen перебивание по количеству символов')
 def test_v3_media_part_google_listen_interruption(app_3, db):
-    global result
     for r in [res[1] for res in result if 'nv.listen' in res]:
         if "перебивание" in r:
             assert "не должна попасть в результаты распознавания" not in r
@@ -446,7 +419,6 @@ def test_v3_media_part_google_listen_interruption(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nv.listen прерывание по сущности')
 def test_v3_media_part_google_nv_listen_stop_entity(app_3, db):
-    global result
     for item in [res for res in result if 'nv.listen' in res]:
         if "сущность" in item:
             assert 'этого текста не должно быть в результатах' not in item
@@ -456,7 +428,6 @@ def test_v3_media_part_google_nv_listen_stop_entity(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nv_listen тишина')
 def test_v3_media_part_google_nlu_extract_person(app_3, db):
-    global logs_dict
     listen_list = [res[1].split(',') for res in result if 'nv.listen' in res]
     utterance_listen_list = [i[i.find(':') + 2:] for res in listen_list for i in res if
                              'utterance' in i]
@@ -468,7 +439,6 @@ def test_v3_media_part_google_nlu_extract_person(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nv_bridge')
 def test_v3_media_part_google_bridge(app_3, db):
-    global result
     for res in result:
         if 'nv.bridge' in res:
             assert '555555' in res[1]
@@ -480,7 +450,6 @@ def test_v3_media_part_google_bridge(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nn_env')
 def test_v3_media_part_google_nn_env(app_3, db):
-    global synth_phrase_list
     assert 'Вытащили переменную окружения' in synth_phrase_list
 
 
@@ -488,7 +457,6 @@ def test_v3_media_part_google_nn_env(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nn_storage')
 def test_v3_media_part_google_nn_storage(app_3, db):
-    global synth_phrase_list
     assert 'Хранилище работает' in synth_phrase_list
 
 
@@ -496,7 +464,6 @@ def test_v3_media_part_google_nn_storage(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nn_counter')
 def test_v3_media_part_google_nn_counter(app_3, db):
-    global synth_phrase_list
     assert 'Счетчик работает' in synth_phrase_list
 
 
@@ -504,7 +471,6 @@ def test_v3_media_part_google_nn_counter(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nn_has_record valid')
 def test_v3_media_part_google_nn_has_record_valid(app_3, db):
-    global synth_phrase_list
     assert 'Проверка наличия записи работает' in synth_phrase_list
 
 
@@ -512,7 +478,6 @@ def test_v3_media_part_google_nn_has_record_valid(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nn_has_record no valid')
 def test_v3_media_part_google_nn_has_record_no_valid(app_3, db):
-    global synth_phrase_list
     assert 'Проверка наличия записи работает некорректно' not in synth_phrase_list
 
 
@@ -520,7 +485,6 @@ def test_v3_media_part_google_nn_has_record_no_valid(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nn_has_records_valid')
 def test_v3_media_part_google_nn_has_records_valid(app_3, db):
-    global synth_phrase_list
     assert 'Работает наличия записей проверка' in synth_phrase_list
 
 
@@ -528,7 +492,6 @@ def test_v3_media_part_google_nn_has_records_valid(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nn_has_records no valid')
 def test_v3_media_part_google_nn_has_records_no_valid(app_3, db):
-    global synth_phrase_list
     assert 'Проверка наличия записей работает некорректно' not in synth_phrase_list
 
 
@@ -536,7 +499,6 @@ def test_v3_media_part_google_nn_has_records_no_valid(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nlu_extract_person')
 def test_v3_media_part_google_nlu_extract_person(app_3, db):
-    global logs_dict
     assert logs_dict['extract_person'] == "{'first': 'иван', 'last': 'петров', 'middle': 'алексеевич'}"
 
 
@@ -544,7 +506,6 @@ def test_v3_media_part_google_nlu_extract_person(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nlu_extract_address')
 def test_v3_media_part_google_nlu_extract_address(app_3, db):
-    global logs_dict
     assert logs_dict['extract_address'] == "{'city': ['москва', None], 'street': ['ленина', 'улица']," \
                                            " 'building': ['16', None, None], 'appartment': None}"
 
@@ -553,7 +514,6 @@ def test_v3_media_part_google_nlu_extract_address(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nv.get_call_transcription')
 def test_v3_media_part_google_nv_get_call_transcription(app_3, db):
-    global logs_dict
     for synth in synth_phrase_list:
         assert synth in logs_dict['call_transcription']
 
@@ -562,7 +522,6 @@ def test_v3_media_part_google_nv_get_call_transcription(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nv.get_call_duration')
 def test_v3_media_part_google_nv_get_call_duration(app_3, db):
-    global logs_dict
     assert len(logs_dict['call_duration']) > 0
     assert int(logs_dict['call_duration']) > 0
 
@@ -571,7 +530,6 @@ def test_v3_media_part_google_nv_get_call_duration(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nv.get_default')
 def test_v3_media_part_google_nv_get_default(app_3, db):
-    global logs_dict
     assert logs_dict['get_default'] == "{'no_input_timeout': 5000, 'recognition_timeout': 30000," \
                                        " 'speech_complete_timeout': 5000, 'asr_complete_timeout': 5000}"
 
