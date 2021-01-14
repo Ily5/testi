@@ -26,7 +26,7 @@ def test_v3_cms(app_3, db):
 @allure.story("Yandex")
 @allure.title('Создание диалога, получение статистики из БД')
 def test_v3_init_call_yandex(app_3, db):
-    global result
+    global result, logs_dict
     global synth_phrase_list
     db.create_connect(app_3.database["rw"]["prod"])
     with allure.step("Авторизация в external_api"):
@@ -54,6 +54,10 @@ def test_v3_init_call_yandex(app_3, db):
             logs_dict['call_duration'] = item
         if 'no_input_timeout' in item:
             logs_dict['get_default'] = item
+        if '@yandex' in item or '@google' in item:
+            logs_dict['tts_engine'] = item
+        if 'yandex' == item or 'google' == item:
+            logs_dict['asr_engine'] = item
 
 
 # @allure.feature("Smoke 3.0")
@@ -63,7 +67,7 @@ def test_v3_init_call_yandex(app_3, db):
 #     global result, logs_dict
 #     global synth_phrase_list
 #     db.create_connect(app_3.database["rw"]["prod"])
-#     result = db.execute_call_data(table='dialog_stats', data='474679')
+#     result = db.execute_call_data(table='dialog_stats', data='537913')
 #     synth_phrase_list = [res[1][res[1].find(':') + 4: res[1].find(',') - 1] for res in result if 'nv.synthesize' in res]
 #     for item in [res[1] for res in result if 'nn.log' in res]:
 #         if 'city' in item:
@@ -76,6 +80,10 @@ def test_v3_init_call_yandex(app_3, db):
 #             logs_dict['call_duration'] = item
 #         if 'no_input_timeout' in item:
 #             logs_dict['get_default'] = item
+#         if '@yandex' in item or '@google' in item:
+#             logs_dict['tts_engine'] = item
+#         if 'yandex' == item or 'google' == item:
+#             logs_dict['asr_engine'] = item
 
 
 @allure.feature("Smoke 3.0")
@@ -303,10 +311,20 @@ def test_v3_media_part_yandex_nv_hold_and_call(app_3, db):
 
 
 @allure.feature("Smoke 3.0")
+@allure.story("Проверка медиа части Yandex")
+@allure.title('nv_media_params изменение параметров tts, asr на другие')
+def test_v3_media_part_yandex_nv_media_params():
+    media_params_list = [res[1] for res in result if 'nv.update_media_tokens' in res]
+    assert len(media_params_list) > 0
+    assert logs_dict['asr_engine'] == 'google'
+    assert '@google' in logs_dict['tts_engine']
+
+
+@allure.feature("Smoke 3.0")
 @allure.story("Google")
 @allure.title('Создание диалога, получение статистики из БД')
 def test_v3_init_call_google(app_3, db):
-    global result
+    global result, logs_dict
     global synth_phrase_list
     db.create_connect(app_3.database["rw"]["prod"])
     with allure.step("Авторизация в external_api"):
@@ -335,6 +353,10 @@ def test_v3_init_call_google(app_3, db):
             logs_dict['call_duration'] = item
         if 'no_input_timeout' in item:
             logs_dict['get_default'] = item
+        if '@yandex' in item or '@google' in item:
+            logs_dict['tts_engine'] = item
+        if 'yandex' == item or 'google' == item:
+            logs_dict['asr_engine'] = item
 
 
 @allure.feature("Smoke 3.0")
@@ -561,6 +583,16 @@ def test_v3_media_part_google_nv_hold_and_call(app_3, db):
     pass
 
 
+@allure.feature("Smoke 3.0")
+@allure.story("Проверка медиа части google")
+@allure.title('nv_media_params изменение параметров tts, asr на другие')
+def test_v3_media_part_google_nv_media_params():
+    media_params_list = [res[1] for res in result if 'nv.update_media_tokens' in res]
+    assert len(media_params_list) > 0
+    assert logs_dict['asr_engine'] == 'yandex'
+    assert '@yandex' in logs_dict['tts_engine']
+
+
 @allure.feature("Silence")
 @allure.story("Тишина + тишина")
 def test_v3_silence(app_3, db):
@@ -578,7 +610,6 @@ def test_v3_silence(app_3, db):
         dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
         result = db.execute_call_data(table='dialog_stats', data=dialog_id)
         print(db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
-
 
 # with allure.step("Изменение параметров в cms_api"):
 #     app_3.api.set_google(token)
