@@ -60,17 +60,15 @@ class ApiHelper:
             'content-type': "application/json",
             'authorization': "Bearer %s" % token
         }
-        data = {"tts_key": {"uuid": "785f6528-1bfc-441d-8236-d97574af697e", "name": "yandex_key",
-                            "platform": "yandex", "type": "agent"},
+        data = {"tts_key_uuid": "785f6528-1bfc-441d-8236-d97574af697e",
                 "speed": 1,
                 "name": "release_run",
                 "tts_voice": "zahar",
-                "asr_key": {"uuid": "31b5edd7-4bd6-4968-8346-27d091a68fbf", "name": "yandex_key",
-                            "platform": "yandex", "type": "agent"},
+                "asr_key_uuid": "31b5edd7-4bd6-4968-8346-27d091a68fbf"
                 }
-        response = requests.request("PUT", self.url, data=json.dumps(data), headers=self.headers)
-        print(data)
-        print(response.text)
+        response = requests.request("PUT", self.url, json=data, headers=self.headers)
+        print('\n', data)
+        print('\n', response.text)
 
         # print(response.text)
 
@@ -83,15 +81,15 @@ class ApiHelper:
             'authorization': "Bearer %s" % token
         }
         data = {
-            "asr_key": {"uuid": "a7f66456-cafe-4d7b-a9b9-3a2c2d72b402", "name": "google_key", "platform": "google",
-                        "type": "agent"},
-            "tts_key": {"uuid": "bbd9323f-0cc4-411c-ae81-58e02b283353", "name": "google_key_tts", "platform": "google",
-                        "type": "agent"},
+            "asr_key_uuid": "a7f66456-cafe-4d7b-a9b9-3a2c2d72b402",
+            "tts_key_uuid": "bbd9323f-0cc4-411c-ae81-58e02b283353",
             "speed": 1,
             "name": "release_run",
             "tts_voice": "ru-RU-Wavenet-E"
         }
-        response = requests.request("PUT", self.url, data=json.dumps(self.payload), headers=self.headers)
+        response = requests.request("PUT", self.url, json=data, headers=self.headers)
+        print('\n', data)
+        print('\n', response.text)
         # print(response.text)
 
     def get_value(self, response, value):
