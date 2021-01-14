@@ -265,7 +265,7 @@ def test_v3_media_part_yandex_nlu_extract_person(app_3, db):
 def test_v3_media_part_yandex_nlu_extract_address(app_3, db):
     global logs_dict
     assert logs_dict['extract_address'] == "{'city': ['москва', None], 'street': ['ленина', 'улица']," \
-                                           " 'building': ['16', None, None], 'appartment': '5'}"
+                                           " 'building': ['16', None, None], 'appartment': None}"
 
 
 @allure.feature("Smoke 3.0")
@@ -524,7 +524,7 @@ def test_v3_media_part_google_nlu_extract_person(app_3, db):
 def test_v3_media_part_google_nlu_extract_address(app_3, db):
     global logs_dict
     assert logs_dict['extract_address'] == "{'city': ['москва', None], 'street': ['ленина', 'улица']," \
-                                           " 'building': ['16', None, None], 'appartment': '5'}"
+                                           " 'building': ['16', None, None], 'appartment': None}"
 
 
 @allure.feature("Smoke 3.0")
