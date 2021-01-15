@@ -44,26 +44,19 @@ class Connector:
 
     def wait_for_done(self, dialog_uuid):
         timeout = time.time() + 600
-        conn = self.db_conn("SELECT result FROM dialog WHERE uuid = '%s'" % str(dialog_uuid))
         while True:
-            if len(conn) > 0:
-                break
-            elif time.time() > timeout:
+            conn = self.db_conn("SELECT result FROM dialog WHERE uuid = '%s'" % str(dialog_uuid))
+            if len(conn) > 0 and conn[0][0] == "done":
+
+                dialog_id = self.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
+
+                calls = self.db_conn("SELECT name FROM dialog_stats WHERE dialog_id = '%s'" % str(dialog_id))
+                count_call_transcription = ([item[0] for item in calls].count('call_transcription'))
+                if count_call_transcription > 1:
+                    break
+            if time.time() > timeout:
                 raise TimeoutError
-            else:
-                conn = self.db_conn("SELECT result FROM dialog WHERE uuid = '%s'" % str(dialog_uuid))
-                time.sleep(1)
-                continue
-        #   TODO 1 cycle
-        while True:
-            if conn[0][0] == "done":
-                break
-            elif time.time() > timeout:
-                raise TimeoutError
-            else:
-                conn = self.db_conn("SELECT result FROM dialog WHERE uuid = '%s'" % str(dialog_uuid))
-                time.sleep(1)
-                continue
+            time.sleep(1)
 
     def get_detected_speech(self, call_id):
         detected = list(self.db_conn("SELECT action_data FROM call_stats WHERE ACTION = 'detected_speech' and uuid = '"
@@ -85,7 +78,7 @@ class Connector:
     def change_project_data(self, column, data, project_id):
         # print(self.conn)
         if type(data) == str:
-            data = "'"+data+"'"
+            data = "'" + data + "'"
         return self.db_conn(
             "UPDATE projects SET {column}={data} where id = {id}".format(column=column, data=data, id=project_id))
 
@@ -102,7 +95,8 @@ class Connector:
 
     def execute_call_data(self, table, data):
         return self.db_conn(
-            "select action, data from {table} where dialog_id = {data} and data is not null".format(table=table, data=data))
+            "select action, data from {table} where dialog_id = {data} and data is not null".format(table=table,
+                                                                                                    data=data))
 
 
 class MongoConnector:
