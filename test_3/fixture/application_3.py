@@ -8,7 +8,8 @@ from test_3.fixture.BasePage import BasePage
 from test_3.fixture.WebFW.AnyPage import AnyPage
 from test_3.fixture.WebFW.LoginPage import LoginPage
 from test_3.fixture.WebFW.MainPage import MainPage
-from test_3.fixture.WebFW.AgentPage import AnyAgentPage, DataUploadingPage
+from test_3.fixture.WebFW.AgentPage import AnyAgentPage
+from test_3.fixture.WebFW.AnyAgentPage.DataUploadingPage import DataUploadingPage
 
 from test_3.fixture.api import ApiHelper
 
