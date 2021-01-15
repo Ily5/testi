@@ -60,8 +60,14 @@ class ApiHelper:
             'content-type': "application/json",
             'authorization': "Bearer %s" % token
         }
-
-        response = requests.request("PUT", self.url, data=json.dumps(self.payload), headers=self.headers)
+        data = {"tts_key_uuid": "785f6528-1bfc-441d-8236-d97574af697e",
+                "speed": 1,
+                "pitch": 1,
+                "name": "release_run",
+                "tts_voice": "zahar",
+                "asr_key_uuid": "31b5edd7-4bd6-4968-8346-27d091a68fbf"
+                }
+        response = requests.request("PUT", self.url, json=data, headers=self.headers)
 
         # print(response.text)
 
@@ -73,9 +79,15 @@ class ApiHelper:
             'content-type': "application/json",
             'authorization': "Bearer %s" % token
         }
-
-        response = requests.request("PUT", self.url, data=json.dumps(self.payload), headers=self.headers)
-
+        data = {
+            "asr_key_uuid": "a7f66456-cafe-4d7b-a9b9-3a2c2d72b402",
+            "tts_key_uuid": "bbd9323f-0cc4-411c-ae81-58e02b283353",
+            "speed": 1,
+            "pitch": 1,
+            "name": "release_run",
+            "tts_voice": "ru-RU-Wavenet-E"
+        }
+        response = requests.request("PUT", self.url, json=data, headers=self.headers)
         # print(response.text)
 
     def get_value(self, response, value):
@@ -91,7 +103,7 @@ class APIClientV3:
         self.test_data = test_data
         self.path_end_point = path_end_point
 
-    def request_send(self, method='GET', path=None, status_code=480, waiting_queue_sec=600, **kwargs):
+    def request_send(self, method='GET', path=None, status_code=480, waiting_queue_sec=900, **kwargs):
         if path is None:
             request_url = self.base_url
         else:
@@ -108,8 +120,9 @@ class APIClientV3:
             if count % 10 == 0:
                 print('\n Код ответа от сервера = {}'.format(response.status_code),
                       '-- попытка № {}'.format(count))
-            time.sleep(0.1)
-            if count > waiting_queue_sec * 10:
+                print('\n', 'Message Error - {}'.format(response.text))
+            time.sleep(0.5)
+            if count > waiting_queue_sec * 2:
                 print('Очередь занята более {} секунд '.format(waiting_queue_sec))
                 raise Exception('Time Limit Error , превышено время отправки запроса')
 
