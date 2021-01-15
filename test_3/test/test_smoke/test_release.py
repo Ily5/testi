@@ -41,15 +41,19 @@ def test_v3_init_call_yandex(app_3, db):
         dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
         print('dialog id - ', dialog_id)
     print('call uuid - ', db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
+
+
     result = db.execute_call_data(table='dialog_stats', data=dialog_id)
     synth_phrase_list = [res[1][res[1].find(':') + 4: res[1].find(',') - 1] for res in result if 'nv.synthesize' in res]
+
+    transcription = ''
     for item in [res[1] for res in result if 'nn.log' in res]:
         if 'city' in item:
             logs_dict['extract_address'] = item
         if 'first' in item:
             logs_dict['extract_person'] = item
         if 'bot' in item:
-            logs_dict['call_transcription'] = item
+            transcription += item
         if len(item) <= 4:
             logs_dict['call_duration'] = item
         if 'no_input_timeout' in item:
@@ -58,32 +62,39 @@ def test_v3_init_call_yandex(app_3, db):
             logs_dict['tts_engine'] = item
         if 'yandex' == item or 'google' == item:
             logs_dict['asr_engine'] = item
+    logs_dict['call_transcription'] = transcription
 
 
-# @allure.feature("Smoke 3.0")
-# @allure.story("Yandex")
-# @allure.title('Создание диалога, получение статистики из БД')
-# def test_test(app_3, db):
-#     global result, logs_dict
-#     global synth_phrase_list
-#     db.create_connect(app_3.database["rw"]["prod"])
-#     result = db.execute_call_data(table='dialog_stats', data='537913')
-#     synth_phrase_list = [res[1][res[1].find(':') + 4: res[1].find(',') - 1] for res in result if 'nv.synthesize' in res]
-#     for item in [res[1] for res in result if 'nn.log' in res]:
-#         if 'city' in item:
-#             logs_dict['extract_address'] = item
-#         if 'first' in item:
-#             logs_dict['extract_person'] = item
-#         if 'bot' in item:
-#             logs_dict['call_transcription'] = item
-#         if len(item) <= 4:
-#             logs_dict['call_duration'] = item
-#         if 'no_input_timeout' in item:
-#             logs_dict['get_default'] = item
-#         if '@yandex' in item or '@google' in item:
-#             logs_dict['tts_engine'] = item
-#         if 'yandex' == item or 'google' == item:
-#             logs_dict['asr_engine'] = item
+@pytest.mark.skip(reason='test method')
+@allure.feature("Smoke 3.0")
+@allure.story("Yandex")
+@allure.title('Отладочный метод')
+def test_test(app_3, db):
+    global result, logs_dict
+    global synth_phrase_list
+    db.create_connect(app_3.database["rw"]["prod"])
+    db.wait_for_done('7dc5a6fc-77f6-4ca0-828e-9a5f78622580')
+    result = db.execute_call_data(table='dialog_stats', data='587878')
+    # count_call = db.select_data(table='call', column='dialog_id', sdata='count(uuid)', data=int(587878))
+    synth_phrase_list = [res[1][res[1].find(':') + 4: res[1].find(',') - 1] for res in result if 'nv.synthesize' in res]
+
+    transcription = ''
+    for item in [res[1] for res in result if 'nn.log' in res]:
+        if 'city' in item:
+            logs_dict['extract_address'] = item
+        if 'first' in item:
+            logs_dict['extract_person'] = item
+        if 'bot' in item:
+            transcription += item
+        if len(item) <= 4:
+            logs_dict['call_duration'] = item
+        if 'no_input_timeout' in item:
+            logs_dict['get_default'] = item
+        if '@yandex' in item or '@google' in item:
+            logs_dict['tts_engine'] = item
+        if 'yandex' == item or 'google' == item:
+            logs_dict['asr_engine'] = item
+    logs_dict['call_transcription'] = transcription
 
 
 @allure.feature("Smoke 3.0")
@@ -135,7 +146,7 @@ def test_v3_media_part_yandex_synthesize(app_3, db):
         if 'nv.synthesize' in res:
             count += 1
             assert len(res[1]) > 20
-    assert count == 13
+    assert count == 15
     if not any('nv.synthesize' in d for d in result):
         assert False
 
@@ -286,7 +297,8 @@ def test_v3_media_part_yandex_nv_get_default(app_3, db):
 @allure.story("Проверка медиа части Yandex")
 @allure.title('nv.hold_and_call и nv.bridge_to_caller')
 def test_v3_media_part_yandex_nv_hold_and_call(app_3, db):
-    pass
+    assert 'Выполним удержание и звонок на другой номер' in synth_phrase_list
+    assert 'Привет. Удержание и вызов работает. Сейчас переключу обратно' in synth_phrase_list
 
 
 @allure.feature("Smoke 3.0")
@@ -299,6 +311,7 @@ def test_v3_media_part_yandex_nv_media_params():
     assert '@google' in logs_dict['tts_engine']
 
 
+# @pytest.mark.skip(reason='test')
 @allure.feature("Smoke 3.0")
 @allure.story("Google")
 @allure.title('Создание диалога, получение статистики из БД')
@@ -321,13 +334,15 @@ def test_v3_init_call_google(app_3, db):
     result = db.execute_call_data(table='dialog_stats', data=dialog_id)
     print('call uuid - ', db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
     synth_phrase_list = [res[1][res[1].find(':') + 4: res[1].find(',') - 1] for res in result if 'nv.synthesize' in res]
+
+    transcription = ''
     for item in [res[1] for res in result if 'nn.log' in res]:
         if 'city' in item:
             logs_dict['extract_address'] = item
         if 'first' in item:
             logs_dict['extract_person'] = item
         if 'bot' in item:
-            logs_dict['call_transcription'] = item
+            transcription += item
         if len(item) <= 4:
             logs_dict['call_duration'] = item
         if 'no_input_timeout' in item:
@@ -336,6 +351,7 @@ def test_v3_init_call_google(app_3, db):
             logs_dict['tts_engine'] = item
         if 'yandex' == item or 'google' == item:
             logs_dict['asr_engine'] = item
+    logs_dict['call_transcription'] = transcription
 
 
 @allure.feature("Smoke 3.0")
@@ -387,7 +403,7 @@ def test_v3_media_part_google_synthesize(app_3, db):
         if 'nv.synthesize' in res:
             count += 1
             assert len(res[1]) > 20
-    assert count == 13
+    assert count == 15
     if not any('nv.synthesize' in d for d in result):
         assert False
 
@@ -538,7 +554,8 @@ def test_v3_media_part_google_nv_get_default(app_3, db):
 @allure.story("Проверка медиа части google")
 @allure.title('nv.hold_and_call и nv.bridge_to_caller')
 def test_v3_media_part_google_nv_hold_and_call(app_3, db):
-    pass
+    assert 'Выполним удержание и звонок на другой номер' in synth_phrase_list
+    assert 'Привет. Удержание и вызов работает. Сейчас переключу обратно' in synth_phrase_list
 
 
 @allure.feature("Smoke 3.0")
