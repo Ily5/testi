@@ -13,9 +13,13 @@ class AnyAgentPage(AnyPage):
     __contacts_button = ''
     __analytics_button = ''
     __data_uploading_button = '//span[contains(text(),"data uploading")]'
-    __queue_button = ''
+    __queue_button = '//span[contains(text(),"queue")]'
     __test_nlu_button = ''
 
-    @allure.step('')
+    @allure.step('Открытие страницы "Data uploading"')
     def open_data_uploading_page(self):
         self.click_by_xpath(self.__data_uploading_button)
+
+    @allure.step('Открытие страницы "Queue"')
+    def open_queue_page(self):
+        self.click_by_xpath(self.__queue_button)
