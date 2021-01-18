@@ -88,7 +88,7 @@ class BasePage:
             self.allure_NoSuchElementException()
 
     @allure.step('Получение текста из атрибута тега')
-    def get_attribute_test(self, locator, attribute):
+    def get_attribute_text(self, locator, attribute):
         try:
             element = self.driver.find_element_by_xpath(locator)
             test = element.get_attribute(attribute)

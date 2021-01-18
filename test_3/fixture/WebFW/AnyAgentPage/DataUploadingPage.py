@@ -120,7 +120,7 @@ class DataUploadingPage(AnyAgentPage):
         base_locator = self.__all_uploading_file_list + '/div[{}]'.format(number)
 
         status_locator = base_locator + self.__status_file
-        status = self.get_attribute_test(locator=status_locator, attribute='ng-reflect-state')
+        status = self.get_attribute_text(locator=status_locator, attribute='ng-reflect-state')
 
         name_locator = base_locator + self.__name_file
         name = self.get_tag_text(name_locator)
