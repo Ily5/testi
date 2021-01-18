@@ -71,7 +71,6 @@ class QueuePage(AnyAgentPage):
 
     @allure.step('Получить данные n-ого по счету диалогу')
     def get_n_dialog_info(self, number):
-        self.open_dialogs_queue()
         _n_dialog = self.__all_dialogs_or_call_list + '/div[{}]'.format(number)
         _msisdn = _n_dialog + self.__msisdn
         _status = _n_dialog + self.__status_dialog
@@ -147,7 +146,6 @@ class QueuePage(AnyAgentPage):
 
     @allure.step('Получить данные n-ого по счету звонку')
     def get_n_call_info(self, number):
-        self.open_dialogs_queue()
         _n_dialog = self.__all_dialogs_or_call_list + '/div[{}]'.format(str(number))
         _msisdn = _n_dialog + self.__msisdn
         _status = _n_dialog + self.__status_call
