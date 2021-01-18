@@ -42,7 +42,7 @@ def agent_settings_page(app_v3):
     return app_v3
 
 
-@pytest.fixture()
+@pytest.fixture(scope='class')
 def queue_page(agent_settings_page):
     agent_settings_page.AnyAgentPage.open_queue_page()
     return agent_settings_page.QueuePage
