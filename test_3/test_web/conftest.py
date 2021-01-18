@@ -40,3 +40,9 @@ def agent_settings_page(app_v3):
     agent_setting_url = app_v3.test_data['agent_setting_url'] + app_v3.test_data['test_data']['agent_uuid']
     app_v3.BasePage.goto_page(agent_setting_url)
     return app_v3
+
+
+@pytest.fixture()
+def queue_page(agent_settings_page):
+    agent_settings_page.AnyAgentPage.open_queue_page()
+    return agent_settings_page.QueuePage
