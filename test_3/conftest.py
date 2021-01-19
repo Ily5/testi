@@ -39,13 +39,6 @@ def params_agent_uuid(api_v3):
     return params
 
 
-@pytest.fixture(scope='session')
-def params_agent_id(pool_api_v3):
-    agent_id = pool_api_v3.test_data['agent_id']
-    params = {"agent_id": "{}".format(agent_id)}
-    return params
-
-
 @pytest.fixture
 def default_settings_agent(api_v3, params_agent_uuid):
     yield
@@ -98,9 +91,9 @@ def create_new_output_entity_agent(request, api_v3, random_str_generator, params
 
 
 @pytest.fixture(scope='module')
-def remove_queue_dialogs_and_calls(request, api_v3, pool_api_v3, params_agent_uuid, params_agent_id):
+def remove_queue_dialogs_and_calls(request, api_v3, pool_api_v3, params_agent_uuid):
     def fin():
-        clear_queue(api_v3, params_agent_id, params_agent_uuid, pool_api_v3)
+        clear_queue(api_v3, params_agent_uuid, pool_api_v3)
 
     request.addfinalizer(fin)
 
@@ -121,9 +114,8 @@ def upload_dialog(api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
 
 
 @pytest.fixture(scope='class')
-def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, params_agent_id,
-                          remove_queue_dialogs_and_calls):
-    clear_queue(api_v3, params_agent_id, params_agent_uuid, pool_api_v3)
+def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
+    clear_queue(api_v3, params_agent_uuid, pool_api_v3)
 
     path_agent_setting = api_v3.path_end_point['put_change_agent_settings']
     api_v3.request_send(method="PUT", path=path_agent_setting,
@@ -136,7 +128,7 @@ def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, param
         data.append({'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"})
     api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
 
-    check_queue(params_agent_id, pool_api_v3, path_name='get_all_dialog_queue', queue_name='dialogs')
+    check_queue(params_agent_uuid, pool_api_v3, path_name='get_all_dialog_queue', queue_name='dialogs')
 
     def default_setting():
         set_default_settings_agent(api_v3, params_agent_uuid)
@@ -146,9 +138,8 @@ def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, param
 
 
 @pytest.fixture(scope='class')
-def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_id, params_agent_uuid,
-                         remove_queue_dialogs_and_calls):
-    clear_queue(api_v3, params_agent_id, params_agent_uuid, pool_api_v3)
+def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
+    clear_queue(api_v3, params_agent_uuid, pool_api_v3)
 
     path = api_v3.path_end_point['upload_group_dialogs']
     data = []
@@ -156,7 +147,7 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_id, params_a
         data.append({'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"})
     api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
 
-    check_queue(params_agent_id, pool_api_v3, path_name='get_list_queue_calls', queue_name='calls')
+    check_queue(params_agent_uuid, pool_api_v3, path_name='get_list_queue_calls', queue_name='calls')
 
     path_agent_setting = api_v3.path_end_point['put_change_agent_settings']
     api_v3.request_send(method="PUT", path=path_agent_setting,
@@ -170,15 +161,15 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_id, params_a
     return data
 
 
-def clear_queue(api_v3, params_agent_id, params_agent_uuid, pool_api_v3):
+def clear_queue(api_v3, params_agent_uuid, pool_api_v3):
     api_v3.request_send(method='POST', path=api_v3.path_end_point['return_queue_dialogs'],
                         params=params_agent_uuid, json={}, status_code=409)
     api_v3.request_send(method='POST', path=api_v3.path_end_point['remove_queue_dialogs'], params=params_agent_uuid,
                         status_code=409)
-    pool_api_v3.request_send(method='POST', path=pool_api_v3.path_end_point['return_calls'], params=params_agent_id,
+    pool_api_v3.request_send(method='POST', path=pool_api_v3.path_end_point['return_calls'], params=params_agent_uuid,
                              json={})
     pool_api_v3.request_send(method='DELETE', path=pool_api_v3.path_end_point['get_list_queue_calls'],
-                             params=params_agent_id, json={})
+                             params=params_agent_uuid, json={})
 
 
 def set_default_settings_agent(api_v3, params_agent_uuid):
@@ -195,9 +186,9 @@ def set_default_settings_agent(api_v3, params_agent_uuid):
     api_v3.request_send(method="PUT", path=path, json=data, params=params_agent_uuid)
 
 
-def check_queue(params_agent_id, pool_api_v3, path_name, queue_name):
+def check_queue(params_agent_uuid, pool_api_v3, path_name, queue_name):
     params = {**{"page": "1",
-                 "by_count": "100"}, **params_agent_id}
+                 "by_count": "100"}, **params_agent_uuid}
     path = pool_api_v3.path_end_point[path_name]
 
     while True:
