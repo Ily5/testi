@@ -42,8 +42,6 @@ class DataUploadingPage(AnyAgentPage):
         self.send_keys_by_xpath(self.__input_select_file, file_path)
         self.click_by_xpath(self.__upload_file_button)
         self.waiting_element_to_be_clickable(self.__filter_all_statuses)
-        # todo убрать рефреш, как пофиксят загрузку файлов
-        self.refresh_the_page()
         while True:
             result = self.get_info_n_file(1)
             if result['status'] in [None, "STARTED"]:
