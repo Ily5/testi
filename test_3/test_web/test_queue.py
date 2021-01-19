@@ -96,10 +96,10 @@ class TestDialogsQueue:
         assert count_dialogs == 0
 
 
+@allure.epic('UI Regression')
+@allure.feature('Queue Calls')
 class TestCallsQueue:
 
-    @allure.epic('UI Regression')
-    @allure.feature('Queue Calls')
     @allure.title('Сортировка по adding time')
     def test_calls_queue_sort_adding_time(self, creation_queue_calls, queue_page):
         queue_page.sorting_queue_list(page='calls', column='adding_time')
