@@ -10,14 +10,14 @@ class TestDialogsQueue:
 
     @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1615')
     @allure.epic('UI Regression')
-    @allure.feature('Queue page')
+    @allure.feature('Queue Dialogs')
     @allure.title('Сортировка списка диалогов по колонке Status')
     def test_dialogs_queue_sort_action(self, queue_page, creation_queue_dialog):
         pass
 
     @pytest.mark.skip(reason='Отладить тест')
     @allure.epic('UI Regression')
-    @allure.feature('Queue page')
+    @allure.feature('Queue Dialogs')
     @allure.title('Фильтрация списка по диалогу')
     def test_dialogs_queue_filter_by_dialog(self, creation_queue_dialog, queue_page):
         msisdn = queue_page.get_queue_info(number='1')['msisdn']
@@ -27,7 +27,7 @@ class TestDialogsQueue:
 
     @pytest.mark.skip(reason='Отладить тест')
     @allure.epic('UI Regression')
-    @allure.feature('Queue page')
+    @allure.feature('Queue Dialogs')
     @allure.title('Фильтрация списка по статусу')
     def test_dialogs_queue_filter_by_status(self, creation_queue_dialog, queue_page):
         status = queue_page.get_queue_info(number='1')['status']
@@ -37,7 +37,7 @@ class TestDialogsQueue:
             assert item['status'].lower() == status.lower()
 
     @allure.epic('UI Regression')
-    @allure.feature('Queue page')
+    @allure.feature('Queue Dialogs')
     @allure.title('Удалить один диалог из списка')
     def test_dialogs_queue_remove_one_dialog(self, creation_queue_dialog, queue_page):
         dialogs_count = queue_page.get_count_list_dialogs_and_calls()['dialogs']
@@ -47,7 +47,7 @@ class TestDialogsQueue:
         assert int(dialogs_count) == int(dialogs_count_new) + 1
 
     @allure.epic('UI Regression')
-    @allure.feature('Queue page')
+    @allure.feature('Queue Dialogs')
     @allure.title('Поставить на паузу один диалог')
     def test_dialogs_queue_pause_one_dialog(self, creation_queue_dialog, queue_page):
         status_dialog = queue_page.get_queue_info(number='1')
@@ -57,7 +57,7 @@ class TestDialogsQueue:
         assert str(status_dialog_new['status']).lower() == 'stopped'
 
     @allure.epic('UI Regression')
-    @allure.feature('Queue page')
+    @allure.feature('Queue Dialogs')
     @allure.title('Вернуть с паузы один диалог')
     def test_dialogs_queue_return_one_dialog(self, creation_queue_dialog, queue_page):
         status_dialog = queue_page.get_queue_info(number='1')
@@ -68,7 +68,7 @@ class TestDialogsQueue:
         assert str(status_dialog_new['status']).lower() == str(status_dialog_new['status']).lower()
 
     @allure.epic('UI Regression')
-    @allure.feature('Queue page')
+    @allure.feature('Queue Dialogs')
     @allure.title('Поставить на паузу все диалоги')
     def test_dialogs_queue_pause_all_dialog(self, creation_queue_dialog, queue_page):
         queue_page.stop_all_dialogs()
@@ -77,7 +77,7 @@ class TestDialogsQueue:
             assert str(status_dialogs_after[str(i + 1)]['status']).lower() == 'stopped'
 
     @allure.epic('UI Regression')
-    @allure.feature('Queue page')
+    @allure.feature('Queue Dialogs')
     @allure.title('Вернуть все диалоги с паузы')
     def test_dialogs_queue_pause_all_dialog(self, creation_queue_dialog, queue_page):
         queue_page.stop_all_dialogs()
@@ -88,7 +88,7 @@ class TestDialogsQueue:
             assert str(status_dialogs[str(i + 1)]['status']).lower() != 'stopped'
 
     @allure.epic('UI Regression')
-    @allure.feature('Queue page')
+    @allure.feature('Queue Dialogs')
     @allure.title('Удалить все диалоги')
     def test_dialogs_queue_remove_all_dialogs(self, creation_queue_dialog, queue_page):
         queue_page.remove_all_dialogs()
@@ -99,7 +99,7 @@ class TestDialogsQueue:
 class TestCallsQueue:
 
     @allure.epic('UI Regression')
-    @allure.feature('Queue page')
+    @allure.feature('Queue Calls')
     @allure.title('Сортировка по adding time')
     def test_calls_queue_sort_adding_time(self, creation_queue_calls, queue_page):
         queue_page.sorting_queue_list(page='calls', column='adding_time')
