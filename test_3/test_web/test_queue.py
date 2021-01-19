@@ -33,7 +33,6 @@ class TestDialogsQueue:
         status = queue_page.get_queue_info(number='1')['status']
         queue_page.filter_dialogs_queue_list(param='dialog', text=status)
         stats = queue_page.get_queue_info()
-        stats: dict
         for item in stats.values():
             assert item['status'].lower() == status.lower()
 
