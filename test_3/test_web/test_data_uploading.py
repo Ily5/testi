@@ -3,9 +3,11 @@ import datetime
 import allure
 
 
+@allure.epic('UI Regression')
+@allure.feature('Data uploading')
 class TestWebDataUploading:
 
-    @allure.feature('Загрузка валидного файла')
+    @allure.title('Загрузка валидного файла')
     def test_data_uploading_valid_file(self, data_uploading, remove_queue_dialogs_and_calls):
 
         count = data_uploading.DataUploadingPage.count_list_files()
@@ -22,7 +24,7 @@ class TestWebDataUploading:
         assert result['count_contact'] is not None
         assert count_new == count + 1
 
-    @allure.feature('Загрузка невалидного файла')
+    @allure.title('Загрузка невалидного файла')
     def test_data_uploading_no_valid_file(self, data_uploading):
 
         count = data_uploading.DataUploadingPage.count_list_files()
@@ -38,7 +40,7 @@ class TestWebDataUploading:
         assert result['error_message'] is not None
         assert count_new == count + 1
 
-    @allure.feature('Изменение сортировки списка загруженных файлов')
+    @allure.title('Изменение сортировки списка загруженных файлов')
     def test_edit_sorted(self, data_uploading):
         before = data_uploading.DataUploadingPage.get_info_n_file(1)
         before_time = datetime.datetime.strptime(before['time_uploading'][0:-4], "%d.%m.%Y %H:%M:%S")
@@ -57,7 +59,7 @@ class TestWebDataUploading:
         assert after_time < before_time_new
         assert before_time == before_time_new
 
-    @allure.feature('Фильтрация по статусу - All statuses')
+    @allure.title('Фильтрация по статусу - All statuses')
     def test_filters_all_statuses(self, data_uploading):
 
         count_elements = data_uploading.DataUploadingPage.count_list_files()
@@ -68,7 +70,7 @@ class TestWebDataUploading:
         assert "SUCCESS" in result
         assert "FAILED" in result
 
-    @allure.feature('Фильтрация по статусу - Success')
+    @allure.title('Фильтрация по статусу - Success')
     def test_filters_success(self, data_uploading):
         data_uploading.DataUploadingPage.set_filer_status(status='success')
 
@@ -80,7 +82,7 @@ class TestWebDataUploading:
         for res in result:
             assert res == "SUCCESS"
 
-    @allure.feature('Фильтрация по статусу - Failed')
+    @allure.title('Фильтрация по статусу - Failed')
     def test_filters_failed(self, data_uploading):
         data_uploading.DataUploadingPage.set_filer_status(status='failed')
 
@@ -92,7 +94,7 @@ class TestWebDataUploading:
         for res in result:
             assert res == "FAILED"
 
-    @allure.feature('Фильтрация по статусу - Loading')
+    @allure.title('Фильтрация по статусу - Loading')
     def test_filters_loading(self, data_uploading):
         data_uploading.DataUploadingPage.set_filer_status(status='loading')
 
@@ -100,7 +102,7 @@ class TestWebDataUploading:
 
         assert count_elements == 0
 
-    @allure.feature('Фильтрация по статусу - Warning')
+    @allure.title('Фильтрация по статусу - Warning')
     def test_filters_warning(self, data_uploading):
         data_uploading.DataUploadingPage.set_filer_status(status='warning')
 
@@ -108,7 +110,7 @@ class TestWebDataUploading:
 
         assert count_elements == 0
 
-    @allure.feature('Удаление одного успшено загруженного файла со статсус success из списка')
+    @allure.title('Удаление одного успшено загруженного файла со статсус success из списка')
     def test_delete_one_valid_file(self, data_uploading):
         data_uploading.DataUploadingPage.set_filer_status(status='success')
         count = data_uploading.DataUploadingPage.count_list_files()
@@ -117,7 +119,7 @@ class TestWebDataUploading:
 
         assert count == count_new + 1
 
-    @allure.feature('Удаление одного успешно загруженного файла со статусом failed из списка')
+    @allure.title('Удаление одного успешно загруженного файла со статусом failed из списка')
     def test_delete_one_no_valid_file(self, data_uploading):
         data_uploading.DataUploadingPage.set_filer_status(status='failed')
 
@@ -130,7 +132,7 @@ class TestWebDataUploading:
 
         assert before['time_uploading'] != after['time_uploading']
 
-    @allure.feature('Скачивание образца загрузочного файла')
+    @allure.title('Скачивание образца загрузочного файла')
     def test_download_example(self, data_uploading):
 
         locator = data_uploading.DataUploadingPage._DataUploadingPage__download_example
@@ -139,7 +141,7 @@ class TestWebDataUploading:
         # todo добавить скачивание файла и проверку, что он скачался
         # data_uploading.DataUploadingPage.download_example()
 
-    @allure.feature('Скачивание валидного успешно загруженного файла')
+    @allure.title('Скачивание валидного успешно загруженного файла')
     def test_download_valid_file(self, data_uploading):
 
         valid_file_path = data_uploading.test_data['path_to_uploading_file']['valid_file']
@@ -157,7 +159,7 @@ class TestWebDataUploading:
         # todo добавить скачивание файла и проверку, что он скачался
         # data_uploading.DataUploadingPage.download_valid_n_file(1)
 
-    @allure.feature('Удаление всех успешно загруженных файлов')
+    @allure.title('Удаление всех успешно загруженных файлов')
     def test_delete_all_completed_file(self, data_uploading):
         data_uploading.DataUploadingPage.delete_all_completed_uploading()
         time.sleep(1)
