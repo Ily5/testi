@@ -25,7 +25,7 @@ def app_3_web(request):
     return fixture
 
 
-@pytest.fixture()
+@pytest.fixture(scope='class')
 def app_v3(request, app_3_web):
     def fin():
         main_page_url = app_3_web.test_data['main_page_url']
@@ -35,7 +35,7 @@ def app_v3(request, app_3_web):
     return app_3_web
 
 
-@pytest.fixture()
+@pytest.fixture(scope='class')
 def agent_settings_page(app_v3):
     agent_setting_url = app_v3.test_data['agent_setting_url'] + app_v3.test_data['test_data']['agent_uuid']
     app_v3.BasePage.goto_page(agent_setting_url)
