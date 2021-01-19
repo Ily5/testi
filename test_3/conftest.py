@@ -124,7 +124,7 @@ def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, remov
 
     path = api_v3.path_end_point['upload_group_dialogs']
     data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
-    for i in range(randint(2, 15)):
+    for i in range(randint(5, 15)):
         data.append({'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"})
     api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
 
@@ -143,7 +143,7 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_uuid, remove
 
     path = api_v3.path_end_point['upload_group_dialogs']
     data = []
-    for i in range(randint(2, 15)):
+    for i in range(randint(5, 15)):
         data.append({'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"})
     api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
 
