@@ -42,6 +42,7 @@ class DataUploadingPage(AnyAgentPage):
         self.send_keys_by_xpath(self.__input_select_file, file_path)
         self.waiting_element_to_be_clickable(self.__upload_file_button)
         self.click_by_xpath(self.__upload_file_button)
+        self.waiting_element_to_be_clickable(self.__upload_file_button)
         self.waiting_element_to_be_clickable(self.__filter_all_statuses)
         self.refresh_the_page()
         while True:
