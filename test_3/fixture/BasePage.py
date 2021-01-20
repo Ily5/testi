@@ -80,7 +80,7 @@ class BasePage:
     @allure.step('Получение текста из тега')
     def get_tag_text(self, locator):
         try:
-            WebDriverWait(self.driver, self.time_element_Wait, ignored_exceptions=StaleElementReferenceException).until(
+            WebDriverWait(self.driver, self.time_element_Wait).until(
                 EC.presence_of_element_located((By.XPATH, locator)))
             text = self.driver.find_element_by_xpath(locator).text
             return text
