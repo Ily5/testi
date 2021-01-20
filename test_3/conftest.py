@@ -208,7 +208,7 @@ def check_queue(params_agent_uuid, pool_api_v3, path_name, queue_name, queue_len
             print('\n', time.time(), ' len calls = ', len(response_1.json()['calls']))
             print('\n', time.time(), 'len dialogs = ', len(response_2.json()['dialogs']))
 
-            if len(response_1.json()[queue_name]) > 0 and len(response_2.json()[queue_name_2]):
+            if len(response_1.json()[queue_name]) > 0 and len(response_2.json()[queue_name_2]) == 0:
                 print('\n', time.time(), 'Выход из цикла. len calls = ', len(response_1.json()['calls']))
                 break
         else:
