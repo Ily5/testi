@@ -21,7 +21,7 @@ class TestPoolApiCalls:
         assert 'trunk_id' in response.json()['calls'][0]
         assert 'uuid' in response.json()['calls'][0]
         assert response.json()['total'] > 0
-        assert response.json()['total'] >= len(response.json()['calls'])
+        assert len(response.json()['calls']) > 0
 
     @allure.feature('Получение звонка из очереди')
     def test_get_calls_queue(self, pool_api_v3, creation_queue_calls):
@@ -49,17 +49,17 @@ class TestPoolApiCalls:
                 path=pool_api_v3.path_end_point['get_list_queue_calls'],
                 params={**{"page": "1",
                            "by_count": "50"}, **params_agent_uuid})
-            call_id = response_list_queue_calls.json()['calls'][0]['id']
+            call_id = response_list_queue_calls.json()['calls'][0]['uuid']
             call_msisdn = response_list_queue_calls.json()['calls'][0]['msisdn']
 
         with allure.step('Ставим один звонок на паузу'):
             path = pool_api_v3.path_end_point['defer_calls']
-            params = {**{'call_id': str(call_id)}, **params_agent_uuid}
+            params = {**{'call_uuid': str(call_id)}, **params_agent_uuid}
             pool_api_v3.request_send(method='POST', path=path, params=params, json={})
 
         with allure.step('Возвращяем звонок обратно, провряем статус код'):
             path = pool_api_v3.path_end_point['return_calls']
-            params = {**{'call_id': str(call_id)}, **params_agent_uuid}
+            params = {**{'call_uuid': str(call_id)}, **params_agent_uuid}
             response = pool_api_v3.request_send(method='POST', path=path, params=params, json={})
             assert response.status_code == 200
 
