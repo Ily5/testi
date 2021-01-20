@@ -50,25 +50,26 @@ class TestPoolApiCalls:
                 params={**{"page": "1",
                            "by_count": "50"}, **params_agent_uuid})
             call_id = response_list_queue_calls.json()['calls'][0]['id']
+            call_msisdn = response_list_queue_calls.json()['calls'][0]['msisdn']
 
         with allure.step('Ставим один звонок на паузу'):
             path = pool_api_v3.path_end_point['defer_calls']
             params = {**{'call_id': str(call_id)}, **params_agent_uuid}
             pool_api_v3.request_send(method='POST', path=path, params=params, json={})
 
-        with allure.step('Возвращяем звонок обратно, провряем что он есть в списке'):
+        with allure.step('Возвращяем звонок обратно, провряем статус код'):
             path = pool_api_v3.path_end_point['return_calls']
             params = {**{'call_id': str(call_id)}, **params_agent_uuid}
             response = pool_api_v3.request_send(method='POST', path=path, params=params, json={})
             assert response.status_code == 200
 
-        with allure.step('Получаем список звонков в очереди, поверяем, что отложеного звонка там нет'):
+        with allure.step('Получаем список звонков в очереди, поверяем, что отложенный звонок есть в списке'):
             response_list_queue_calls = pool_api_v3.request_send(
                 path=pool_api_v3.path_end_point['get_list_queue_calls'],
                 params={**{"page": "1",
                            "by_count": "50"}, **params_agent_uuid})
-            list_active_call_id = [call['id'] for call in response_list_queue_calls.json()['calls']]
-            assert call_id in list_active_call_id
+            list_active_call_id = [call['msisdn'] for call in response_list_queue_calls.json()['calls']]
+            assert call_msisdn in list_active_call_id
 
     @allure.feature('Сбросить очередь звонков')
     def test_drop_queue_calls(self, pool_api_v3, params_agent_uuid, creation_queue_calls):
