@@ -6,7 +6,7 @@ from test_3.fixture.WebFW.AgentPage import AnyAgentPage
 class DataUploadingPage(AnyAgentPage):
     __input_select_file = '//input[@type="file"]'
     __select_file_button = '//span[contains(text(),"select file")]/..'
-    __upload_file_button = '//span[text()="upload "]'
+    __upload_file_button = '//span[text()="upload "]/..'
     __download_example = '//div[contains(text(),"download example")]'
 
     __menu_all_uploading_file = '//div[@class="app-initial-data__container__info ng-star-inserted"]'
