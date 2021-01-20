@@ -144,16 +144,11 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_uuid, remove
 
     path = api_v3.path_end_point['upload_group_dialogs']
     data = []
-    for i in range(randint(5, 15)):
+    for i in range(randint(10, 18)):
         data.append({'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"})
     api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
-    print(data)
+
     print('\n', 'LEN data - ', len(data))
-
-    # check_queue(params_agent_uuid, pool_api_v3, path_name='get_all_dialog_queue', queue_name='dialogs',
-    #             queue_len=len(data))
-
-    change_total_channel_limit(api_v3, 5, params_agent_uuid)
 
     check_queue(params_agent_uuid, pool_api_v3, path_name='get_list_queue_calls', queue_name='calls',
                 queue_len=len(data))
@@ -205,10 +200,10 @@ def check_queue(params_agent_uuid, pool_api_v3, path_name, queue_name, queue_len
             response_1 = pool_api_v3.request_send(path=path, params=params)
             response_2 = pool_api_v3.request_send(path=path_2, params=params)
 
-            print('\n', time.time(), ' len calls = ', len(response_1.json()['calls']))
-            print('\n', time.time(), 'len dialogs = ', len(response_2.json()['dialogs']))
+            # print('\n', time.time(), ' len calls = ', len(response_1.json()['calls']))
+            # print('\n', time.time(), 'len dialogs = ', len(response_2.json()['dialogs']))
 
-            if len(response_1.json()[queue_name]) > 0 and len(response_2.json()[queue_name_2]) == 0:
+            if len(response_1.json()[queue_name]) > 0:
                 print('\n', time.time(), 'Выход из цикла. len calls = ', len(response_1.json()['calls']))
                 break
         else:
