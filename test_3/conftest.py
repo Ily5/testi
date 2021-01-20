@@ -1,3 +1,4 @@
+import time
 import pytest
 import json
 from test_3.fixture.api import APIClientV3
@@ -90,7 +91,7 @@ def create_new_output_entity_agent(request, api_v3, random_str_generator, params
     return output_entity_uuid
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='class')
 def remove_queue_dialogs_and_calls(request, api_v3, pool_api_v3, params_agent_uuid):
     def fin():
         clear_queue(api_v3, params_agent_uuid, pool_api_v3)
@@ -98,7 +99,7 @@ def remove_queue_dialogs_and_calls(request, api_v3, pool_api_v3, params_agent_uu
     request.addfinalizer(fin)
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='class')
 def upload_group_dialogs(api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
     path = api_v3.path_end_point['upload_group_dialogs']
     data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"},
@@ -106,7 +107,7 @@ def upload_group_dialogs(api_v3, params_agent_uuid, remove_queue_dialogs_and_cal
     return (api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)).json()
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='class')
 def upload_dialog(api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
     path = api_v3.path_end_point['upload_dialog']
     data = {'msisdn': str(randint(00000000000, 99999999999))}
@@ -117,10 +118,7 @@ def upload_dialog(api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
 def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
     clear_queue(api_v3, params_agent_uuid, pool_api_v3)
 
-    path_agent_setting = api_v3.path_end_point['put_change_agent_settings']
-    api_v3.request_send(method="PUT", path=path_agent_setting,
-                        json={'total_channel_limit': 0},
-                        params=params_agent_uuid)
+    change_total_channel_limit(api_v3, 0, params_agent_uuid)
 
     path = api_v3.path_end_point['upload_group_dialogs']
     data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
@@ -128,7 +126,10 @@ def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, remov
         data.append({'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"})
     api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
 
-    check_queue(params_agent_uuid, pool_api_v3, path_name='get_all_dialog_queue', queue_name='dialogs')
+    print('\n', 'LEN data - ', len(data))
+
+    check_queue(params_agent_uuid, pool_api_v3, path_name='get_all_dialog_queue', queue_name='dialogs',
+                queue_len=len(data))
 
     def default_setting():
         set_default_settings_agent(api_v3, params_agent_uuid)
@@ -146,13 +147,18 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_uuid, remove
     for i in range(randint(5, 15)):
         data.append({'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"})
     api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
+    print(data)
+    print('\n', 'LEN data - ', len(data))
 
-    check_queue(params_agent_uuid, pool_api_v3, path_name='get_list_queue_calls', queue_name='calls')
+    # check_queue(params_agent_uuid, pool_api_v3, path_name='get_all_dialog_queue', queue_name='dialogs',
+    #             queue_len=len(data))
 
-    path_agent_setting = api_v3.path_end_point['put_change_agent_settings']
-    api_v3.request_send(method="PUT", path=path_agent_setting,
-                        json={'total_channel_limit': 0},
-                        params=params_agent_uuid)
+    change_total_channel_limit(api_v3, 5, params_agent_uuid)
+
+    check_queue(params_agent_uuid, pool_api_v3, path_name='get_list_queue_calls', queue_name='calls',
+                queue_len=len(data))
+
+    change_total_channel_limit(api_v3, 0, params_agent_uuid)
 
     def default_setting():
         set_default_settings_agent(api_v3, params_agent_uuid)
@@ -186,7 +192,7 @@ def set_default_settings_agent(api_v3, params_agent_uuid):
     api_v3.request_send(method="PUT", path=path, json=data, params=params_agent_uuid)
 
 
-def check_queue(params_agent_uuid, pool_api_v3, path_name, queue_name):
+def check_queue(params_agent_uuid, pool_api_v3, path_name, queue_name, queue_len=0):
     params = {**{"page": "1",
                  "by_count": "100"}, **params_agent_uuid}
     path = pool_api_v3.path_end_point[path_name]
@@ -199,9 +205,21 @@ def check_queue(params_agent_uuid, pool_api_v3, path_name, queue_name):
             response_1 = pool_api_v3.request_send(path=path, params=params)
             response_2 = pool_api_v3.request_send(path=path_2, params=params)
 
-            if len(response_1.json()[queue_name]) > 0 and len(response_2.json()[queue_name_2]) == 0:
+            print('\n', time.time(), ' len calls = ', len(response_1.json()['calls']))
+            print('\n', time.time(), 'len dialogs = ', len(response_2.json()['dialogs']))
+
+            if len(response_1.json()[queue_name]) > 0 and len(response_2.json()[queue_name_2]):
+                print('\n', time.time(), 'Выход из цикла. len calls = ', len(response_1.json()['calls']))
                 break
         else:
             response = pool_api_v3.request_send(path=path, params=params)
-            if len(response.json()[queue_name]) > 0:
+            print('\n', time.time(), 'len DIALOGS = ', len(response.json()[queue_name]))
+            if len(response.json()[queue_name]) >= queue_len:
+                print("Вышли из цикла")
                 break
+
+
+def change_total_channel_limit(api_v3, limit, params_agent_uuid):
+    path_agent_setting = api_v3.path_end_point['put_change_agent_settings']
+    api_v3.request_send(method="PUT", path=path_agent_setting, json={'total_channel_limit': limit},
+                        params=params_agent_uuid)
