@@ -123,6 +123,7 @@ class BasePage:
         except NoSuchElementException as e:
             self.allure_NoSuchElementException()
 
+    @allure.step('Получение URL текущей старинцы')
     def get_current_url(self):
         return self.driver.current_url
 
