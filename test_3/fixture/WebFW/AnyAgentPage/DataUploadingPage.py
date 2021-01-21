@@ -154,5 +154,6 @@ class DataUploadingPage(AnyAgentPage):
 
     @allure.step('Получение количества загруженных файлов в списке ')
     def count_list_files(self):
+        self.refresh_the_page()
         locator = self.__all_uploading_file_list + '/div'
         return len(self.find_elements(locator))
