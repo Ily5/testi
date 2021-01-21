@@ -5,17 +5,20 @@ from test_3.fixture.WebFW.AgentPage import AnyAgentPage
 
 class QueuePage(AnyAgentPage):
     __dialogs_queue = '//div[text()="dialogs"]'
-    __refresh_dialogs_queue_button = '//span[text()=" Get data "]/..'
-    __popup_menu_dialogs_queue_button = __refresh_dialogs_queue_button + '/../button[2]'
+    __get_dialogs_queue_button = '//span[text()=" Get data "]/..'
+    __popup_menu_queue_button = __get_dialogs_queue_button + '/../button[2]'
 
-    __remove_all_dialogs_button = '//div[contains(text(),"remove all dialogs")]'
-    __stop_all_dialogs_button = '//div[contains(text(),"stop all dialogs")]'
-    __run_all_dialogs_button = '//div[contains(text(),"run all dialogs")]'
+    __remove_all_dialogs_button = '//div[contains(text(),"remove all dialogs ")]'
+    __stop_all_dialogs_button = '//div[contains(text(),"stop all dialogs ")]'
+    __run_all_dialogs_button = '//div[contains(text(),"run all dialogs ")]'
+
+    __remove_all_calls_button = '//div[contains(text(),"remove all calls ")]'
+    __stop_all_calls_button = '//div[contains(text(),"stop all calls ")]'
+    __run_all_calls_button = '//div[contains(text(),"run all calls ")]'
 
     __all_dialogs_or_call_list = '//div[@class="ag-center-cols-container"]'
     __msisdn = '//div[@col-id="msisdn"]//div[contains(@class, "app-full")]/span'
-    __status_dialog = '//div[@col-id="0"]//div[contains(@class, "app-status")]'
-    __status_call = '//div[@col-id="result"]//div[contains(@class, "app-status")]'
+    __status = '//div[@col-id="result"]//div[contains(@class, "app-status")]'
     __adding_time = '//div[@col-id="date_added"]//div[contains(@class, "app-full")]/span'
 
     __base_sorting_menu = '//div[@class="ag-header-row"]/div'
@@ -33,7 +36,6 @@ class QueuePage(AnyAgentPage):
     __action_return = '//app-queue-cell-actions/button[1]'
 
     __calls_queue = '//div[text()="calls"]'
-    __refresh_calls_queue_button = '//div[@fxlayoutalign="end center"]/button'
 
     __yes_button = '//span[contains(text(),"yes")]/..'
     __confirm_button = '//span[contains(text(),"confirm")]/..'
@@ -43,13 +45,14 @@ class QueuePage(AnyAgentPage):
         url = self.get_current_url()
         if 'dialogs' not in url:
             self.click_by_xpath(self.__dialogs_queue)
-            self.get_dialogs_queue_list()
+        self.get_dialogs_queue_list()
 
     @allure.step('Открытие вкладики Calls')
     def open_calls_queue(self):
         url = self.get_current_url()
         if 'calls' not in url:
             self.click_by_xpath(self.__calls_queue)
+        self.get_call_queue_list()
 
     @allure.step('Удалить/поставить на паузу/вернуть n-ый по списку диалог или звонок')
     def action_n_dialog_or_call(self, page: str, number: int, action: str):
@@ -72,11 +75,9 @@ class QueuePage(AnyAgentPage):
     @allure.step('Получить размер очереди диалогов и звонков')
     def get_count_list_dialogs_and_calls(self):
         self.open_dialogs_queue()
-        self.get_dialogs_queue_list()
         dialogs = self.__all_dialogs_or_call_list + '/div'
         dialogs_count = len(self.find_elements(dialogs))
         self.open_calls_queue()
-        self.refresh_calls_queue_list()
         calls = self.__all_dialogs_or_call_list + '/div'
         calls_count = len(self.find_elements(calls))
         return {"dialogs": dialogs_count, "calls": calls_count}
@@ -85,10 +86,8 @@ class QueuePage(AnyAgentPage):
     def get_queue_info(self, page='dialogs', number='all'):
         if page in 'dialogs':
             self.open_dialogs_queue()
-            self.get_dialogs_queue_list()
         if page in 'calls':
             self.open_calls_queue()
-            self.refresh_calls_queue_list()
 
         _n_item = self.__all_dialogs_or_call_list + '/div'
         count = len(self.find_elements(_n_item))
@@ -102,7 +101,7 @@ class QueuePage(AnyAgentPage):
                 _adding_time = _n_item + self.__adding_time
                 adding_time = self.get_tag_text(_adding_time)
 
-            _status = _n_item + self.__status_dialog
+            _status = _n_item + self.__status
             _msisdn = _n_item + self.__msisdn
 
             msisdn = self.get_tag_text(_msisdn)
@@ -144,35 +143,42 @@ class QueuePage(AnyAgentPage):
         if column.lower() == 'adding_time':
             self.click_by_xpath(self.__adding_time_sorting_button)
 
-    @allure.step('Открытие меню действий с очередью диалогов')
-    def open_popup_menu_dialogs_queue(self):
-        self.open_dialogs_queue()
-        self.click_by_xpath(self.__popup_menu_dialogs_queue_button)
+    @allure.step('Удалить все диалоги или звонки')
+    def remove_all_dialogs_or_calls(self, page='dialogs'):
+        if page.lower() in 'dialogs':
+            self.open_dialogs_queue()
+            _remove_locator = self.__remove_all_dialogs_button
+        else:
+            self.open_calls_queue()
+            _remove_locator = self.__remove_all_calls_button
 
-    @allure.step('Удалить все диалоги')
-    def remove_all_dialogs(self):
-        self.open_dialogs_queue()
-        self.click_by_xpath(self.__popup_menu_dialogs_queue_button)
-        self.click_by_xpath(self.__remove_all_dialogs_button)
+        self.click_by_xpath(self.__popup_menu_queue_button)
+        self.click_by_xpath(_remove_locator)
         self.click_by_xpath(self.__confirm_button)
-        self.get_dialogs_queue_list()
 
-    @allure.step('Получить список диалогов в очереди')
-    def get_dialogs_queue_list(self):
-        self.open_dialogs_queue()
-        self.click_by_xpath(self.__refresh_dialogs_queue_button)
+    @allure.step('Вернуть все диалоги или звонка с паузы')
+    def run_all_dialogs_or_calls(self, page='dialogs'):
+        if page.lower() in 'dialogs':
+            self.open_dialogs_queue()
+            _return_locator = self.__run_all_dialogs_button
+        else:
+            self.open_calls_queue()
+            _return_locator = self.__run_all_calls_button
 
-    @allure.step('Вернуть все диалоги с паузы')
-    def run_all_dialogs(self):
-        self.open_dialogs_queue()
-        self.open_popup_menu_dialogs_queue()
-        self.click_by_xpath(self.__run_all_dialogs_button)
+        self.click_by_xpath(self.__popup_menu_queue_button)
+        self.click_by_xpath(_return_locator)
 
-    @allure.step('Поставить все диалоги на паузу')
-    def stop_all_dialogs(self):
-        self.open_dialogs_queue()
-        self.open_popup_menu_dialogs_queue()
-        self.click_by_xpath(self.__stop_all_dialogs_button)
+    @allure.step('Поставить все диалоги или звонки на паузу')
+    def stop_all_dialogs_or_calls(self, page='dialogs'):
+        if page.lower() in 'dialogs':
+            self.open_dialogs_queue()
+            _stop_locator = self.__stop_all_dialogs_button
+        else:
+            self.open_calls_queue()
+            _stop_locator = self.__stop_all_calls_button
+
+        self.click_by_xpath(self.__popup_menu_queue_button)
+        self.click_by_xpath(_stop_locator)
 
     @allure.step('Фильтрация списка диалогов')
     def filter_dialogs_queue_list(self, param: str, text: str):
@@ -188,12 +194,21 @@ class QueuePage(AnyAgentPage):
             self.click_by_xpath(self.__param_filter_status)
         self.get_dialogs_queue_list()
 
+    @allure.step('Получить список диалогов в очереди')
+    def get_dialogs_queue_list(self):
+        url = self.get_current_url()
+        if 'dialog' not in url:
+            self.open_dialogs_queue()
+        self.click_by_xpath(self.__get_dialogs_queue_button)
+
+    @allure.step('Получить список звонков в очереди')
+    def get_call_queue_list(self):
+        url = self.get_current_url()
+        if 'calls' not in url:
+            self.open_calls_queue()
+        self.click_by_xpath(self.__get_dialogs_queue_button)
+
     @allure.step('Изменение количеста строк на странице очереди диалогов')
     def change_items_per_page_dialogs_queue(self):
         self.open_dialogs_queue()
         pass
-
-    @allure.step('Обновить список звонков в очереди')
-    def refresh_calls_queue_list(self):
-        self.open_calls_queue()
-        self.click_by_xpath(self.__refresh_calls_queue_button)
