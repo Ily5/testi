@@ -7,66 +7,6 @@ import pytest
 # todo попробовать промаркировать класс для отчета алюр, мб не надо каждый метод?
 @pytest.mark.skip(reason='test allure')
 @allure.epic('UI Regression')
-@allure.feature('Queue Calls')
-class TestCallsQueue:
-
-    @allure.title('Сортировка списка звонков по Adding time')
-    def test_calls_queue_sort_adding_time(self, creation_queue_calls, queue_page):
-        queue_page.sorting_queue_list(page='calls', column='adding_time')
-        stats_list = queue_page.get_queue_info(page='calls')
-        time_1 = datetime.datetime.strptime(stats_list['1']['adding_time'], "%d.%m.%Y %H:%M:%S.%f")
-        time_2 = datetime.datetime.strptime(stats_list['3']['adding_time'], "%d.%m.%Y %H:%M:%S.%f")
-
-        queue_page.sorting_queue_list(page='calls', column='adding_time')
-        stats_list_new = queue_page.get_queue_info(page='calls')
-        time_3 = datetime.datetime.strptime(stats_list_new['1']['adding_time'], "%d.%m.%Y %H:%M:%S.%f")
-        time_4 = datetime.datetime.strptime(stats_list_new['3']['adding_time'], "%d.%m.%Y %H:%M:%S.%f")
-
-        assert time_1 < time_2
-        assert time_3 > time_4
-
-    @allure.title('Сортировка списка звонков по Status')
-    def test_calls_queue_sort_status(self, creation_queue_calls, queue_page):
-        pass
-
-    @allure.title('Поставить на паузу один звонок')
-    def test_calls_queue_pause_one_call(self, creation_queue_calls, queue_page):
-        status_call = queue_page.get_queue_info(page='calls', number=3)
-        queue_page.action_n_dialog_or_call(page='calls', number=3, action='pause')
-        queue_page.refresh_calls_queue_list()
-        status_call_new = queue_page.get_queue_info_for_msisdn_status(page='calls', msisdn=status_call['msisdn'])
-        assert status_call['status'] != status_call_new['status']
-        assert str(status_call_new['status']).lower() == 'stopped'
-
-    @allure.title('Вернуть с паузы один звонок')
-    def test_calls_queue_return_one_call(self, creation_queue_calls, queue_page):
-        stats_call = queue_page.get_queue_info(page='calls', number="all")
-
-        # ищем звонок в списке со статусом stopped, если его нет ставим на паузу один звонок
-        number = ''
-        call_msisdn = ''
-        for item in range(len(stats_call)):
-            print(stats_call[(str(item + 1))]['status'])
-            if stats_call[(str(item + 1))]['status'].lower() == 'stopped':
-                number = str(item + 1)
-                call_msisdn = stats_call[number]['msisdn']
-        if number == '':
-            queue_page.action_n_dialog_or_call(page='calls', number=3, action='pause')
-
-        queue_page.action_n_dialog_or_call(page='calls', number=number, action='return')
-        status_call_after = queue_page.get_queue_info_for_msisdn_status(page='calls', msisdn=call_msisdn)
-        assert status_call_after['status'].lower() != 'stopped'
-
-    @allure.title('Удалить один звонок')
-    def test_calls_queue_remove_one_call(self, creation_queue_calls, queue_page):
-        count_calls_before = queue_page.get_count_list_dialogs_and_calls()['calls']
-        queue_page.action_n_dialog_or_call(page='calls', number=1, action='remove')
-        count_calls_after = queue_page.get_count_list_dialogs_and_calls()['calls']
-        assert int(count_calls_before) < int(count_calls_after)
-
-
-@pytest.mark.skip(reason='test allure')
-@allure.epic('UI Regression')
 @allure.feature('Queue Dialogs')
 class TestDialogsQueue:
 
@@ -143,3 +83,63 @@ class TestDialogsQueue:
         queue_page.remove_all_dialogs()
         count_dialogs = queue_page.get_count_list_dialogs_and_calls()['dialogs']
         assert count_dialogs == 0
+
+
+@pytest.mark.skip(reason='test allure')
+@allure.epic('UI Regression')
+@allure.feature('Queue Calls')
+class TestCallsQueue:
+
+    @allure.title('Сортировка списка звонков по Adding time')
+    def test_calls_queue_sort_adding_time(self, creation_queue_calls, queue_page):
+        queue_page.sorting_queue_list(page='calls', column='adding_time')
+        stats_list = queue_page.get_queue_info(page='calls')
+        time_1 = datetime.datetime.strptime(stats_list['1']['adding_time'], "%d.%m.%Y %H:%M:%S.%f")
+        time_2 = datetime.datetime.strptime(stats_list['3']['adding_time'], "%d.%m.%Y %H:%M:%S.%f")
+
+        queue_page.sorting_queue_list(page='calls', column='adding_time')
+        stats_list_new = queue_page.get_queue_info(page='calls')
+        time_3 = datetime.datetime.strptime(stats_list_new['1']['adding_time'], "%d.%m.%Y %H:%M:%S.%f")
+        time_4 = datetime.datetime.strptime(stats_list_new['3']['adding_time'], "%d.%m.%Y %H:%M:%S.%f")
+
+        assert time_1 < time_2
+        assert time_3 > time_4
+
+    @allure.title('Сортировка списка звонков по Status')
+    def test_calls_queue_sort_status(self, creation_queue_calls, queue_page):
+        pass
+
+    @allure.title('Поставить на паузу один звонок')
+    def test_calls_queue_pause_one_call(self, creation_queue_calls, queue_page):
+        status_call = queue_page.get_queue_info(page='calls', number=3)
+        queue_page.action_n_dialog_or_call(page='calls', number=3, action='pause')
+        queue_page.refresh_calls_queue_list()
+        status_call_new = queue_page.get_queue_info_for_msisdn_status(page='calls', msisdn=status_call['msisdn'])
+        assert status_call['status'] != status_call_new['status']
+        assert str(status_call_new['status']).lower() == 'stopped'
+
+    @allure.title('Вернуть с паузы один звонок')
+    def test_calls_queue_return_one_call(self, creation_queue_calls, queue_page):
+        stats_call = queue_page.get_queue_info(page='calls', number="all")
+
+        # ищем звонок в списке со статусом stopped, если его нет ставим на паузу один звонок
+        number = ''
+        call_msisdn = ''
+        for item in range(len(stats_call)):
+            print(stats_call[(str(item + 1))]['status'])
+            if stats_call[(str(item + 1))]['status'].lower() == 'stopped':
+                number = str(item + 1)
+                call_msisdn = stats_call[number]['msisdn']
+        if number == '':
+            queue_page.action_n_dialog_or_call(page='calls', number=3, action='pause')
+
+        queue_page.action_n_dialog_or_call(page='calls', number=number, action='return')
+        status_call_after = queue_page.get_queue_info_for_msisdn_status(page='calls', msisdn=call_msisdn)
+        assert status_call_after['status'].lower() != 'stopped'
+
+    @allure.title('Удалить один звонок')
+    def test_calls_queue_remove_one_call(self, creation_queue_calls, queue_page):
+        count_calls_before = queue_page.get_count_list_dialogs_and_calls()['calls']
+        queue_page.action_n_dialog_or_call(page='calls', number=1, action='remove')
+        count_calls_after = queue_page.get_count_list_dialogs_and_calls()['calls']
+        assert int(count_calls_before) < int(count_calls_after)
