@@ -75,7 +75,7 @@ class TestDialogsQueue:
 
     @pytest.mark.skip(reason='test allure')
     @allure.title('Вернуть все диалоги с паузы')
-    def test_dialogs_queue_pause_all_dialog(self, creation_queue_dialog, queue_page):
+    def test_dialogs_queue_return_all_dialog(self, creation_queue_dialog, queue_page):
         queue_page.refresh_the_page()
         queue_page.stop_all_dialogs()
         queue_page.refresh_the_page()
