@@ -40,36 +40,43 @@ class QueuePage(AnyAgentPage):
 
     @allure.step('Открытие вкладики Dialogs')
     def open_dialogs_queue(self):
-        self.click_by_xpath(self.__dialogs_queue)
+        url = self.get_current_url()
+        if 'dialogs' not in url:
+            self.click_by_xpath(self.__dialogs_queue)
+            self.get_dialogs_queue_list()
 
     @allure.step('Открытие вкладики Calls')
     def open_calls_queue(self):
-        self.click_by_xpath(self.__calls_queue)
+        url = self.get_current_url()
+        if 'calls' not in url:
+            self.click_by_xpath(self.__calls_queue)
 
     @allure.step('Удалить/поставить на паузу/вернуть n-ый по списку диалог или звонок')
-    def action_n_dialog_or_call(self, page: str, number, action: str):
+    def action_n_dialog_or_call(self, page: str, number: int, action: str):
         if page in 'dialogs':
             self.open_dialogs_queue()
         if page in 'calls':
             self.open_calls_queue()
-        _n_line = self.__all_dialogs_or_call_list + '/div[{}]'.format(str(number))
-        if action.lower() == 'remove':
+        _n_line = self.__all_dialogs_or_call_list + '/div[@row-index="{}"]'.format(str(int(number) - 1))
+        if action.lower() in 'remove, delete':
             _locator = _n_line + self.__action_remove
             self.click_by_xpath(_locator)
             self.click_by_xpath(self.__yes_button)
-        if action.lower() == 'pause':
+        if action.lower() in 'pause, stop':
             _locator = _n_line + self.__action_pause
             self.click_by_xpath(_locator)
-        if action.lower() == 'return':
+        if action.lower() in 'return, run':
             _locator = _n_line + self.__action_return
             self.click_by_xpath(_locator)
 
     @allure.step('Получить размер очереди диалогов и звонков')
     def get_count_list_dialogs_and_calls(self):
         self.open_dialogs_queue()
+        self.get_dialogs_queue_list()
         dialogs = self.__all_dialogs_or_call_list + '/div'
         dialogs_count = len(self.find_elements(dialogs))
-        self.open_dialogs_queue()
+        self.open_calls_queue()
+        self.refresh_calls_queue_list()
         calls = self.__all_dialogs_or_call_list + '/div'
         calls_count = len(self.find_elements(calls))
         return {"dialogs": dialogs_count, "calls": calls_count}
@@ -87,16 +94,17 @@ class QueuePage(AnyAgentPage):
         count = len(self.find_elements(_n_item))
         stats_list = {}
         for i in range(count):
-            _n_item = self.__all_dialogs_or_call_list + '/div[{}]'.format(str(i + 1))
+            _n_item = self.__all_dialogs_or_call_list + '/div[@row-index="{}"]'.format(str(i))
+            # self.waiting_element_to_be_clickable(_n_item)
             adding_time = None
-            if page in 'dialogs':
-                _status = _n_item + self.__status_dialog
-            else:
-                _status = _n_item + self.__status_call
+
+            if page in 'calls':
                 _adding_time = _n_item + self.__adding_time
                 adding_time = self.get_tag_text(_adding_time)
 
+            _status = _n_item + self.__status_dialog
             _msisdn = _n_item + self.__msisdn
+
             msisdn = self.get_tag_text(_msisdn)
             status = self.get_tag_text(_status)
 
@@ -108,11 +116,20 @@ class QueuePage(AnyAgentPage):
             return stats_list[str(number)]
 
     @allure.step('Получить информация о диалоге/звонки по msisdn')
-    def get_queue_info_for_msisdn(self, page='dialogs', msisdn=None):
+    def get_queue_info_for_msisdn_status(self, page='dialogs', msisdn=None, status=None):
+        if msisdn is not None:
+            flag = 'msisdn'
+            var = msisdn
+        else:
+            flag = 'status'
+            var = status.upper()
+
         dict_stats = self.get_queue_info(page=page)
         for item in range(len(dict_stats)):
-            if dict_stats[str(item + 1)]['msisdn'] == str(msisdn):
-                return dict_stats[str(item + 1)]
+            if dict_stats[str(item + 1)][flag] == str(var):
+                number = {"number": str(item + 1)}
+                print({**dict_stats[str(item + 1)], **number})
+                return {**dict_stats[str(item + 1)], **number}
 
     @allure.step('Сортировка списка звонков/диалогов в очереди')
     def sorting_queue_list(self, page: str, column: str):
@@ -160,12 +177,15 @@ class QueuePage(AnyAgentPage):
     @allure.step('Фильтрация списка диалогов')
     def filter_dialogs_queue_list(self, param: str, text: str):
         self.open_dialogs_queue()
+
+        self.click_by_xpath(self.__value_filter_input)
+        self.send_keys_by_xpath(self.__value_filter_input, text)
+
         self.click_by_xpath(self.__param_filter_button)
         if param.lower() in 'dialog':
             self.click_by_xpath(self.__param_filter_dialog)
         if param.lower() in 'status':
             self.click_by_xpath(self.__param_filter_status)
-        self.send_keys_by_xpath(self.__value_filter_input, text)
         self.get_dialogs_queue_list()
 
     @allure.step('Изменение количеста строк на странице очереди диалогов')
