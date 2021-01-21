@@ -5,15 +5,16 @@ import pytest
 
 
 # todo попробовать промаркировать класс для отчета алюр, мб не надо каждый метод?
-@pytest.mark.skip(reason='test allure')
+
 @allure.epic('UI Regression')
 @allure.feature('Queue Dialogs')
 class TestDialogsQueue:
-
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Сортировка списка диалогов по Status')
     def test_dialogs_queue_sort_status(self):
         pass
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Фильтрация списка диалогов по Dialog')
     def test_dialogs_queue_filter_by_dialog(self, creation_queue_dialog, queue_page):
         msisdn = queue_page.get_queue_info(number='1')['msisdn']
@@ -21,6 +22,7 @@ class TestDialogsQueue:
         assert int(queue_page.get_count_list_dialogs_and_calls()['dialogs']) == 1
         assert queue_page.get_queue_info()['1']['msisdn'] == msisdn
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Фильтрация списка диалогов по Status')
     def test_dialogs_queue_filter_by_status(self, creation_queue_dialog, queue_page):
         queue_page.refresh_the_page()
@@ -30,6 +32,7 @@ class TestDialogsQueue:
         for item in stats.values():
             assert item['status'].lower() == status.lower()
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Удалить один диалог из списка')
     def test_dialogs_queue_remove_one_dialog(self, creation_queue_dialog, queue_page):
         queue_page.refresh_the_page()
@@ -39,6 +42,7 @@ class TestDialogsQueue:
         dialogs_count_new = queue_page.get_count_list_dialogs_and_calls()['dialogs']
         assert int(dialogs_count) == int(dialogs_count_new) + 1
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Поставить на паузу один диалог')
     def test_dialogs_queue_pause_one_dialog(self, creation_queue_dialog, queue_page):
         queue_page.refresh_the_page()
@@ -48,6 +52,7 @@ class TestDialogsQueue:
         assert status_dialog['status'] != status_dialog_new['status']
         assert str(status_dialog_new['status']).lower() == 'stopped'
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Вернуть с паузы один диалог')
     def test_dialogs_queue_return_one_dialog(self, creation_queue_dialog, queue_page):
         # queue_page.refresh_the_page()
@@ -59,6 +64,7 @@ class TestDialogsQueue:
         assert status_dialog_new['msisdn'] == stat_dialog['msisdn']
         assert status_dialog_new['status'].lower() != 'stopped'
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Поставить на паузу все диалоги')
     def test_dialogs_queue_pause_all_dialog(self, creation_queue_dialog, queue_page):
         queue_page.refresh_the_page()
@@ -67,6 +73,7 @@ class TestDialogsQueue:
         for i in range(len(status_dialogs_after)):
             assert str(status_dialogs_after[str(i + 1)]['status']).lower() == 'stopped'
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Вернуть все диалоги с паузы')
     def test_dialogs_queue_pause_all_dialog(self, creation_queue_dialog, queue_page):
         queue_page.refresh_the_page()
@@ -77,6 +84,7 @@ class TestDialogsQueue:
         for i in range(len(status_dialogs)):
             assert str(status_dialogs[str(i + 1)]['status']).lower() != 'stopped'
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Удалить все диалоги')
     def test_dialogs_queue_remove_all_dialogs(self, creation_queue_dialog, queue_page):
         queue_page.refresh_the_page()
@@ -85,11 +93,10 @@ class TestDialogsQueue:
         assert count_dialogs == 0
 
 
-@pytest.mark.skip(reason='test allure')
 @allure.epic('UI Regression')
 @allure.feature('Queue Calls')
 class TestCallsQueue:
-
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Сортировка списка звонков по Adding time')
     def test_calls_queue_sort_adding_time(self, creation_queue_calls, queue_page):
         queue_page.sorting_queue_list(page='calls', column='adding_time')
@@ -105,10 +112,12 @@ class TestCallsQueue:
         assert time_1 < time_2
         assert time_3 > time_4
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Сортировка списка звонков по Status')
     def test_calls_queue_sort_status(self, creation_queue_calls, queue_page):
         pass
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Поставить на паузу один звонок')
     def test_calls_queue_pause_one_call(self, creation_queue_calls, queue_page):
         status_call = queue_page.get_queue_info(page='calls', number=3)
@@ -118,6 +127,7 @@ class TestCallsQueue:
         assert status_call['status'] != status_call_new['status']
         assert str(status_call_new['status']).lower() == 'stopped'
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Вернуть с паузы один звонок')
     def test_calls_queue_return_one_call(self, creation_queue_calls, queue_page):
         stats_call = queue_page.get_queue_info(page='calls', number="all")
@@ -137,6 +147,7 @@ class TestCallsQueue:
         status_call_after = queue_page.get_queue_info_for_msisdn_status(page='calls', msisdn=call_msisdn)
         assert status_call_after['status'].lower() != 'stopped'
 
+    @pytest.mark.skip(reason='test allure')
     @allure.title('Удалить один звонок')
     def test_calls_queue_remove_one_call(self, creation_queue_calls, queue_page):
         count_calls_before = queue_page.get_count_list_dialogs_and_calls()['calls']
