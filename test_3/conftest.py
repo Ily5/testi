@@ -162,12 +162,13 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_uuid, remove
 
 
 def clear_queue(api_v3, params_agent_uuid, pool_api_v3):
-    # api_v3.request_send(method='POST', path=api_v3.path_end_point['return_queue_dialogs'],
-    #                     params=params_agent_uuid, json={}, status_code=409)
+    api_v3.request_send(method='POST', path=api_v3.path_end_point['return_queue_dialogs'],
+                        params=params_agent_uuid, json={}, status_code=409)
     api_v3.request_send(method='POST', path=api_v3.path_end_point['remove_queue_dialogs'], params=params_agent_uuid,
                         status_code=409)
-    # pool_api_v3.request_send(method='POST', path=pool_api_v3.path_end_point['return_calls'], params=params_agent_uuid,
-    #                          json={})
+
+    pool_api_v3.request_send(method='POST', path=pool_api_v3.path_end_point['return_calls'], params=params_agent_uuid,
+                             json={})
     pool_api_v3.request_send(method='DELETE', path=pool_api_v3.path_end_point['get_list_queue_calls'],
                              params=params_agent_uuid, json={})
 
