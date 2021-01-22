@@ -209,7 +209,7 @@ def check_queue(params_agent_uuid, pool_api_v3, path_name, queue_name, queue_len
                 break
         else:
             response = pool_api_v3.request_send(path=path, params=params)
-            print('\n', time.time(), 'len DIALOGS = ', len(response.json()[queue_name]))
+            # print('\n', time.time(), 'len DIALOGS = ', len(response.json()[queue_name]))
             if len(response.json()[queue_name]) >= queue_len:
                 print("Вышли из цикла")
                 break
