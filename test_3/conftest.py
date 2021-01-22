@@ -102,8 +102,8 @@ def remove_queue_dialogs_and_calls(request, api_v3, pool_api_v3, params_agent_uu
 @pytest.fixture(scope='class')
 def upload_group_dialogs(api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
     path = api_v3.path_end_point['upload_group_dialogs']
-    data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"},
-            {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
+    data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"},
+            {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"}]
     return (api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)).json()
 
 
@@ -142,13 +142,14 @@ def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, remov
 @pytest.fixture(scope='class')
 def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
     clear_queue(api_v3, params_agent_uuid, pool_api_v3)
+    change_total_channel_limit(api_v3, 2, params_agent_uuid)
 
     path = api_v3.path_end_point['upload_group_dialogs']
     data = []
     for i in range(randint(5, 15)):
         data.append(
             {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"})
-    resp = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
+    api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
 
     check_queue(params_agent_uuid, pool_api_v3, path_name='get_list_queue_calls', queue_name='calls',
                 queue_len=len(data))
@@ -200,11 +201,11 @@ def check_queue(params_agent_uuid, pool_api_v3, path_name, queue_name, queue_len
             response_1 = pool_api_v3.request_send(path=path, params=params)
             response_2 = pool_api_v3.request_send(path=path_2, params=params)
 
-            print('\n', time.time(), ' len calls = ', len(response_1.json()['calls']))
-            print('\n', time.time(), 'len dialogs = ', len(response_2.json()['dialogs']))
+            # print('\n', time.time(), ' len calls = ', len(response_1.json()['calls']))
+            # print('\n', time.time(), 'len dialogs = ', len(response_2.json()['dialogs']))
 
             if len(response_1.json()[queue_name]) > 0 and len(response_2.json()[queue_name_2]) == 0:
-                print('\n', time.time(), 'Выход из цикла. len calls = ', len(response_1.json()['calls']))
+                # print('\n', time.time(), 'Выход из цикла. len calls = ', len(response_1.json()['calls']))
                 break
         else:
             response = pool_api_v3.request_send(path=path, params=params)
