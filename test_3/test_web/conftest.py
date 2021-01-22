@@ -35,9 +35,7 @@ def agent_settings_page(app_3_web):
 @pytest.fixture()
 def go_to_agent_settings(request, agent_settings_page):
     def fin():
-        agent_setting_url = agent_settings_page.test_data['agent_setting_url'] + \
-                            agent_settings_page.test_data['test_data']['agent_uuid']
-        agent_settings_page.BasePage.goto_page(agent_setting_url)
+        agent_settings_page.AnyAgentPage.open_agent_settings_page()
 
     request.addfinalizer(fin)
 
