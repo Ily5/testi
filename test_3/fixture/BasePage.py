@@ -33,7 +33,7 @@ class BasePage:
     def click_by_xpath(self, locator):
         try:
             self.waiting_element_to_be_clickable(locator)
-            self.scroll_to_element(locator)
+            # self.scroll_to_element(locator)
             self.driver.find_element_by_xpath(locator).click()
         except ElementNotVisibleException as e:
             self.allure_ElementNotVisibleException()
@@ -80,15 +80,19 @@ class BasePage:
     @allure.step('Получение текста из тега')
     def get_tag_text(self, locator):
         try:
+            WebDriverWait(self.driver, self.time_element_Wait).until(
+                EC.presence_of_element_located((By.XPATH, locator)))
             text = self.driver.find_element_by_xpath(locator).text
             return text
         except ElementNotVisibleException as e:
             self.allure_ElementNotVisibleException()
         except NoSuchElementException as e:
             self.allure_NoSuchElementException()
+        except StaleElementReferenceException as e:
+            pass
 
     @allure.step('Получение текста из атрибута тега')
-    def get_attribute_test(self, locator, attribute):
+    def get_attribute_text(self, locator, attribute):
         try:
             element = self.driver.find_element_by_xpath(locator)
             test = element.get_attribute(attribute)
@@ -119,6 +123,7 @@ class BasePage:
         except NoSuchElementException as e:
             self.allure_NoSuchElementException()
 
+    @allure.step('Получение URL текущей старинцы')
     def get_current_url(self):
         return self.driver.current_url
 

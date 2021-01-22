@@ -127,6 +127,10 @@
         "get_calls_agent": "/api/v2/ext/queue/call",
         "stop_queue_dialogs": "/api/v2/ext/queue/stop",
         "return_queue_dialogs": "/api/v2/ext/queue/return",
+        "post_queue_dialogs": "/api/v2/queue/dialog",
+        "remove_queue_dialog_2": "/api/v2/queue/dialog/remove",
+        "post_queue_calls": "/api/v2/queue/call",
+        "remove_queue_call": "/api/v2/queue/call/remove",
         "poll_api": {
           "get_calls": "/get_calls",
           "get_progress_calls": "/pending",
