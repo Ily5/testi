@@ -172,6 +172,8 @@ class TestCallsQueue:
 
     @allure.title('Удалить все звонки')
     def test_dialogs_queue_remove_all_dialogs(self, creation_queue_calls, queue_page):
-        queue_page.remove_all_dialogs_or_calls(page='calls')
         count_calls = queue_page.get_count_list_dialogs_and_calls()['calls']
-        assert count_calls == 0
+        queue_page.remove_all_dialogs_or_calls(page='calls')
+        count_calls_after = queue_page.get_count_list_dialogs_and_calls()['calls']
+        assert count_calls > count_calls_after
+        assert count_calls_after == 0
