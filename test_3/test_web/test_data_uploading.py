@@ -11,7 +11,6 @@ class TestWebDataUploading:
     def test_data_uploading_valid_file(self, data_uploading, remove_queue_dialogs_and_calls):
 
         count = data_uploading.DataUploadingPage.count_list_files()
-        data_uploading.DataUploadingPage.count_list_files()
 
         valid_file_path = data_uploading.test_data['path_to_uploading_file']['valid_file']
         data_uploading.DataUploadingPage.uploading_file(valid_file_path)
