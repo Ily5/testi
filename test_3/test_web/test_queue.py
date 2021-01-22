@@ -50,7 +50,6 @@ class TestDialogsQueue:
     def test_dialogs_queue_return_one_dialog(self, creation_queue_dialog, queue_page):
 
         stat_dialog = queue_page.get_queue_info_for_msisdn_status(status='stopped')
-        print(stat_dialog)
         if stat_dialog is None:
             queue_page.action_n_dialog_or_call('dialog', '1', 'pause')
 
@@ -136,7 +135,6 @@ class TestCallsQueue:
     @allure.title('Вернуть с паузы один звонок')
     def test_calls_queue_return_one_call(self, creation_queue_calls, queue_page):
         stat_call = queue_page.get_queue_info_for_msisdn_status(page='calls', status='stopped')
-        print(stat_call)
         if stat_call is None:
             queue_page.action_n_dialog_or_call('calls', '1', 'pause')
 
