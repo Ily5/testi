@@ -68,7 +68,6 @@ class DataUploadingPage(AnyAgentPage):
 
     @allure.step('Изменение фильтра по статусам')
     def set_filer_status(self, status):
-        self.refresh_the_page()
         if self.count_list_files() == 0: raise Exception('Пустой список загруженных файлов')
         if self.count_list_files() > 0:
             self.click_by_xpath(self.__filer_status_button)
