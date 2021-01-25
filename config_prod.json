@@ -85,39 +85,23 @@
     }
   },
   "databasev3": {
-    "rw": {
-      "test": {
-        "database": "pbx_refactor",
-        "user": "postgres",
-        "password": "",
-        "host": "10.131.0.116",
-        "port": 5001
-      },
-      "prod": {
+    "rw":  {
         "database": "pbx_refactor",
         "user": "postgres",
         "password": "",
         "host": "10.131.0.80",
         "port": 5001
       }
-    },
-    "ro": {
-      "test": {
-        "database": "pbx_refactor",
-        "user": "postgres",
-        "password": "",
-        "host": "10.131.0.116",
-        "port": 5000
-      },
-      "prod": {
+    ,
+    "ro":  {
         "database": "pbx_refactor",
         "user": "postgres",
         "password": "",
         "host": "10.131.0.80",
         "port": 5000
       }
-    }
-  },
+  }
+    ,
   "CmsUrl3": "https://cms-v3.neuro.net/auth/login?lng=en",
   "api_v3_url": "https://api-v3.neuro.net",
   "v3": {
@@ -164,6 +148,7 @@
         "remove_queue_dialog_2": "/api/v2/queue/dialog/remove",
         "post_queue_calls": "/api/v2/queue/call",
         "remove_queue_call": "/api/v2/queue/call/remove",
+        "set_media_params": "/api/v2/rbac/agent/",
         "poll_api": {
           "get_calls": "/get_calls",
           "get_progress_calls": "/pending",
@@ -197,7 +182,18 @@
       "asr": "yandex",
       "tts": "jane@yandex",
       "language": "ru-RU",
-      "total_channel_limit": 2
+      "total_channel_limit": 2,
+      "data_release_run": {
+        "agent_uuid": "f29c639f-f3ff-46bb-9425-fe2ffb27796c",
+        "agent_name": "release_run",
+        "asr_yandex_uuid": "31b5edd7-4bd6-4968-8346-27d091a68fbf",
+        "tts_yandex_uuid": "785f6528-1bfc-441d-8236-d97574af697e",
+        "yandex_voice": "zahar",
+        "asr_google_uuid": "a7f66456-cafe-4d7b-a9b9-3a2c2d72b402",
+        "tts_google_uuid": "bbd9323f-0cc4-411c-ae81-58e02b283353",
+        "google_voice": "ru-RU-Wavenet-E",
+        "agent_id": "164"
+      }
     }
   }
 }

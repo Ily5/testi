@@ -55,49 +55,73 @@
     "Host": "10.129.0.9:8080",
     "Connection": "keep-alive"
   },
-  "speech_engine": {"yandex": "oksana@yandex", "google": "ru-RU-Wavenet-A@google"},
-  "database" : {"rw":
-                {"test": {"database": "pbx_refactor",
-                          "user": "postgres",
-                          "password": "",
-                          "host": "10.131.0.116",
-                          "port": 5001},
-                 "prod": {"database": "pbx_main_pool",
-                          "user": "postgres",
-                          "password": "",
-                          "host": "10.129.0.26",
-                          "port": 5432
-                          }
-                 },
-            "ro":
-                {"test": {"database": "pbx_refactor",
-                          "user": "postgres",
-                          "password": "",
-                          "host": "10.131.0.116",
-                          "port": 5000},
-                 "prod": {"database": "pbx_main_pool",
-                          "user": "postgres",
-                          "password": "",
-                          "host": "10.129.0.26",
-                          "port": 5432
-                          }
-                 }
-            },
+  "speech_engine": {
+    "yandex": "oksana@yandex",
+    "google": "ru-RU-Wavenet-A@google"
+  },
+  "database": {
+    "rw": {
+      "test": {
+        "database": "pbx_refactor",
+        "user": "postgres",
+        "password": "",
+        "host": "10.131.0.116",
+        "port": 5001
+      },
+      "prod": {
+        "database": "pbx_main_pool",
+        "user": "postgres",
+        "password": "",
+        "host": "10.129.0.26",
+        "port": 5432
+      }
+    },
+    "ro": {
+      "test": {
+        "database": "pbx_refactor",
+        "user": "postgres",
+        "password": "",
+        "host": "10.131.0.116",
+        "port": 5000
+      },
+      "prod": {
+        "database": "pbx_main_pool",
+        "user": "postgres",
+        "password": "",
+        "host": "10.129.0.26",
+        "port": 5432
+      }
+    }
+  },
+  "databasev3": {
+    "rw": {
+      "database": "pbx_refactor",
+      "user": "postgres",
+      "password": "",
+      "host": "10.131.0.116",
+      "port": 5001
+    },
+    "ro": {
+      "database": "pbx_refactor",
+      "user": "postgres",
+      "password": "",
+      "host": "10.131.0.116",
+      "port": 5000
+    }
+  },
   "CmsUrl3": "https://cms-test-v3.neuro.net/auth/login?lng=en",
   "api_v3_url": "https://api-test-v3.neuro.net",
-  "v3":
-  {
+  "v3": {
     "agent_setting_url": "https://cms-test-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=",
     "main_page_url": "https://cms-test-v3.neuro.net/agents?lng=en",
     "path_to_uploading_file": {
-        "valid_file": "test_3/test_web/uploading_files/valid_file.xlsx",
-        "no_valid_file": "test_3/test_web/uploading_files/no_valid_file.xlsx"
+      "valid_file": "test_3/test_web/uploading_files/valid_file.xlsx",
+      "no_valid_file": "test_3/test_web/uploading_files/no_valid_file.xlsx"
     },
     "name_uploading_file": {
       "valid_file": "valid_file.xlsx",
       "no_valid_file": "no_valid_file.xlsx"
     },
-
     "auth": {
       "login": "rdevetiarov@neuro.net",
       "pass": "123456"
@@ -131,6 +155,7 @@
         "remove_queue_dialog_2": "/api/v2/queue/dialog/remove",
         "post_queue_calls": "/api/v2/queue/call",
         "remove_queue_call": "/api/v2/queue/call/remove",
+        "set_media_params": "/api/v2/rbac/agent/",
         "poll_api": {
           "get_calls": "/get_calls",
           "get_progress_calls": "/pending",
@@ -146,7 +171,6 @@
           "defer_dialog": "/dialog_queue/defer",
           "return_dialog": "/dialog_queue/return",
           "get_dialogs": "/get_dialogs"
-
         }
       }
     },
@@ -165,7 +189,18 @@
       "asr": "yandex",
       "tts": "jane@yandex",
       "language": "ru-RU",
-      "total_channel_limit": 2
+      "total_channel_limit": 2,
+      "data_release_run": {
+        "agent_uuid": "b5b2a743-259b-4641-a007-0dd2abe3e0fa",
+        "agent_name": "release_run",
+        "asr_yandex_uuid": "148ef1f0-d81e-415a-8c0b-26c7319138b1",
+        "tts_yandex_uuid": "86988b9a-35dd-4e4b-bda9-fcc943acb86c",
+        "yandex_voice": "zahar",
+        "asr_google_uuid": "68828df6-fabb-4f01-a32b-1359512fd66c",
+        "tts_google_uuid": "b90fecf7-96c3-48e9-b8a7-8f8ca8280eed",
+        "google_voice": "ru-RU-Wavenet-E",
+        "agent_id": "117"
+      }
     }
   }
 }
