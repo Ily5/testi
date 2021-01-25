@@ -82,10 +82,10 @@ class Connector:
         return self.db_conn(
             "UPDATE projects SET {column}={data} where id = {id}".format(column=column, data=data, id=project_id))
 
-    def change_pool_id(self, data, project_id):
+    def change_pool_id(self, pool_id, project_id):
         # print("change_pool_id connection %s" % self.conn)
         return self.db_conn(
-            "UPDATE projects SET pool_id = 2 where id = 214")
+            f"UPDATE projects SET pool_id = {pool_id} where id = {project_id}")
 
     def select_data(self, table, column, sdata, data):
 
