@@ -10,7 +10,7 @@ class AnyAgentPage(AnyPage):
     __nlu_engine_button = '//span[contains(text(),"NLU Engine")]'
     __records_button = '//span[contains(text(),"records")]'
     __logs_button = '//span[contains(text(),"logs")]'
-    __contacts_button = '//span[contains(text(),"logs")]'
+    __contacts_button = '//span[contains(text(),"contacts")]'
     __analytics_button = '//span[contains(text(),"analytics")]'
     __data_uploading_button = '//span[contains(text(),"data uploading")]'
     __queue_button = '//span[contains(text(),"queue")]'
