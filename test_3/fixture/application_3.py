@@ -2,8 +2,8 @@ from selenium import webdriver
 import sys
 import logging
 
-from test_3.fixture.session import SessionHelper
-from test_3.fixture.page import PageHelper
+# from test_3.fixture.session import SessionHelper
+# from test_3.fixture.page import PageHelper
 from test_3.fixture.BasePage import BasePage
 from test_3.fixture.WebFW.AnyPage import AnyPage
 from test_3.fixture.WebFW.LoginPage import LoginPage
@@ -47,8 +47,8 @@ class ApplicationNewVersion:
         self.verificationErrors = []
         self.wd.implicitly_wait(10)
         self.cms_url = cms_url
-        self.session = SessionHelper(self)
-        self.page = PageHelper(self)
+        # self.session = SessionHelper(self)
+        # self.page = PageHelper(self)
         self.database = database
         self.test_data = test_data
         self.api_new = APIClientV3(self)
