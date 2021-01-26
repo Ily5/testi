@@ -20,8 +20,9 @@ def test_v3_cms(app_3, db, app_3_web):
                             app_3_web.test_data['test_data']['data_release_run']['agent_uuid']
         app_3_web.BasePage.goto_page(agent_setting_url)
     with allure.step("Наличие элементов меню"):
-        app_3.page.check_menu()
-        app_3.session.logout()
+        app_3_web.AnyAgentPage.opening_all_page_agent()
+    with allure.step('Логаут'):
+        app_3_web.AnyPage.logout()
 
 
 @allure.feature("Smoke 3.0")
