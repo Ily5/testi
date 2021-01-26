@@ -7,11 +7,10 @@ synth_phrase_list = []
 logs_dict = {}
 
 
-@pytest.mark.skip(reason='test')
 @allure.feature("Smoke 3.0")
 @allure.story("Работа cms")
 @allure.title('Провека UI')
-def test_v3_cms(app_3, db, app_3_web):
+def test_v3_cms(db, app_3_web):
     # todo рефакторинг этого теста
     with allure.step("логин в cms v3"):
         pass
