@@ -1,97 +1,19 @@
 import requests
-import json
 import time
-
-
-class ApiHelper:
-
-    def __init__(self, app_3):
-        self.app = app_3
-        self.url = "https://api-test-v3.neuro.net/api/v2/ext/auth"
-        self.querystring = None
-        self.payload = ""
-        self.headers = None
-
-    def auth(self):
-        self.url = "https://api-v3.neuro.net/api/v2/ext/auth"
-        self.payload = ""
-        self.headers = {
-            'content-type': "multipart/form-data; boundary=---011000010111000001101001",
-            'authorization': "Basic aWtvc2hraW5AbmV1cm8ubmV0OjEyMzQ1Ng=="
-        }
-
-        response = requests.request("POST", self.url, data=self.payload, headers=self.headers)
-        token = self.get_value(json.loads(response.text), "token")
-        # print(response.text)
-        return token
-
-    def init_dialog(self, token, number):
-        self.url = "https://api-v3.neuro.net/api/v2/ext/dialog/dialog-initial"
-        self.querystring = {"agent_uuid": "f29c639f-f3ff-46bb-9425-fe2ffb27796c"}
-        self.payload = "{\n\"msisdn\": \"%s\",\n\"script_entry_point\": \"main\"\n}" % number
-        self.headers = {
-            'content-type': "application/json",
-            'authorization': "Bearer %s" % token
-        }
-
-        response = requests.request("POST", self.url, data=self.payload,
-                                    headers=self.headers, params=self.querystring)
-        uuid = self.get_value(json.loads(response.text), "dialog_uuid")
-        return uuid
-
-    def set_params(self, token, asr, tts):
-        self.url = "https://api-v3.neuro.net/api/v2/ext/agent-settings/general"
-        self.querystring = {"agent_uuid": "f29c639f-f3ff-46bb-9425-fe2ffb27796c"}
-
-        self.payload = {"asr": asr, "tts": tts}
-        self.headers = {
-            'content-type': "application/json",
-            'authorization': "Bearer %s" % token
-        }
-        response = requests.request("PUT", self.url, data=json.dumps(self.payload), headers=self.headers,
-                                    params=self.querystring)
-        # print(response.text)
-
-    def set_yandex(self, token):
-        self.url = "https://api-v3.neuro.net/api/v2/rbac/agent/f29c639f-f3ff-46bb-9425-fe2ffb27796c"
-
-        # self.payload = json_yandex
-        self.headers = {
-            'content-type': "application/json",
-            'authorization': "Bearer %s" % token
-        }
-
-        response = requests.request("PUT", self.url, data=json.dumps(self.payload), headers=self.headers)
-
-        # print(response.text)
-
-    def set_google(self, token):
-        self.url = "https://api-v3.neuro.net/api/v2/rbac/agent/f29c639f-f3ff-46bb-9425-fe2ffb27796c"
-
-        # self.payload = json_google
-        self.headers = {
-            'content-type': "application/json",
-            'authorization': "Bearer %s" % token
-        }
-
-        response = requests.request("PUT", self.url, data=json.dumps(self.payload), headers=self.headers)
-
-        # print(response.text)
-
-    def get_value(self, response, value):
-        return response[value]
 
 
 class APIClientV3:
 
-    def __init__(self, base_url=None, token=None, refresh_token=None, test_data=None, path_end_point=None):
+    def __init__(self, base_url=None, token=None, refresh_token=None, test_data=None, path_end_point=None,
+                 database=None):
         self.base_url = base_url
         self.token = token
         self.refresh_token = refresh_token
         self.test_data = test_data
         self.path_end_point = path_end_point
+        self.database = database
 
-    def request_send(self, method='GET', path=None, status_code=480, waiting_queue_sec=600, **kwargs):
+    def request_send(self, method='GET', path=None, status_code=480, waiting_queue_sec=900, **kwargs):
         if path is None:
             request_url = self.base_url
         else:
@@ -108,8 +30,9 @@ class APIClientV3:
             if count % 10 == 0:
                 print('\n Код ответа от сервера = {}'.format(response.status_code),
                       '-- попытка № {}'.format(count))
-            time.sleep(0.1)
-            if count > waiting_queue_sec * 10:
+                print('\n', 'Message Error - {}'.format(response.text))
+            time.sleep(0.5)
+            if count > waiting_queue_sec * 2:
                 print('Очередь занята более {} секунд '.format(waiting_queue_sec))
                 raise Exception('Time Limit Error , превышено время отправки запроса')
 
@@ -120,3 +43,30 @@ class APIClientV3:
         token = response.json()['token']
         refresh_token = response.json()['refresh_token']
         return {'Authorization': "Bearer %s" % token}, refresh_token
+
+    def set_media_params_release_project(self, engine: str):
+        data = {"speed": 1,
+                "pitch": 1,
+                "name": self.test_data['data_release_run']['agent_name']}
+
+        if engine in 'yandex':
+            data['tts_key_uuid'] = self.test_data['data_release_run']['tts_yandex_uuid']
+            data['asr_key_uuid'] = self.test_data['data_release_run']['asr_yandex_uuid']
+            data['tts_voice'] = self.test_data['data_release_run']['yandex_voice']
+        if engine in 'google':
+            data['tts_key_uuid'] = self.test_data['data_release_run']['tts_google_uuid']
+            data['asr_key_uuid'] = self.test_data['data_release_run']['asr_google_uuid']
+            data['tts_voice'] = self.test_data['data_release_run']['google_voice']
+
+        path = self.path_end_point['set_media_params'] + self.test_data['data_release_run']['agent_uuid']
+        return self.request_send(method="PUT", path=path, json=data).json()
+
+    def init_dialog(self, msisdn, agent: str):
+        path = self.path_end_point['upload_dialog']
+        data = {"msisdn": "{}".format(msisdn), "script_entry_point": "main"}
+        params = {}
+        if agent in "release_run":
+            params['agent_uuid'] = self.test_data['data_release_run']['agent_uuid']
+        else:
+            params['agent_uuid'] = self.test_data['agent_uuid']
+        return self.request_send(method="POST", path=path, params=params, json=data)
