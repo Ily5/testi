@@ -117,18 +117,18 @@ class DataUploadingPage(AnyAgentPage):
     def get_info_n_file(self, number):
         error_message = None
         count_contact = None
-
+        status = None
         base_locator = self.__all_uploading_file_list + '/div[{}]'.format(number)
 
         status_locator = base_locator + self.__status_file
-        status = self.get_attribute_text(locator=status_locator, attribute='class')
-        if 'success' in status.lower():
+        status_text = self.get_attribute_text(locator=status_locator, attribute='class')
+        if 'success' in status_text:
             status = 'SUCCESS'
-        if 'danger' in status.lower():
+        if 'danger' in status_text:
             status = 'FAILED'
-        if 'warning' in status.lower():
+        if 'warning' in status_text:
             status = 'WARNING'
-        else:
+        if 'success' not in status_text and 'danger' not in status_text and 'warning' not in status_text:
             status = 'LOADING'
 
         name_locator = base_locator + self.__name_file
