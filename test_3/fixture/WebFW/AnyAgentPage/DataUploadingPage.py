@@ -17,7 +17,7 @@ class DataUploadingPage(AnyAgentPage):
     __sure_delete_file = '//span[contains(text(), "delete")]/..'
     __download_valid_file = __delete_download_menu + '/button[1]'
 
-    __status_file = '/*[1]'
+    __status_file = '/*[1]//div[contains(@class, "status")]'
     __name_file = '/div/div[1]'
     __time_uploading_file = '/div/div[2]/div'
     __error_message_file = '/div/div[2]/div[3]/div'
@@ -121,7 +121,15 @@ class DataUploadingPage(AnyAgentPage):
         base_locator = self.__all_uploading_file_list + '/div[{}]'.format(number)
 
         status_locator = base_locator + self.__status_file
-        status = self.get_attribute_text(locator=status_locator, attribute='ng-reflect-state')
+        status = self.get_attribute_text(locator=status_locator, attribute='class')
+        if 'success' in status.lower():
+            status = 'SUCCESS'
+        if 'danger' in status.lower():
+            status = 'FAILED'
+        if 'warning' in status.lower():
+            status = 'WARNING'
+        else:
+            status = 'LOADING'
 
         name_locator = base_locator + self.__name_file
         name = self.get_tag_text(name_locator)
