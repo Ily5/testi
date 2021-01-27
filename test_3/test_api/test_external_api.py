@@ -271,6 +271,7 @@ class TestExternalApi:
         response = api_v3.request_send(path=path, params=params)
         assert response.status_code in [200, 404]
 
+    @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1671')
     @allure.title('Получение статистики по группе диалогов, валидные bulk_uuid')
     def test_get_group_dialogs_statistic(self, api_v3, upload_group_dialogs):
         path = api_v3.path_end_point['get_group_dialogs_statistic']

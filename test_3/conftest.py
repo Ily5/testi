@@ -1,8 +1,9 @@
 import time
+from random import randint
 import pytest
 import json
 from test_3.fixture.api import APIClientV3
-from random import randint
+from test_3.fixture.application_3 import ApplicationNewVersion
 
 
 @pytest.fixture(scope='session')
@@ -13,11 +14,33 @@ def api_v3(request):
             config = json.load(cfg)
             fixture = APIClientV3(base_url=config['v3']['api']['api_base_url'],
                                   test_data=config['v3']['test_data'],
-                                  path_end_point=config['v3']['api']['methods_end_point'])
+                                  path_end_point=config['v3']['api']['methods_end_point'],
+                                  database=config["databasev3"])
             token, refresh_token = fixture.get_api_token(password=config['v3']['auth']['pass'],
                                                          login=config['v3']['auth']['login'])
         fixture.token, fixture.refresh_token = token, refresh_token
 
+    return fixture
+
+
+@pytest.fixture(scope='class')
+def app_3_web(request):
+    fixture = None
+    if fixture is None:
+        browser = request.config.getoption("--browser")
+        with open(request.config.getoption("--config")) as cfg:
+            config = json.load(cfg)
+        fixture = ApplicationNewVersion(browser=browser, cms_url=config["CmsUrl3"], test_data=config['v3'],
+                                        database=None)
+        fixture.wd.get(fixture.cms_url)
+        fixture.LoginPage.login_in_cms(username=fixture.test_data['auth']['login'],
+                                       password=fixture.test_data['auth']['pass'])
+        time.sleep(3)
+
+    def done():
+        fixture.cancel()
+
+    request.addfinalizer(done)
     return fixture
 
 
