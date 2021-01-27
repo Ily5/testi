@@ -118,6 +118,7 @@ class DataUploadingPage(AnyAgentPage):
         error_message = None
         count_contact = None
         status = None
+        self.waiting_element_to_be_clickable(self.__filer_status_button)
         base_locator = self.__all_uploading_file_list + '/div[{}]'.format(number)
 
         status_locator = base_locator + self.__status_file
