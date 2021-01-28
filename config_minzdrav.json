@@ -1,0 +1,206 @@
+{
+  "CmsUrl": "https://cms-test.neuro.net/",
+  "ApiEndpoint": "https://api-test.neuro.net/api/v1/",
+  "PoolApiUrl": "http://10.129.0.9:8080",
+  "Postgres": {
+    "RW": {
+      "database": "pbx",
+      "user": "postgres",
+      "password": "",
+      "host": "10.129.0.9",
+      "port": 5436
+    },
+    "CMS": {
+      "database": "pbx",
+      "user": "postgres",
+      "password": "",
+      "host": "10.129.0.9",
+      "port": 5433
+    }
+  },
+  "UsernameCms": "ikoshkin",
+  "PasswordCms": "123456",
+  "Pool": "",
+  "Server": "",
+  "Mongo_client": "mongodb://10.129.0.9:27017/",
+  "ProjectId": 109,
+  "Browser": "firefox",
+  "ApiHeaders": {
+    "Content-type": "application/json",
+    "Accept": "text/plain",
+    "Content-Encoding": "utf-8",
+    "Authorization": "Basic aWtvc2hraW46MTIzNDU2",
+    "Host": "api-test.neuro.net"
+  },
+  "ApiMethods": [
+    "get_agents",
+    "set_agent_param",
+    "get_agent_params",
+    "get_agent_param",
+    "get_initial_entities",
+    "get_initial_entity",
+    "set_initial_entity",
+    "delete_initial_entity",
+    "get_output_entity",
+    "get_output_entities",
+    "set_output_entity",
+    "delete_output_entity",
+    "initiate_call",
+    "get_data_by_bulk_id",
+    "get_data_by_call_group_id",
+    "get_data_by_timeslot",
+    "get_call_records"
+  ],
+  "PoolApiHeaders": {
+    "Host": "10.129.0.9:8080",
+    "Connection": "keep-alive"
+  },
+  "speech_engine": {
+    "yandex": "oksana@yandex",
+    "google": "ru-RU-Wavenet-A@google"
+  },
+  "database": {
+    "rw": {
+      "test": {
+        "database": "pbx_refactor",
+        "user": "postgres",
+        "password": "",
+        "host": "10.131.0.116",
+        "port": 5001
+      },
+      "prod": {
+        "database": "pbx_main_pool",
+        "user": "postgres",
+        "password": "",
+        "host": "10.129.0.26",
+        "port": 5432
+      }
+    },
+    "ro": {
+      "test": {
+        "database": "pbx_refactor",
+        "user": "postgres",
+        "password": "",
+        "host": "10.131.0.116",
+        "port": 5000
+      },
+      "prod": {
+        "database": "pbx_main_pool",
+        "user": "postgres",
+        "password": "",
+        "host": "10.129.0.26",
+        "port": 5432
+      }
+    }
+  },
+  "databasev3": {
+    "rw": {
+      "database": "pbx_refactor",
+      "user": "postgres",
+      "password": "",
+      "host": "10.3.121.10",
+      "port": 5001
+    },
+    "ro": {
+      "database": "pbx_refactor",
+      "user": "postgres",
+      "password": "",
+      "host": "10.3.121.10",
+      "port": 5000
+    }
+  },
+  "CmsUrl3": "http://cms-v3.neuro.emias.mosreg.ru/auth/login?lng=en",
+  "api_v3_url": "https://api-v3.neuro.emias.mosreg.ru",
+  "v3": {
+    "agent_setting_url": "https://cms-test-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=",
+    "main_page_url": "https://cms-test-v3.neuro.net/agents?lng=en",
+    "path_to_uploading_file": {
+      "valid_file": "test_3/test_web/uploading_files/valid_file.xlsx",
+      "no_valid_file": "test_3/test_web/uploading_files/no_valid_file.xlsx"
+    },
+    "name_uploading_file": {
+      "valid_file": "valid_file.xlsx",
+      "no_valid_file": "no_valid_file.xlsx"
+    },
+    "auth": {
+      "login": "rdevetiarov@neuro.net",
+      "pass": "123456"
+    },
+    "api": {
+      "api_base_url": "http://api-v3.neuro.emias.mosreg.ru",
+      "poll_api_v3_url": "http://10.3.121.140:8083",
+      "methods_end_point": {
+        "post_auth": "/api/v2/ext/auth",
+        "post_update_token": "/api/v2/ext/auth/refresh",
+        "get_all_agents_company": "/api/v2/ext/company-agents",
+        "get_agent_settings": "/api/v2/ext/agent-settings/general",
+        "put_change_agent_settings": "/api/v2/ext/agent-settings/general",
+        "agent_call_rules": "/api/v2/ext/agent-settings/time-slot",
+        "agent_initial_entities": "/api/v2/ext/initial-entity",
+        "agent_output_entities": "/api/v2/ext/output-entity",
+        "remove_queue_dialogs": "/api/v2/ext/queue/remove",
+        "upload_dialog": "/api/v2/ext/dialog/dialog-initial",
+        "upload_group_dialogs": "/api/v2/ext/dialog/dialogs-group-initial",
+        "get_dialogs_group_upload_result": "/api/v2/ext/dialog/dialogs-group-initial-result",
+        "get_dialogs_group_upload_status": "/api/v2/ext/dialog/dialogs-group-initial-status",
+        "get_dialog_statistic": "/api/v2/ext/statistic/dialog",
+        "get_group_dialogs_statistic": "/api/v2/ext/statistic/dialog-group",
+        "get_statistic_output_entities": "/api/v2/ext/statistic/dialog-report",
+        "get_download_call_record": "/api/v2/ext/statistic/download/call",
+        "get_dialogs_agent": "/api/v2/ext/queue/dialog",
+        "get_calls_agent": "/api/v2/ext/queue/call",
+        "stop_queue_dialogs": "/api/v2/ext/queue/stop",
+        "return_queue_dialogs": "/api/v2/ext/queue/return",
+        "post_queue_dialogs": "/api/v2/queue/dialog",
+        "remove_queue_dialog_2": "/api/v2/queue/dialog/remove",
+        "post_queue_calls": "/api/v2/queue/call",
+        "remove_queue_call": "/api/v2/queue/call/remove",
+        "set_media_params": "/api/v2/rbac/agent/",
+        "poll_api": {
+          "get_calls": "/get_calls",
+          "get_progress_calls": "/pending",
+          "get_list_queue_calls": "/queue",
+          "defer_calls": "/queue/defer",
+          "return_calls": "/queue/return",
+          "drop_queue_calls": "/queue/flush",
+          "get_full_queue": "/get_full_queue",
+          "get_all_valid_calls": "/valid_calls",
+          "get_all_dialog_queue": "/dialog_queue",
+          "get_dialog_queue_size": "/dialog_queue_size",
+          "cancel_all_dialogs": "/cancel_dialog",
+          "defer_dialog": "/dialog_queue/defer",
+          "return_dialog": "/dialog_queue/return",
+          "get_dialogs": "/get_dialogs"
+        }
+      }
+    },
+    "test_data": {
+      "agent_uuid": "54d239a2-1bcb-4762-b3a7-0ba8f7fded5a",
+      "agent_id": "3",
+      "msisdn": "89960652535",
+      "company_uuid": "5c775be9-6ab4-4569-9a7c-2722dd3e6ce0",
+      "agent_name": "API_test_agent",
+      "agent_flag": "apiflag",
+      "agent_language": "ru-RU",
+      "agent_tts": "oksana@yandex",
+      "agent_pool_name": "main-pool",
+      "agent_trunk_name": "minzdrav_1",
+      "recall_count": 1,
+      "asr": "yandex",
+      "tts": "jane@yandex",
+      "language": "ru-RU",
+      "total_channel_limit": 2,
+      "data_release_run": {
+        "agent_uuid": "b5b2a743-259b-4641-a007-0dd2abe3e0fa",
+        "agent_name": "release_run",
+        "asr_yandex_uuid": "148ef1f0-d81e-415a-8c0b-26c7319138b1",
+        "tts_yandex_uuid": "86988b9a-35dd-4e4b-bda9-fcc943acb86c",
+        "yandex_voice": "zahar",
+        "asr_google_uuid": "68828df6-fabb-4f01-a32b-1359512fd66c",
+        "tts_google_uuid": "b90fecf7-96c3-48e9-b8a7-8f8ca8280eed",
+        "google_voice": "ru-RU-Wavenet-E",
+        "agent_id": "117"
+      }
+    }
+  }
+}
