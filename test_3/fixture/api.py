@@ -5,13 +5,14 @@ import time
 class APIClientV3:
 
     def __init__(self, base_url=None, token=None, refresh_token=None, test_data=None, path_end_point=None,
-                 database=None):
+                 database=None, headers=None):
         self.base_url = base_url
         self.token = token
         self.refresh_token = refresh_token
         self.test_data = test_data
         self.path_end_point = path_end_point
         self.database = database
+        self.api_headers = headers
 
     def request_send(self, method='GET', path=None, status_code=480, waiting_queue_sec=900, **kwargs):
         if path is None:
