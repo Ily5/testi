@@ -4,6 +4,7 @@ import requests
 import json
 
 
+@allure.epic('API')
 @pytest.mark.parametrize('data', ["потом", "не хочу", "да давайте", "хм"], ids=["not_now", "dont_want", "yes", "other"])
 @allure.feature('Проверка работы nlu_api')
 @allure.title('nlu_base')
