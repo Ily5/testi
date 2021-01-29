@@ -23,6 +23,18 @@ def api_v3(request):
     return fixture
 
 
+@pytest.fixture(scope='session')
+def nlu_api_v3(request):
+    fixture = None
+    if fixture is None:
+        with open(request.config.getoption("--config")) as cfg:
+            config = json.load(cfg)
+            fixture = APIClientV3(base_url=config['v3']['nlu']['url'],
+                                  path_end_point=config['v3']['nlu']['routes'],
+                                  headers=config['v3']['nlu']['headers'])
+    return fixture
+
+
 @pytest.fixture(scope='class')
 def app_3_web(request):
     fixture = None

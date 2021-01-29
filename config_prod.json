@@ -194,6 +194,17 @@
         "google_voice": "ru-RU-Wavenet-E",
         "agent_id": "164"
       }
+    },
+    "nlu": {
+      "url": "http://10.131.0.131:8099",
+      "routes": [
+        "/nlu_engine",
+        "/ner_address",
+        "/ner_person"
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      }
     }
   }
 }
