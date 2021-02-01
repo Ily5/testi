@@ -201,7 +201,7 @@ class TestPoolApiDialog:
         assert len(response.json()['dialogs']) <= response.json()['total']
         assert response.json()['total'] > 0
         assert len(response.json()['dialogs']) > 0
-        upload_msisdn_list = [item['msisdn'] for item in creation_queue_dialog]
+        upload_msisdn_list = [item['msisdn'] for item in creation_queue_dialog[1]]
         for call in response.json()['dialogs']:
             assert call['msisdn'] in upload_msisdn_list
 
@@ -303,7 +303,7 @@ class TestPoolApiDialog:
         assert response_before.json()['total'] > response_after.json()['total']
         assert dialog_uuid not in [item['uuid'] for item in response_after.json()['dialogs']]
 
-    @pytest.mark.skip(reason='Убрать скип после деплоя на прод https://neuronet.atlassian.net/browse/NP-1572')
+    # @pytest.mark.skip(reason='Убрать скип после деплоя на прод https://neuronet.atlassian.net/browse/NP-1572')
     @allure.title('Отменить один диалог по валидный bulk_uuid')
     def test_cancel_one_dialog_valid_bulk_uuid(self, pool_api_v3, params_agent_uuid, creation_queue_dialog, api_v3):
         data = {"limit": 100, "offset": 0,
@@ -311,7 +311,7 @@ class TestPoolApiDialog:
         response_before = api_v3.request_send(method="POST", path=api_v3.path_end_point["post_queue_dialogs"],
                                               json=data)
 
-        params_for_remove = {**{"bulk_uuid": creation_queue_dialog['bulk_uuid']}, **params_agent_uuid}
+        params_for_remove = {**{"bulk_uuid": creation_queue_dialog[0]['bulk_uuid']}, **params_agent_uuid}
         path = pool_api_v3.path_end_point['cancel_all_dialogs']
         response = pool_api_v3.request_send(method='DELETE', path=path, params=params_for_remove)
 
