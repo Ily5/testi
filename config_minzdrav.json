@@ -1,36 +1,36 @@
 {
-  "CmsUrl": "https://cms.neuro.net/",
-  "ApiEndpoint": "https://api.neuro.net/api/v1/",
+  "CmsUrl": "https://cms-test.neuro.net/",
+  "ApiEndpoint": "https://api-test.neuro.net/api/v1/",
   "PoolApiUrl": "http://10.129.0.9:8080",
   "Postgres": {
     "RW": {
-      "database": "test_pool_pbx",
+      "database": "pbx",
       "user": "postgres",
       "password": "",
-      "host": "10.129.0.33",
-      "port": 5432
+      "host": "10.129.0.9",
+      "port": 5436
     },
     "CMS": {
       "database": "pbx",
       "user": "postgres",
       "password": "",
-      "host": "10.129.0.7",
-      "port": 5432
+      "host": "10.129.0.9",
+      "port": 5433
     }
   },
   "UsernameCms": "ikoshkin",
-  "PasswordCms": "12345678",
+  "PasswordCms": "123456",
   "Pool": "",
   "Server": "",
-  "Mongo_client": "mongodb://10.129.0.14:27017/",
-  "ProjectId": 214,
+  "Mongo_client": "mongodb://10.129.0.9:27017/",
+  "ProjectId": 109,
   "Browser": "firefox",
   "ApiHeaders": {
     "Content-type": "application/json",
     "Accept": "text/plain",
     "Content-Encoding": "utf-8",
-    "Authorization": "Basic aWtvc2hraW46MTIzNDU2Nzg=",
-    "Host": "api.neuro.net"
+    "Authorization": "Basic aWtvc2hraW46MTIzNDU2",
+    "Host": "api-test.neuro.net"
   },
   "ApiMethods": [
     "get_agents",
@@ -52,7 +52,7 @@
     "get_call_records"
   ],
   "PoolApiHeaders": {
-    "Host": "10.129.0.26:8080",
+    "Host": "10.129.0.9:8080",
     "Connection": "keep-alive"
   },
   "speech_engine": {
@@ -61,14 +61,14 @@
   },
   "database": {
     "rw": {
-      "test_pool": {
-        "database": "test_pool_pbx",
+      "test": {
+        "database": "pbx_refactor",
         "user": "postgres",
         "password": "",
-        "host": "10.129.0.33",
-        "port": 5432
+        "host": "10.131.0.116",
+        "port": 5001
       },
-      "main_pool": {
+      "prod": {
         "database": "pbx_main_pool",
         "user": "postgres",
         "password": "",
@@ -76,37 +76,44 @@
         "port": 5432
       }
     },
-    "cms": {
-      "database": "pbx",
-      "user": "postgres",
-      "password": "",
-      "host": "10.129.0.7",
-      "port": 5432
+    "ro": {
+      "test": {
+        "database": "pbx_refactor",
+        "user": "postgres",
+        "password": "",
+        "host": "10.131.0.116",
+        "port": 5000
+      },
+      "prod": {
+        "database": "pbx_main_pool",
+        "user": "postgres",
+        "password": "",
+        "host": "10.129.0.26",
+        "port": 5432
+      }
     }
   },
   "databasev3": {
-    "rw":  {
-        "database": "pbx_refactor",
-        "user": "postgres",
-        "password": "",
-        "host": "10.131.0.80",
-        "port": 5001
-      }
-    ,
-    "ro":  {
-        "database": "pbx_refactor",
-        "user": "postgres",
-        "password": "",
-        "host": "10.131.0.80",
-        "port": 5000
-      }
-  }
-    ,
-  "CmsUrl3": "https://cms-v3.neuro.net/auth/login?lng=en",
-  "api_v3_url": "https://api-v3.neuro.net",
+    "rw": {
+      "database": "pbx_refactor",
+      "user": "postgres",
+      "password": "",
+      "host": "10.3.121.10",
+      "port": 5001
+    },
+    "ro": {
+      "database": "pbx_refactor",
+      "user": "postgres",
+      "password": "",
+      "host": "10.3.121.10",
+      "port": 5000
+    }
+  },
+  "CmsUrl3": "http://cms-v3.neuro.emias.mosreg.ru/auth/login?lng=en",
+  "api_v3_url": "https://api-v3.neuro.emias.mosreg.ru",
   "v3": {
-    "agent_setting_url": "https://cms-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=",
-    "main_page_url": "https://cms-v3.neuro.net/agents?lng=en",
+    "agent_setting_url": "https://cms-test-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=",
+    "main_page_url": "https://cms-test-v3.neuro.net/agents?lng=en",
     "path_to_uploading_file": {
       "valid_file": "test_3/test_web/uploading_files/valid_file.xlsx",
       "no_valid_file": "test_3/test_web/uploading_files/no_valid_file.xlsx"
@@ -120,8 +127,8 @@
       "pass": "123456"
     },
     "api": {
-      "api_base_url": "https://api-v3.neuro.net",
-      "poll_api_v3_url": "http://10.129.0.171:8083",
+      "api_base_url": "http://api-v3.neuro.emias.mosreg.ru",
+      "poll_api_v3_url": "http://10.3.121.140:8083",
       "methods_end_point": {
         "post_auth": "/api/v2/ext/auth",
         "post_update_token": "/api/v2/ext/auth/refresh",
@@ -168,42 +175,31 @@
       }
     },
     "test_data": {
-      "agent_uuid": "2fd100a0-5b79-42bd-ae35-fb38c5808e53",
-      "agent_id": "204",
+      "agent_uuid": "54d239a2-1bcb-4762-b3a7-0ba8f7fded5a",
+      "agent_id": "3",
       "msisdn": "89960652535",
-      "company_uuid": "60e0e833-6ea7-4ac3-8f90-136f2caba1dd",
+      "company_uuid": "5c775be9-6ab4-4569-9a7c-2722dd3e6ce0",
       "agent_name": "API_test_agent",
       "agent_flag": "apiflag",
       "agent_language": "ru-RU",
       "agent_tts": "oksana@yandex",
-      "agent_pool_name": "yandex-pool-1-a",
-      "agent_trunk_name": "sip-client-QA",
+      "agent_pool_name": "main-pool",
+      "agent_trunk_name": "minzdrav_1",
       "recall_count": 1,
       "asr": "yandex",
       "tts": "jane@yandex",
       "language": "ru-RU",
       "total_channel_limit": 2,
       "data_release_run": {
-        "agent_uuid": "f29c639f-f3ff-46bb-9425-fe2ffb27796c",
+        "agent_uuid": "b5b2a743-259b-4641-a007-0dd2abe3e0fa",
         "agent_name": "release_run",
-        "asr_yandex_uuid": "31b5edd7-4bd6-4968-8346-27d091a68fbf",
-        "tts_yandex_uuid": "785f6528-1bfc-441d-8236-d97574af697e",
+        "asr_yandex_uuid": "148ef1f0-d81e-415a-8c0b-26c7319138b1",
+        "tts_yandex_uuid": "86988b9a-35dd-4e4b-bda9-fcc943acb86c",
         "yandex_voice": "zahar",
-        "asr_google_uuid": "a7f66456-cafe-4d7b-a9b9-3a2c2d72b402",
-        "tts_google_uuid": "bbd9323f-0cc4-411c-ae81-58e02b283353",
+        "asr_google_uuid": "68828df6-fabb-4f01-a32b-1359512fd66c",
+        "tts_google_uuid": "b90fecf7-96c3-48e9-b8a7-8f8ca8280eed",
         "google_voice": "ru-RU-Wavenet-E",
-        "agent_id": "164"
-      }
-    },
-    "nlu": {
-      "url": "http://10.131.0.131:8099",
-      "routes": [
-        "/nlu_engine",
-        "/ner_address",
-        "/ner_person"
-      ],
-      "headers": {
-        "Content-Type": "application/json"
+        "agent_id": "117"
       }
     }
   }

@@ -232,6 +232,7 @@ class TestPoolApiDialog:
             list_dialog_id = [dialog['id'] for dialog in response_list_dialogs.json()['dialogs']]
             assert dialog_id not in list_dialog_id
 
+    @pytest.mark.skip(reason='Пофиксить тест после деплоя https://neuronet.atlassian.net/browse/NP-1596')
     @allure.title('Отложить все диалоги для проекта')
     def test_defer_all_dialogs(self, pool_api_v3, params_agent_uuid, creation_queue_dialog):
         path = pool_api_v3.path_end_point['defer_dialog']

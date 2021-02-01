@@ -23,6 +23,18 @@ def api_v3(request):
     return fixture
 
 
+@pytest.fixture(scope='session')
+def nlu_api_v3(request):
+    fixture = None
+    if fixture is None:
+        with open(request.config.getoption("--config")) as cfg:
+            config = json.load(cfg)
+            fixture = APIClientV3(base_url=config['v3']['nlu']['url'],
+                                  path_end_point=config['v3']['nlu']['routes'],
+                                  headers=config['v3']['nlu']['headers'])
+    return fixture
+
+
 @pytest.fixture(scope='class')
 def app_3_web(request):
     fixture = None
@@ -227,7 +239,7 @@ def check_queue(params_agent_uuid, pool_api_v3, path_name, queue_name, queue_len
             # print('\n', time.time(), ' len calls = ', len(response_1.json()['calls']))
             # print('\n', time.time(), 'len dialogs = ', len(response_2.json()['dialogs']))
 
-            if len(response_1.json()[queue_name]) > 0 and len(response_2.json()[queue_name_2]) == 0:
+            if len(response_1.json()[queue_name]) == queue_len and len(response_2.json()[queue_name_2]) == 0:
                 # print('\n', time.time(), 'Выход из цикла. len calls = ', len(response_1.json()['calls']))
                 break
         else:
