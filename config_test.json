@@ -202,6 +202,17 @@
         "google_voice": "ru-RU-Wavenet-E",
         "agent_id": "117"
       }
+    },
+    "nlu": {
+      "url": "https://simantec-test.neuro.net",
+      "routes": [
+        "/nlu_engine",
+        "/ner_address",
+        "/ner_person"
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      }
     }
   }
 }

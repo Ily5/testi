@@ -387,7 +387,7 @@ class TestExternalApi:
 
         response_after = api_v3.request_send(method="POST", path=path, json=data)
         assert response.status_code == 200
-        assert int(response_before.json()['total_count']) == int(response_after.json()['total_count']) + 1
+        assert int(response_before.json()['total_count']) >= int(response_after.json()['total_count']) + 1
         uuid_list = [item['uuid'] for item in response_after.json()['data']]
         assert data not in uuid_list
 
@@ -407,7 +407,7 @@ class TestExternalApi:
         assert int(response_after.json()['total_count']) == 0
         assert len(response_after.json()['data']) == 0
 
-    @allure.title('Удаление одного звонка из очереди')
+    @allure.title('Удаление одного звонка из очереди по call_uuid')
     def test_remove_one_calls_queue(self, api_v3, params_agent_uuid, creation_queue_calls):
         data = {"limit": 100, "offset": 0,
                 "where": {"agent_uuid": api_v3.test_data['agent_uuid'], "msisdn": [], "result": []}}
@@ -423,7 +423,7 @@ class TestExternalApi:
         response_after = api_v3.request_send(method="POST", path=path, json=data)
 
         assert response.status_code == 200
-        assert int(response_before.json()['total_count']) == int(response_after.json()['total_count']) + 1
+        assert int(response_before.json()['total_count']) >= int(response_after.json()['total_count']) + 1
         uuid_list = [item['uuid'] for item in response_after.json()['data']]
         assert data not in uuid_list
 
