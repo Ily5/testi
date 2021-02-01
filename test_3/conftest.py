@@ -172,7 +172,7 @@ def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, remov
         set_default_settings_agent(api_v3, params_agent_uuid)
 
     request.addfinalizer(default_setting)
-    return response.json()
+    return response.json(), data
 
 
 @pytest.fixture(scope='class')
