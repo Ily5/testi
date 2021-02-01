@@ -4,9 +4,9 @@ import requests
 import json
 
 
-@allure.epic('API')
 @pytest.mark.parametrize('data', ["потом", "не хочу", "да давайте", "хм"], ids=["not_now", "dont_want", "yes", "other"])
-@allure.feature('Проверка работы nlu_api')
+@allure.epic('API')
+@allure.feature('NLU API')
 @allure.title('nlu_base')
 def test_nlu(nlu_api_v3, data):
     request_url = nlu_api_v3.base_url + [x for x in nlu_api_v3.path_end_point if "nlu_engine" in x][0]
@@ -28,7 +28,8 @@ def test_nlu(nlu_api_v3, data):
                                   "нижний новгород улица пушкина дом 2 квартира 5",
                                   "в нижнем живу кароче на пушкина в доме пять в третьей квартире"],
                          ids=["msk_correct", "nn_correct", "nn_incorrect"])
-@allure.feature('Проверка работы nlu_api')
+@allure.epic('API')
+@allure.feature('NLU API')
 @allure.title('ner_address')
 def test_ner_address(nlu_api_v3, data):
     request_url = nlu_api_v3.base_url + [x for x in nlu_api_v3.path_end_point if "ner_address" in x][0]
@@ -53,7 +54,8 @@ def test_ner_address(nlu_api_v3, data):
 
 @pytest.mark.parametrize('data', ["Иванов Иван Иванович"],
                          ids=["Correct"])
-@allure.feature('Проверка работы nlu_api')
+@allure.epic('API')
+@allure.feature('NLU API')
 @allure.title('ner_person')
 def test_ner_person(nlu_api_v3, data):
     request_url = nlu_api_v3.base_url + [x for x in nlu_api_v3.path_end_point if "ner_person" in x][0]
