@@ -350,7 +350,7 @@ class TestExternalApi:
 
         response_after = api_v3.request_send(method="POST", path=path, json=data)
         assert response.status_code == 200
-        assert int(response_before.json()['total_count']) == int(response_after.json()['total_count']) + 1
+        assert int(response_before.json()['total_count']) >= int(response_after.json()['total_count']) + 1
         uuid_list = [item['uuid'] for item in response_after.json()['data']]
         assert data not in uuid_list
 
@@ -386,7 +386,7 @@ class TestExternalApi:
         response_after = api_v3.request_send(method="POST", path=path, json=data)
 
         assert response.status_code == 200
-        assert int(response_before.json()['total_count']) > int(response_after.json()['total_count']) + 1
+        assert int(response_before.json()['total_count']) >= int(response_after.json()['total_count']) + 1
         uuid_list = [item['uuid'] for item in response_after.json()['data']]
         assert data not in uuid_list
 
