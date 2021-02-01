@@ -248,6 +248,7 @@ class TestExternalApi:
                         {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
 
         response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data_dialogs)
+        time.sleep(2)
 
         bulk_uuid = response.json()['bulk_uuid']
         response_new = api_v3.request_send(method='POST', path=path,
