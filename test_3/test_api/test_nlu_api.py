@@ -4,8 +4,8 @@ import requests
 import json
 
 
-@allure.epic('API')
 @pytest.mark.parametrize('data', ["потом", "не хочу", "да давайте", "хм"], ids=["not_now", "dont_want", "yes", "other"])
+@allure.epic('API')
 @allure.feature('Проверка работы nlu_api')
 @allure.title('nlu_base')
 def test_nlu(nlu_api_v3, data):
@@ -28,6 +28,7 @@ def test_nlu(nlu_api_v3, data):
                                   "нижний новгород улица пушкина дом 2 квартира 5",
                                   "в нижнем живу кароче на пушкина в доме пять в третьей квартире"],
                          ids=["msk_correct", "nn_correct", "nn_incorrect"])
+@allure.epic('API')
 @allure.feature('Проверка работы nlu_api')
 @allure.title('ner_address')
 def test_ner_address(nlu_api_v3, data):
@@ -53,6 +54,7 @@ def test_ner_address(nlu_api_v3, data):
 
 @pytest.mark.parametrize('data', ["Иванов Иван Иванович"],
                          ids=["Correct"])
+@allure.epic('API')
 @allure.feature('Проверка работы nlu_api')
 @allure.title('ner_person')
 def test_ner_person(nlu_api_v3, data):
