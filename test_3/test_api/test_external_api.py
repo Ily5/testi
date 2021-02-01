@@ -252,8 +252,11 @@ class TestExternalApi:
         bulk_uuid = response.json()['bulk_uuid']
         response_new = api_v3.request_send(method='POST', path=path,
                                            params={**params_agent_uuid, **{"bulk_uuid": bulk_uuid}}, json=data_dialogs)
-
-        assert response_new.status_code == 202
+        try:
+            assert response_new.status_code == 202
+        except AssertionError as e:
+            print(e)
+            print(response_new.text)
         assert response.json()['bulk_uuid'] == response_new.json()['bulk_uuid']
 
     @allure.title('Добавление диалга к уже существующему набору диалогов по несуществущему bulk_uuid')
