@@ -396,13 +396,11 @@ class TestExternalApi:
                 "where": {"agent_uuid": api_v3.test_data['agent_uuid'], "msisdn": [], "result": []}}
         path = api_v3.path_end_point["post_queue_calls"]
         response_before = api_v3.request_send(method="POST", path=path, json=data)
-        print(response_before.json())
 
         response = api_v3.request_send(method="POST", path=api_v3.path_end_point['remove_queue_call'], json={},
                                        params=params_agent_uuid)
 
         response_after = api_v3.request_send(method="POST", path=path, json=data)
-        print(response_after.json())
         assert response.status_code == 200
         assert int(response_before.json()['total_count']) > int(response_after.json()['total_count'])
         assert int(response_after.json()['total_count']) == 0
