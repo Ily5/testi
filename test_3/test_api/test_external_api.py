@@ -51,10 +51,11 @@ class TestExternalApi:
 
         assert response.status_code == 200
         assert len(response.json()) > 0
-        assert 'agent_uuid' in response.json()[0]
-        assert 'name' in response.json()[0]
-        assert response.json()['agent_uuid'] is not None
-        assert response.json()['name'] is not None
+        for agent in response.json():
+            assert 'agent_uuid' in agent
+            assert 'name' in agent
+            assert agent['agent_uuid'] is not None
+            assert agent['name'] is not None
 
         name_agent_list = [item['name'] for item in response.json()]
         assert api_v3.test_data['agent_name'] in name_agent_list
@@ -85,7 +86,6 @@ class TestExternalApi:
                 "language": "en-US"}
         response = api_v3.request_send(method='PUT', path=path, params=params_agent_uuid, json=data)
         assert response.status_code == 200
-        # assert response.json()['name'] == data['name']
         assert response.json()['recall_count'] == data['recall_count']
         assert response.json()['flag'] == data['flag']
         assert response.json()['routing_channel_limit'] == data['routing_channel_limit']
@@ -239,8 +239,7 @@ class TestExternalApi:
         data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
         for i in range(randint(1, 10)):
             data.append(data[0])
-        params = {"agent_uuid": "2264c5e6-7df8-46f4-947c-0440b01f155a"}
-        response = api_v3.request_send(method='POST', path=path, params=params, json=data)
+        response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)
         assert response.status_code == 202
         assert 'bulk_uuid' in response.json()
         assert 'task_uuid' in response.json()
