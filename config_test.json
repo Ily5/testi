@@ -170,7 +170,8 @@
           "cancel_all_dialogs": "/cancel_dialog",
           "defer_dialog": "/dialog_queue/defer",
           "return_dialog": "/dialog_queue/return",
-          "get_dialogs": "/get_dialogs"
+          "get_dialogs": "/get_dialogs",
+          "get_full_dialog_queue": "/get_full_dialog_queue"
         }
       }
     },
