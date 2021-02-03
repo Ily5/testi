@@ -232,13 +232,55 @@ class TestExternalApi:
     def test_upload_group_dialogs(self, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
         path = api_v3.path_end_point['upload_group_dialogs']
         data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
-        iterations = randint(1, 10)
-        for i in range(iterations):
+        for i in range(randint(1, 10)):
             data.append(data[0])
         response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)
         assert response.status_code == 202
         assert 'bulk_uuid' in response.json()
         assert 'task_uuid' in response.json()
+
+    @allure.title('Добавление диалга к уже существующему набору диалогов по bulk_uuid')
+    def test_add_dialogs_bulk_uuid(self, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
+
+        path = api_v3.path_end_point['upload_group_dialogs']
+
+        data_dialogs = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"},
+                        {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
+
+        response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data_dialogs)
+        time.sleep(2)
+
+        bulk_uuid = response.json()['bulk_uuid']
+        response_new = api_v3.request_send(method='POST', path=path,
+                                           params={**params_agent_uuid, **{"bulk_uuid": bulk_uuid}}, json=data_dialogs)
+        try:
+            assert response_new.status_code == 202
+        except AssertionError as e:
+            print(e)
+            print(response_new.text)
+        assert response.json()['bulk_uuid'] == response_new.json()['bulk_uuid']
+
+    @allure.title('Добавление диалга к уже существующему набору диалогов по несуществущему bulk_uuid')
+    def test_add_dialogs_not_exist_bulk_uuid(self, api_v3, params_agent_uuid):
+        data_dialogs = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"},
+                        {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
+        bulk_uuid = uuid.uuid4()
+        response = api_v3.request_send(method='POST', path=api_v3.path_end_point['upload_group_dialogs'],
+                                       params={**params_agent_uuid, **{"bulk_uuid": bulk_uuid}}, json=data_dialogs)
+
+        assert response.status_code == 409
+        assert 'message' in response.json()
+
+    @allure.title('Добавление диалга к уже существующему набору диалогов с невалидным bulk_uuid')
+    def test_add_dialogs_no_valid_bulk_uuid(self, api_v3, params_agent_uuid):
+        data_dialogs = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"},
+                        {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main"}]
+        bulk_uuid = 'no_valid_ewer23'
+        response = api_v3.request_send(method='POST', path=api_v3.path_end_point['upload_group_dialogs'],
+                                       params={**params_agent_uuid, **{"bulk_uuid": bulk_uuid}}, json=data_dialogs)
+
+        assert response.status_code == 400
+        assert 'message' in response.json()
 
     @allure.title('Получение статуса множественной загрузки параметров диалога, валидные данные')
     def test_get_status_upload_group_dialogs_valid(self, api_v3, upload_group_dialogs):
@@ -271,7 +313,6 @@ class TestExternalApi:
         response = api_v3.request_send(path=path, params=params)
         assert response.status_code in [200, 404]
 
-    @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1671')
     @allure.title('Получение статистики по группе диалогов, валидные bulk_uuid')
     def test_get_group_dialogs_statistic(self, api_v3, upload_group_dialogs):
         path = api_v3.path_end_point['get_group_dialogs_statistic']
