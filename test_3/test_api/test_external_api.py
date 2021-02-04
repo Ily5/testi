@@ -29,6 +29,8 @@ class TestExternalApi:
         assert response.status_code == 200
         assert 'token' in response.json()
         assert 'refresh_token' in response.json()
+        assert type(response.json()['token']) is str
+        assert type(response.json()['refresh_token']) is str
 
     @pytest.mark.parametrize('no_valid_token',
                              ['12345354346436', '23fdw234fw34', 'ывфавывапывп', 'sdfgagsdfgaa', '   '])
@@ -49,8 +51,11 @@ class TestExternalApi:
 
         assert response.status_code == 200
         assert len(response.json()) > 0
-        assert 'agent_uuid' in response.json()[0]
-        assert 'name' in response.json()[0]
+        for agent in response.json():
+            assert 'agent_uuid' in agent
+            assert 'name' in agent
+            assert agent['agent_uuid'] is not None
+            assert agent['name'] is not None
 
         name_agent_list = [item['name'] for item in response.json()]
         assert api_v3.test_data['agent_name'] in name_agent_list
@@ -81,7 +86,6 @@ class TestExternalApi:
                 "language": "en-US"}
         response = api_v3.request_send(method='PUT', path=path, params=params_agent_uuid, json=data)
         assert response.status_code == 200
-        # assert response.json()['name'] == data['name']
         assert response.json()['recall_count'] == data['recall_count']
         assert response.json()['flag'] == data['flag']
         assert response.json()['routing_channel_limit'] == data['routing_channel_limit']
@@ -227,6 +231,7 @@ class TestExternalApi:
         response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data)
         assert response.status_code == 200
         assert 'dialog_uuid' in response.json()
+        assert response.json()['dialog_uuid'] is not None
 
     @allure.title('Множественная загрузка диалога, получение статуса, валидные данные')
     def test_upload_group_dialogs(self, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
@@ -238,6 +243,8 @@ class TestExternalApi:
         assert response.status_code == 202
         assert 'bulk_uuid' in response.json()
         assert 'task_uuid' in response.json()
+        assert response.json()['bulk_uuid'] is not None
+        assert response.json()['task_uuid'] is not None
 
     @allure.title('Добавление диалга к уже существующему набору диалогов по bulk_uuid')
     def test_add_dialogs_bulk_uuid(self, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
@@ -270,6 +277,8 @@ class TestExternalApi:
 
         assert response.status_code == 409
         assert 'message' in response.json()
+        assert type(response.json()['message']) is str
+        assert len(response.json()['message']) > 0
 
     @allure.title('Добавление диалга к уже существующему набору диалогов с невалидным bulk_uuid')
     def test_add_dialogs_no_valid_bulk_uuid(self, api_v3, params_agent_uuid):
@@ -281,6 +290,8 @@ class TestExternalApi:
 
         assert response.status_code == 400
         assert 'message' in response.json()
+        assert type(response.json()['message']) is str
+        assert len(response.json()['message']) > 0
 
     @allure.title('Получение статуса множественной загрузки параметров диалога, валидные данные')
     def test_get_status_upload_group_dialogs_valid(self, api_v3, upload_group_dialogs):
@@ -295,16 +306,20 @@ class TestExternalApi:
     @allure.title('Получение результата множественной загрузки параметров диалога, валидные данные')
     def test_get_result_upload_group_dialogs_valid(self, api_v3, upload_group_dialogs):
         # todo тест переодически падает, т.к. диалог не успевает создаться, как решить без паузы?
+        # todo надо добавить что проверку статус загрузки success
         time.sleep(2)
         params = {'task_uuid': upload_group_dialogs['task_uuid']}
         path = api_v3.path_end_point['get_dialogs_group_upload_result']
         response = api_v3.request_send(path=path, params=params)
-        result = response.json()
         assert response.status_code == 200
-        assert 'status' in result[0]
-        assert 'msisdn' in result[0]
-        assert 'message' in result[0]
-        assert 'dialog_uuid' in result[0]
+        for item in response.json():
+            assert 'status' in item
+            assert 'msisdn' in item
+            assert 'message' in item
+            assert 'dialog_uuid' in item
+            assert item['status'] is not None
+            assert item['msisdn'] is not None
+            assert item['dialog_uuid'] is not None
 
     @allure.title('Получение статистики по одному диалогу, валидный dialog_uuid')
     def test_get_dialog_statistic(self, api_v3, upload_dialog):
@@ -338,17 +353,21 @@ class TestExternalApi:
         assert response.status_code == 404
 
     @allure.title('Получение списка диалогов агента, валидные данные')
-    def test_get_agent_dialogs_valid(self, api_v3, params_agent_uuid):
+    def test_get_agent_dialogs_valid(self, api_v3, params_agent_uuid, creation_queue_dialog):
         path = api_v3.path_end_point['get_dialogs_agent']
         response = api_v3.request_send(path=path, params=params_agent_uuid)
         assert response.status_code == 200
-        assert 'msisdn' in response.json()
-        assert 'dialog_uuid' in response.json()
-        assert 'result' in response.json()
-        assert 'date_added' in response.json()
+        assert 'dialogs' in response.json()
+        assert 'total' in response.json()
+        for dialog in response.json()['dialogs']:
+            assert 'msisdn' in dialog
+            assert 'dialog_uuid' in dialog
+            assert 'result' in dialog
+            assert dialog['msisdn'] is not None
+            assert dialog['dialog_uuid'] is not None
 
     @allure.title('Получение списка звонков агента, валидные данные')
-    def test_get_agent_dialogs_valid(self, api_v3, params_agent_uuid):
+    def test_get_agent_calls_valid(self, api_v3, params_agent_uuid):
         path = api_v3.path_end_point['get_calls_agent']
         response = api_v3.request_send(path=path, params=params_agent_uuid)
         assert response.status_code == 200
@@ -370,13 +389,7 @@ class TestExternalApi:
         response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json={})
         assert response.status_code == 200
 
-    @allure.title('Удаление диалогов из очереди, валидный agent_uuid')
-    def test_remove_queue_dialogs_valid(self, api_v3, params_agent_uuid):
-        path = api_v3.path_end_point['remove_queue_dialogs']
-        response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json={}, status_code=409)
-        assert response.status_code == 200
-
-    @allure.title('Удаление одного диалога из очереди')
+    @allure.title('Удаление одного диалога из очереди по dialog_uuid')
     def test_remove_one_dialogs_queue(self, api_v3, params_agent_uuid, creation_queue_dialog):
         data = {"limit": 100, "offset": 0,
                 "where": {"agent_uuid": api_v3.test_data['agent_uuid'], "msisdn": [], "result": []}}
@@ -410,6 +423,12 @@ class TestExternalApi:
         assert int(response_before.json()['total_count']) > int(response_after.json()['total_count'])
         assert int(response_after.json()['total_count']) == 0
         assert len(response_after.json()['data']) == 0
+
+    @allure.title('Удаление диалогов из очереди, валидный agent_uuid')
+    def test_remove_queue_dialogs_valid(self, api_v3, params_agent_uuid):
+        path = api_v3.path_end_point['remove_queue_dialogs']
+        response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json={}, status_code=409)
+        assert response.status_code == 200
 
     @allure.title('Удаление одного звонка из очереди по call_uuid')
     def test_remove_one_calls_queue(self, api_v3, params_agent_uuid, creation_queue_calls):
