@@ -285,6 +285,24 @@ class TestPoolApiDialog:
             list_dialog_id = [dialog['id'] for dialog in response_list_dialogs.json()['dialogs']]
             assert dialog_id in list_dialog_id
 
+    # @pytest.mark.skip(reason='Убрать скип после деплоя на прод https://neuronet.atlassian.net/browse/NP-1572')
+    @allure.title('Отменить один диалог по валидный bulk_uuid')
+    def test_cancel_one_dialog_valid_bulk_uuid(self, pool_api_v3, params_agent_uuid, creation_queue_dialog, api_v3):
+        data = {"limit": 100, "offset": 0,
+                "where": {"agent_uuid": api_v3.test_data['agent_uuid'], "msisdn": [], "result": []}}
+        response_before = api_v3.request_send(method="POST", path=api_v3.path_end_point["post_queue_dialogs"],
+                                              json=data)
+
+        params_for_remove = {**{"bulk_uuid": creation_queue_dialog[0]['bulk_uuid']}, **params_agent_uuid}
+        path = pool_api_v3.path_end_point['cancel_all_dialogs']
+        response = pool_api_v3.request_send(method='DELETE', path=path, params=params_for_remove)
+
+        response_after = api_v3.request_send(method="POST", path=api_v3.path_end_point["post_queue_dialogs"],
+                                             json=data)
+
+        assert response.status_code == 200
+        assert int(response_before.json()['total_count']) > int(response_after.json()['total_count'])
+
     @allure.title('Отменить один диалог по dialog_uuid')
     def test_cancel_one_dialog_valid_dialog_uuid(self, pool_api_v3, params_agent_uuid, creation_queue_dialog, api_v3):
         params = {**{"page": "1", "by_count": "100"}, **params_agent_uuid}
@@ -303,23 +321,6 @@ class TestPoolApiDialog:
         assert response.status_code == 200
         assert response_before.json()['total'] > response_after.json()['total']
         assert dialog_uuid not in [item['uuid'] for item in response_after.json()['dialogs']]
-
-    # @pytest.mark.skip(reason='Убрать скип после деплоя на прод https://neuronet.atlassian.net/browse/NP-1572')
-    @allure.title('Отменить один диалог по валидный bulk_uuid')
-    def test_cancel_one_dialog_valid_bulk_uuid(self, pool_api_v3, params_agent_uuid, creation_queue_dialog, api_v3):
-        data = {"limit": 100, "offset": 0,
-                "where": {"agent_uuid": api_v3.test_data['agent_uuid'], "msisdn": [], "result": []}}
-        response_before = api_v3.request_send(method="POST", path=api_v3.path_end_point["post_queue_dialogs"],
-                                              json=data)
-
-        params_for_remove = {**{"bulk_uuid": creation_queue_dialog[0]['bulk_uuid']}, **params_agent_uuid}
-        path = pool_api_v3.path_end_point['cancel_all_dialogs']
-        response = pool_api_v3.request_send(method='DELETE', path=path, params=params_for_remove)
-
-        response_after = api_v3.request_send(method="POST", path=api_v3.path_end_point["post_queue_dialogs"], json=data)
-
-        assert response.status_code == 200
-        assert int(response_before.json()['total_count']) > int(response_after.json()['total_count'])
 
     @allure.title('Отменить все далоги для проекта, валидный agent_id')
     def test_cancel_all_dialog_valid(self, pool_api_v3, params_agent_uuid, creation_queue_dialog):
