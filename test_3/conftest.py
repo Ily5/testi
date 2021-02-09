@@ -131,7 +131,12 @@ def remove_queue_dialogs_and_calls(request, api_v3, pool_api_v3, params_agent_uu
     def fin():
         clear_queue(api_v3, params_agent_uuid, pool_api_v3)
 
-    request.addfinalizer(fin)
+    try:
+        pass
+    except:
+        pass
+    finally:
+        request.addfinalizer(fin)
 
 
 @pytest.fixture(scope='class')
@@ -157,11 +162,13 @@ def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, remov
     change_total_channel_limit(api_v3, 0, params_agent_uuid)
 
     path = api_v3.path_end_point['upload_group_dialogs']
-    data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"}]
+    data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main",
+             "script_name": "load_LE_offline"}]
     response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
     for i in range(count_dialogs):
         data.append(
-            {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"})
+            {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main",
+             "script_name": "load_LE_offline"})
     api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
 
     print('\n', 'LEN data - ', len(data))
@@ -226,11 +233,14 @@ def set_default_settings_agent(api_v3, params_agent_uuid):
 
 
 def check_queue(params_agent_uuid, pool_api_v3, path_name, queue_name, queue_len=0):
+    time_out = time.time() + 240
     params = {**{"page": "1",
                  "by_count": "100000"}, **params_agent_uuid}
     path = pool_api_v3.path_end_point[path_name]
 
     while True:
+        if time.time() > time_out:
+            raise TimeoutError
 
         if queue_name == 'calls':
             queue_name_2 = 'dialogs'
