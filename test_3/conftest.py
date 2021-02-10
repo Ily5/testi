@@ -162,13 +162,11 @@ def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, remov
     change_total_channel_limit(api_v3, 0, params_agent_uuid)
 
     path = api_v3.path_end_point['upload_group_dialogs']
-    data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main",
-             "script_name": "load_LE_offline"}]
+    data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"}]
     response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
     for i in range(count_dialogs):
         data.append(
-            {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main",
-             "script_name": "load_LE_offline"})
+            {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"})
     api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
 
     print('\n', 'LEN data - ', len(data))
