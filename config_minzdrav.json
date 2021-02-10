@@ -112,8 +112,8 @@
   "CmsUrl3": "http://cms-v3.neuro.emias.mosreg.ru/auth/login?lng=en",
   "api_v3_url": "https://api-v3.neuro.emias.mosreg.ru",
   "v3": {
-    "agent_setting_url": "https://cms-test-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=",
-    "main_page_url": "https://cms-test-v3.neuro.net/agents?lng=en",
+    "agent_setting_url": "http://cms-v3.neuro.emias.mosreg.ru/agent-settings/settings?lng=en&agent_uuid=",
+    "main_page_url": "http://cms-v3.neuro.emias.mosreg.ru/agents?lng=en",
     "path_to_uploading_file": {
       "valid_file": "test_3/test_web/uploading_files/valid_file.xlsx",
       "no_valid_file": "test_3/test_web/uploading_files/no_valid_file.xlsx"
@@ -192,15 +192,26 @@
       "language": "ru-RU",
       "total_channel_limit": 2,
       "data_release_run": {
-        "agent_uuid": "b5b2a743-259b-4641-a007-0dd2abe3e0fa",
+        "agent_uuid": "7e5a1f42-45d1-446d-9381-3f7235d8488f",
         "agent_name": "release_run",
-        "asr_yandex_uuid": "148ef1f0-d81e-415a-8c0b-26c7319138b1",
-        "tts_yandex_uuid": "86988b9a-35dd-4e4b-bda9-fcc943acb86c",
+        "asr_yandex_uuid": "2d3bc1b9-4031-42c2-92b8-028de09cb4b2",
+        "tts_yandex_uuid": "099e6738-3b33-4799-bd81-ef5f1a0df18f",
         "yandex_voice": "zahar",
-        "asr_google_uuid": "68828df6-fabb-4f01-a32b-1359512fd66c",
-        "tts_google_uuid": "b90fecf7-96c3-48e9-b8a7-8f8ca8280eed",
+        "asr_google_uuid": "0f827723-240b-4bf6-89ac-523142276294",
+        "tts_google_uuid": "f9e52387-a8b6-484b-97e9-691959e6b41f",
         "google_voice": "ru-RU-Wavenet-E",
-        "agent_id": "117"
+        "agent_id": "5"
+      }
+    },
+    "nlu": {
+      "url": "http://10.3.121.100:8099",
+      "routes": [
+        "/nlu_engine",
+        "/ner_address",
+        "/ner_person"
+      ],
+      "headers": {
+        "Content-Type": "application/json"
       }
     }
   }
