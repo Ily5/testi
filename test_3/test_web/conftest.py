@@ -26,3 +26,9 @@ def data_uploading(agent_settings_page, go_to_agent_settings):
 def queue_page(agent_settings_page):
     agent_settings_page.AnyAgentPage.open_queue_page()
     return agent_settings_page.QueuePage
+
+
+@pytest.fixture(scope='function')
+def cancel_filter_queue(queue_page):
+    yield
+    queue_page.cancel_queue_page_filter()
