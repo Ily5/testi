@@ -163,7 +163,7 @@ class TestCallsQueue:
             assert item['status'].lower() == status.lower()
 
     @allure.title('Фильтрация списка звонков по невалидному Status')
-    def test_calls_queue_filter_by_status_no_valid(self, creation_queue_dialog, queue_page, cancel_filter_queue,
+    def test_calls_queue_filter_by_status_no_valid(self, creation_queue_calls, queue_page, cancel_filter_queue,
                                                    random_str_generator):
         status = random_str_generator
         queue_page.filter_dialogs_calls_queue_list(page='calls', param='status', text=status)
