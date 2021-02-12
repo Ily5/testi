@@ -1,0 +1,60 @@
+{
+  "api": {
+    "external_api": {
+      "post_auth": "/api/v2/ext/auth",
+      "post_update_token": "/api/v2/ext/auth/refresh",
+      "get_all_agents_company": "/api/v2/ext/company-agents",
+      "get_agent_settings": "/api/v2/ext/agent-settings/general",
+      "put_change_agent_settings": "/api/v2/ext/agent-settings/general",
+      "agent_call_rules": "/api/v2/ext/agent-settings/time-slot",
+      "agent_initial_entities": "/api/v2/ext/initial-entity",
+      "agent_output_entities": "/api/v2/ext/output-entity",
+      "remove_queue_dialogs": "/api/v2/ext/queue/remove",
+      "upload_dialog": "/api/v2/ext/dialog/dialog-initial",
+      "upload_group_dialogs": "/api/v2/ext/dialog/dialogs-group-initial",
+      "get_dialogs_group_upload_result": "/api/v2/ext/dialog/dialogs-group-initial-result",
+      "get_dialogs_group_upload_status": "/api/v2/ext/dialog/dialogs-group-initial-status",
+      "get_dialog_statistic": "/api/v2/ext/statistic/dialog",
+      "get_group_dialogs_statistic": "/api/v2/ext/statistic/dialog-group",
+      "get_statistic_output_entities": "/api/v2/ext/statistic/dialog-report",
+      "get_download_call_record": "/api/v2/ext/statistic/download/call",
+      "get_dialogs_agent": "/api/v2/ext/queue/dialog",
+      "get_calls_agent": "/api/v2/ext/queue/call",
+      "stop_queue_dialogs": "/api/v2/ext/queue/stop",
+      "return_queue_dialogs": "/api/v2/ext/queue/return",
+      "post_queue_dialogs": "/api/v2/queue/dialog",
+      "remove_queue_dialog_2": "/api/v2/queue/dialog/remove",
+      "post_queue_calls": "/api/v2/queue/call",
+      "remove_queue_call": "/api/v2/queue/call/remove",
+      "set_media_params": "/api/v2/rbac/agent/"
+    },
+    "poll_api": {
+      "get_calls": "/get_calls",
+      "get_progress_calls": "/pending",
+      "get_list_queue_calls": "/queue",
+      "defer_calls": "/queue/defer",
+      "return_calls": "/queue/return",
+      "drop_queue_calls": "/queue/flush",
+      "get_full_queue": "/get_full_queue",
+      "get_all_valid_calls": "/valid_calls",
+      "get_all_dialog_queue": "/dialog_queue",
+      "get_dialog_queue_size": "/dialog_queue_size",
+      "cancel_all_dialogs": "/cancel_dialog",
+      "defer_dialog": "/dialog_queue/defer",
+      "return_dialog": "/dialog_queue/return",
+      "get_dialogs": "/get_dialogs",
+      "get_full_dialog_queue": "/get_full_dialog_queue"
+    },
+    "nlu_api": {
+      "routes": [
+        "/nlu_engine",
+        "/ner_address",
+        "/ner_person"
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    }
+  }
+}
+

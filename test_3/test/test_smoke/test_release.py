@@ -30,7 +30,7 @@ def test_v3_cms(db, app_3_web):
 def test_v3_init_call_yandex(api_v3, db):
     global result, logs_dict
     global synth_phrase_list
-    db.create_connect(api_v3.database["rw"])
+    db.create_connect(api_v3.database["RW"])
     with allure.step("Авторизация в external_api"):
         token = api_v3.token
         assert len(token['Authorization']) > 10
@@ -74,7 +74,7 @@ def test_v3_init_call_yandex(api_v3, db):
 def test_test(api_v3, db):
     global result, logs_dict
     global synth_phrase_list
-    db.create_connect(api_v3.database["rw"]["prod"])
+    db.create_connect(api_v3.database["RW"])
     db.wait_for_done('7dc5a6fc-77f6-4ca0-828e-9a5f78622580')
     result = db.execute_call_data(table='dialog_stats', data='587878')
     # count_call = db.select_data(table='call', column='dialog_id', sdata='count(uuid)', data=int(587878))
@@ -320,7 +320,7 @@ def test_v3_media_part_yandex_nv_media_params():
 def test_v3_init_call_google(api_v3, db):
     global result, logs_dict
     global synth_phrase_list
-    db.create_connect(api_v3.database['rw'])
+    db.create_connect(api_v3.database['RW'])
     with allure.step("Авторизация в external_api"):
         token = api_v3.token
         assert len(token['Authorization']) > 10
@@ -572,7 +572,7 @@ def test_v3_media_part_google_nv_media_params():
 @allure.feature("Silence")
 @allure.story("Тишина + тишина")
 def test_v3_silence(api_v3, db):
-    db.create_connect(api_v3.database["rw"])
+    db.create_connect(api_v3.database["RW"])
     # with allure.step("Авторизация в external_api"):
     #     token = api_v3.api.auth()
     with allure.step("Изменение параметров в cms_api"):
