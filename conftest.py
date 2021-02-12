@@ -1,20 +1,25 @@
+import string
+import random
+import os
+import json
+import time
+import pytest
 from fixture.application import Application
 from fixture.database import Connector, MongoConnector
-import pytest
-import json
-import os
-import random
-import string
+from test_3.fixture.api import APIClientV3
+from test_3.fixture.application_3 import ApplicationNewVersion
 
-
-fixture = None
+# fixture = None
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+''' Фикстуры для V2'''
 
 
 @pytest.fixture(scope="session")
 def app(request):
-    global fixture
+    # global fixture
+    fixture = None
     if fixture is None:
         browser = request.config.getoption("--browser")
         with open(request.config.getoption("--config")) as cfg:
@@ -37,6 +42,80 @@ def app(request):
 
     request.addfinalizer(done)
     return fixture
+
+
+''' Фикстуры для V3'''
+
+
+@pytest.fixture(scope='session')
+def api_v3(request):
+    fixture = None
+    if fixture is None:
+        with open(request.config.getoption("--config")) as cfg:
+            config = json.load(cfg)
+            with open(ROOT_DIR + "/config_v3.json", 'r', encoding='UTF-8') as conf:
+                config_v3 = json.load(conf)
+                fixture = APIClientV3(base_url=config['api']['external_api_base_url'],
+                                      test_data=config['test_data'],
+                                      path_end_point=config_v3['api']['external_api'],
+                                      database=config["Postgres"])
+                token, refresh_token = fixture.get_api_token(password=config['auth']['pass'],
+                                                             login=config['auth']['login'])
+            fixture.token, fixture.refresh_token = token, refresh_token
+
+    return fixture
+
+
+@pytest.fixture(scope='session')
+def nlu_api_v3(request):
+    fixture = None
+    if fixture is None:
+        with open(request.config.getoption("--config")) as cfg:
+            config = json.load(cfg)
+            with open(ROOT_DIR + "/config_v3.json", 'r', encoding='UTF-8') as conf:
+                config_v3 = json.load(conf)
+                fixture = APIClientV3(base_url=config['api']['nlu_api_url'],
+                                      path_end_point=config_v3['api']['nlu_api']['routes'],
+                                      headers=config_v3['api']['nlu_api']['headers'])
+    return fixture
+
+
+@pytest.fixture(scope='class')
+def app_3_web(request):
+    fixture = None
+    if fixture is None:
+        browser = request.config.getoption("--browser")
+        with open(request.config.getoption("--config")) as cfg:
+            config = json.load(cfg)
+        fixture = ApplicationNewVersion(browser=browser, cms_url=config["CmsUrl3"], test_data=config,
+                                        database=None)
+        fixture.wd.get(fixture.cms_url)
+        fixture.LoginPage.login_in_cms(username=fixture.test_data['auth']['login'],
+                                       password=fixture.test_data['auth']['pass'])
+        time.sleep(3)
+
+    def done():
+        fixture.cancel()
+
+    request.addfinalizer(done)
+    return fixture
+
+
+@pytest.fixture(scope='session')
+def pool_api_v3(request):
+    fixture = None
+    if fixture is None:
+        with open(request.config.getoption("--config")) as cfg:
+            config = json.load(cfg)
+            with open(ROOT_DIR + "/config_v3.json", 'r', encoding='UTF-8') as conf:
+                config_v3 = json.load(conf)
+                fixture = APIClientV3(base_url=config['api']['poll_api_v3_url'],
+                                      test_data=config['test_data'],
+                                      path_end_point=config_v3['api']["poll_api"])
+    return fixture
+
+
+'''Общие фикстуры '''
 
 
 @pytest.fixture(scope="session")
@@ -71,4 +150,3 @@ def pytest_addoption(parser):
 # TODO : make universal parametrize method in future
 # def pytest_make_parametrize_id(val):
 #     return repr(val)
-
