@@ -162,6 +162,7 @@ class TestCallsQueue:
         for item in stats.values():
             assert item['status'].lower() == status.lower()
 
+    @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1781')
     @allure.title('Фильтрация списка звонков по невалидному Status')
     def test_calls_queue_filter_by_status_no_valid(self, creation_queue_calls, queue_page, cancel_filter_queue,
                                                    random_str_generator):
