@@ -444,11 +444,15 @@ class TestExternalApi:
                                        params=params_for_remove)
 
         response_after = api_v3.request_send(method="POST", path=path, json=data)
-
-        assert response.status_code == 200
-        assert int(response_before.json()['total_count']) >= int(response_after.json()['total_count']) + 1
-        uuid_list = [item['uuid'] for item in response_after.json()['data']]
-        assert data not in uuid_list
+        try:
+            assert response.status_code == 200
+            assert int(response_before.json()['total_count']) >= int(response_after.json()['total_count']) + 1
+            uuid_list = [item['uuid'] for item in response_after.json()['data']]
+            assert data not in uuid_list
+        except AssertionError:
+            print('Код ответа - удаление звонка по cull_uud ==', response.status_code)
+            print('Список звонков в очери до удаления', response_before.json())
+            print('Список звонков в очери после удаления', response_after.json())
 
     @allure.title('Удаление всех звонков из очереди')
     def test_remove_all_calls_queue(self, api_v3, params_agent_uuid, creation_queue_calls):
