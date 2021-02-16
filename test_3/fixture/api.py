@@ -58,7 +58,7 @@ class APIClientV3:
             data['tts_key_uuid'] = self.test_data['data_release_run']['tts_google_uuid']
             data['asr_key_uuid'] = self.test_data['data_release_run']['asr_google_uuid']
             data['tts_voice'] = self.test_data['data_release_run']['google_voice']
-        else:
+        if engine.lower() not in ['google', 'yandex']:
             raise ValueError('Engine must be yandex or google')
 
         path = self.path_end_point['set_media_params'] + self.test_data['data_release_run']['agent_uuid']
