@@ -46,15 +46,11 @@
       "get_full_dialog_queue": "/get_full_dialog_queue"
     },
     "nlu_api": {
-      "routes": [
-        "/nlu_engine",
-        "/ner_address",
-        "/ner_person"
-      ],
-      "headers": {
-        "Content-Type": "application/json"
-      }
+        "nlu_engine": "/nlu_engine",
+        "ner_address": "/ner_address",
+        "ner_person": "/ner_person"}
+
     }
   }
-}
+
 
