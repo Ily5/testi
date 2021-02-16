@@ -7,7 +7,7 @@ from test_3.fixture.WebFW.AnyPage import AnyPage
 from test_3.fixture.WebFW.LoginPage import LoginPage
 from test_3.fixture.WebFW.MainPage import MainPage
 from test_3.fixture.WebFW.AgentPage import AnyAgentPage
-from test_3.fixture.WebFW.AnyAgentPage.DataUploadingPage import DataUploadingPage
+from test_3.fixture.WebFW.AnyAgentPage.DataUploading import DataUploading
 from test_3.fixture.WebFW.AnyAgentPage.QueuePage import QueuePage
 
 from test_3.fixture.api import APIClientV3
@@ -49,7 +49,7 @@ class ApplicationNewVersion:
         self.AnyPage = AnyPage(self)
         self.MainPage = MainPage(self)
         self.AnyAgentPage = AnyAgentPage(self)
-        self.DataUploadingPage = DataUploadingPage(self)
+        self.DataUploadingPage = DataUploading(self)
         self.QueuePage = QueuePage(self)
 
         logging.basicConfig(filename=sys.path[1] + "/log/test_asr.log", level=logging.INFO,
