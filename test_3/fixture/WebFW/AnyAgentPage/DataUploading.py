@@ -3,7 +3,7 @@ import allure
 from test_3.fixture.WebFW.AgentPage import AnyAgentPage
 
 
-class DataUploadingPage(AnyAgentPage):
+class DataUploading(AnyAgentPage):
     __input_select_file = '//input[@type="file"]'
     __select_file_button = '//span[contains(text(),"select file")]/..'
     __upload_file_button = '//span[text()="upload "]/..'

@@ -35,7 +35,7 @@ class APIClientV3:
             time.sleep(0.5)
             if count > waiting_queue_sec * 2:
                 print('Очередь занята более {} секунд '.format(waiting_queue_sec))
-                raise Exception('Time Limit Error , превышено время отправки запроса')
+                raise TimeoutError('Превышено время отправки запроса')
 
         return response
 
@@ -58,6 +58,8 @@ class APIClientV3:
             data['tts_key_uuid'] = self.test_data['data_release_run']['tts_google_uuid']
             data['asr_key_uuid'] = self.test_data['data_release_run']['asr_google_uuid']
             data['tts_voice'] = self.test_data['data_release_run']['google_voice']
+        else:
+            raise ValueError('Engine must be yandex or google')
 
         path = self.path_end_point['set_media_params'] + self.test_data['data_release_run']['agent_uuid']
         return self.request_send(method="PUT", path=path, json=data).json()
