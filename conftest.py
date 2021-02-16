@@ -75,8 +75,21 @@ def nlu_api_v3(request):
             with open(ROOT_DIR + "/config_v3.json", 'r', encoding='UTF-8') as conf:
                 config_v3 = json.load(conf)
                 fixture = APIClientV3(base_url=config['api']['nlu_api_url'],
-                                      path_end_point=config_v3['api']['nlu_api']['routes'],
-                                      headers=config_v3['api']['nlu_api']['headers'])
+                                      path_end_point=config_v3['api']['nlu_api'])
+    return fixture
+
+
+@pytest.fixture(scope='session')
+def pool_api_v3(request):
+    fixture = None
+    if fixture is None:
+        with open(request.config.getoption("--config")) as cfg:
+            config = json.load(cfg)
+            with open(ROOT_DIR + "/config_v3.json", 'r', encoding='UTF-8') as conf:
+                config_v3 = json.load(conf)
+                fixture = APIClientV3(base_url=config['api']['poll_api_v3_url'],
+                                      test_data=config['test_data'],
+                                      path_end_point=config_v3['api']["poll_api"])
     return fixture
 
 
@@ -98,20 +111,6 @@ def app_3_web(request):
         fixture.cancel()
 
     request.addfinalizer(done)
-    return fixture
-
-
-@pytest.fixture(scope='session')
-def pool_api_v3(request):
-    fixture = None
-    if fixture is None:
-        with open(request.config.getoption("--config")) as cfg:
-            config = json.load(cfg)
-            with open(ROOT_DIR + "/config_v3.json", 'r', encoding='UTF-8') as conf:
-                config_v3 = json.load(conf)
-                fixture = APIClientV3(base_url=config['api']['poll_api_v3_url'],
-                                      test_data=config['test_data'],
-                                      path_end_point=config_v3['api']["poll_api"])
     return fixture
 
 

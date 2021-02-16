@@ -9,9 +9,9 @@ import json
 @allure.feature('NLU API')
 @allure.title('nlu_base')
 def test_nlu(nlu_api_v3, data):
-    request_url = nlu_api_v3.base_url + [x for x in nlu_api_v3.path_end_point if "nlu_engine" in x][0]
     load = {"utterance": data}
-    response = requests.request("POST", request_url, data=json.dumps(load), headers=nlu_api_v3.api_headers)
+    response = nlu_api_v3.request_send('POST', path=nlu_api_v3.path_end_point['nlu_engine'], json=load)
+
     assert response.status_code == 200
     assert response.headers.get('content-type') == 'application/json; charset=utf-8'
     if "потом" in load.values():
@@ -32,9 +32,8 @@ def test_nlu(nlu_api_v3, data):
 @allure.feature('NLU API')
 @allure.title('ner_address')
 def test_ner_address(nlu_api_v3, data):
-    request_url = nlu_api_v3.base_url + [x for x in nlu_api_v3.path_end_point if "ner_address" in x][0]
     load = {"address": data}
-    response = requests.request("POST", request_url, data=json.dumps(load), headers=nlu_api_v3.api_headers)
+    response = nlu_api_v3.request_send('POST', path=nlu_api_v3.path_end_point['ner_address'], json=load)
 
     assert response.status_code == 200
     assert response.headers.get('content-type') == 'application/json; charset=utf-8'
@@ -58,9 +57,8 @@ def test_ner_address(nlu_api_v3, data):
 @allure.feature('NLU API')
 @allure.title('ner_person')
 def test_ner_person(nlu_api_v3, data):
-    request_url = nlu_api_v3.base_url + [x for x in nlu_api_v3.path_end_point if "ner_person" in x][0]
     load = {"person": data}
-    response = requests.request("POST", request_url, data=json.dumps(load), headers=nlu_api_v3.api_headers)
+    response = nlu_api_v3.request_send('POST', path=nlu_api_v3.path_end_point['ner_person'], json=load)
 
     assert response.status_code == 200
     assert response.headers.get('content-type') == 'application/json; charset=utf-8'
