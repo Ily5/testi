@@ -99,6 +99,11 @@ class Connector:
             "select action, data from {table} where dialog_id = {data} and data is not null".format(table=table,
                                                                                                     data=data))
 
+    def get_call_uuid_by_dialog_id(self, dialog_id, call_duration):
+        return self.db_conn(
+            "select uuid from call where dialog_id = {dialog_id} and duration >= {duration} ".format(
+                dialog_id=dialog_id, duration=call_duration))
+
 
 class MongoConnector:
     def __init__(self, data):
