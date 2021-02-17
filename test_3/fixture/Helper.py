@@ -21,7 +21,6 @@ class FileHelper(object):
     def create_file_of_response(self, file_name, api_response):
         full_path_to_file = self.path_to_file + file_name
         with open(r'{path}'.format(path=full_path_to_file), 'wb') as file:
-            api_response: requests.Response
             file.write(api_response.content)
 
         return file_name
