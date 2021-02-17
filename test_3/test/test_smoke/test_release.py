@@ -6,6 +6,7 @@ from test_3.fixture.Helper import FileHelper
 result = []
 synth_phrase_list = []
 logs_dict = {}
+dialog_id = None
 
 
 @allure.feature("Smoke 3.0")
@@ -29,51 +30,42 @@ def test_v3_cms(db, app_3_web):
 @allure.story("Yandex")
 @allure.title('Создание диалога, получение статистики из БД')
 def test_v3_init_call_yandex(api_v3, db, file_helper):
-    # global result, logs_dict
-    # global synth_phrase_list
-    # db.create_connect(api_v3.database["RW"])
-    # with allure.step("Авторизация в external_api"):
-    #     token = api_v3.token
-    #     assert len(token['Authorization']) > 10
-    # with allure.step("Изменение параметров в cms_api"):
-    #     api_v3.set_media_params_release_project(engine='yandex')
-    # with allure.step("Иницализация диалога в external_api"):
-    #     response = api_v3.init_dialog(msisdn=55555, agent='release')
-    #     dialog_uuid = response.json()['dialog_uuid']
-    # db.wait_for_done(dialog_uuid)
-    # with allure.step("Выгрузка данных по диалогу из rw базы"):
-    #     dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
-    #     print('dialog id - ', dialog_id)
-    # print('call uuid - ', db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
-    dialog_id = '8597494'
-    call_uuid = db.get_call_uuid_by_dialog_id(dialog_id=dialog_id, call_duration=100)
-    path = api_v3.path_end_point['download_call_audio'] + str(call_uuid[0][0])
-    response_file = api_v3.request_send(path=path)
-    print(response_file.status_code)
-    file_helper.create_file_of_response(file_name='new_file_test', api_response=response_file)
-    result = file_helper.get_file_properties(file_name='new_file_test')
-    print(result)
+    global result, logs_dict, synth_phrase_list, dialog_id
+    db.create_connect(api_v3.database["RW"])
+    with allure.step("Авторизация в external_api"):
+        token = api_v3.token
+        assert len(token['Authorization']) > 10
+    with allure.step("Изменение параметров в cms_api"):
+        api_v3.set_media_params_release_project(engine='yandex')
+    with allure.step("Иницализация диалога в external_api"):
+        response = api_v3.init_dialog(msisdn=55555, agent='release')
+        dialog_uuid = response.json()['dialog_uuid']
+    db.wait_for_done(dialog_uuid)
+    with allure.step("Выгрузка данных по диалогу из rw базы"):
+        dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
+        print('dialog id - ', dialog_id)
+    print('call uuid - ', db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
 
-    # result = db.execute_call_data(table='dialog_stats', data=dialog_id)
-    # synth_phrase_list = [res[1][res[1].find(':') + 4: res[1].find(',') - 1] for res in result if 'nv.synthesize' in res]
-    #
-    # transcription = ''
-    # for item in [res[1] for res in result if 'nn.log' in res]:
-    #     if 'city' in item:
-    #         logs_dict['extract_address'] = item
-    #     if 'first' in item:
-    #         logs_dict['extract_person'] = item
-    #     if 'bot' in item:
-    #         transcription += item
-    #     if len(item) <= 4:
-    #         logs_dict['call_duration'] = item
-    #     if 'no_input_timeout' in item:
-    #         logs_dict['get_default'] = item
-    #     if '@yandex' in item or '@google' in item:
-    #         logs_dict['tts_engine'] = item
-    #     if 'yandex' == item or 'google' == item:
-    #         logs_dict['asr_engine'] = item
-    # logs_dict['call_transcription'] = transcription
+    result = db.execute_call_data(table='dialog_stats', data=dialog_id)
+    synth_phrase_list = [res[1][res[1].find(':') + 4: res[1].find(',') - 1] for res in result if 'nv.synthesize' in res]
+
+    transcription = ''
+    for item in [res[1] for res in result if 'nn.log' in res]:
+        if 'city' in item:
+            logs_dict['extract_address'] = item
+        if 'first' in item:
+            logs_dict['extract_person'] = item
+        if 'bot' in item:
+            transcription += item
+        if len(item) <= 4:
+            logs_dict['call_duration'] = item
+        if 'no_input_timeout' in item:
+            logs_dict['get_default'] = item
+        if '@yandex' in item or '@google' in item:
+            logs_dict['tts_engine'] = item
+        if 'yandex' == item or 'google' == item:
+            logs_dict['asr_engine'] = item
+    logs_dict['call_transcription'] = transcription
 
 
 @pytest.mark.skip(reason='test method')
@@ -320,6 +312,26 @@ def test_v3_media_part_yandex_nv_media_params():
     assert len(media_params_list) > 0
     assert logs_dict['asr_engine'] == 'google'
     assert '@google' in logs_dict['tts_engine']
+
+
+@allure.feature("Smoke 3.0")
+@allure.story("Проверка медиа части Yandex")
+@allure.title('Сравнение аудиозаписи звонка с эталонной')
+def test_comparison_audio_files(db, file_helper, api_v3):
+    # dialog_id = 965392
+    call_uuid = db.get_call_uuid_by_dialog_id(dialog_id=dialog_id, call_duration=70)[0][0]
+    file_name = 'call_sound_{uuid}'.format(uuid=call_uuid)
+    res = file_helper.get_call_file_properties(create_file_name=file_name, call_uuid=call_uuid)
+    print(res)
+    res_reference = file_helper.get_call_file_properties('reference_call_yandex',
+                                                         api_v3.test_data['reference_call_uuid_yandex'])
+    print(res_reference)
+    divergence_size = abs(res['size'] / res_reference['size'] - 1) * 100
+    divergence_duration = abs(res['duration'] / res_reference['duration'] - 1) * 100
+    print(divergence_size)
+    print(divergence_duration)
+    assert divergence_size < 5
+    assert divergence_duration < 5
 
 
 # @pytest.mark.skip(reason='test')
