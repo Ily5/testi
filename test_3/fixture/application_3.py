@@ -49,7 +49,7 @@ class ApplicationNewVersion:
         self.AnyPage = AnyPage(self)
         self.MainPage = MainPage(self)
         self.AnyAgentPage = AnyAgentPage(self)
-        self.DataUploadingPage = DataUploading(self)
+        self.DataUploading = DataUploading(self)
         self.QueuePage = QueuePage(self)
 
         logging.basicConfig(filename=sys.path[1] + "/log/test_asr.log", level=logging.INFO,
