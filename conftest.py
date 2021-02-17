@@ -139,8 +139,9 @@ def mdb(request):
 
 
 @pytest.fixture()
-def file_helper():
-    helper = FileHelper(path_to_file='/var/jenkins_home/call_files/')
+def file_helper(api_v3):
+    helper = FileHelper(path_to_file='/var/jenkins_home/call_files/', api_helper=api_v3)
+    # helper = FileHelper(path_to_file='/home/renat/', api_helper=api_v3)
     return helper
 
 
