@@ -140,7 +140,7 @@ def mdb(request):
 
 @pytest.fixture()
 def file_helper():
-    helper = FileHelper(path_to_file='/var/jenkins_home/')
+    helper = FileHelper(path_to_file='/var/jenkins_home/call_files/')
     return helper
 
 
