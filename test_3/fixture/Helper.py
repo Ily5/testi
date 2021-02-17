@@ -15,7 +15,8 @@ class FileHelper(object):
     4. Сравнение с эталонным файлом
     """
 
-    def __init__(self, path_to_file):
+    def __init__(self, path_to_file, api_helper):
+        self.api_helper = api_helper
         self.path_to_file = path_to_file
 
     def create_file_of_response(self, file_name, api_response):
@@ -36,3 +37,9 @@ class FileHelper(object):
 
         # os.remove(full_path_to_file)
         return {'size': size, 'duration': duration}
+
+    def get_call_file_properties(self, create_file_name, call_uuid):
+        path = self.api_helper.path_end_point['download_call_audio'] + str(call_uuid)
+        response = self.api_helper.request_send(path=path)
+        self.create_file_of_response(file_name=create_file_name, api_response=response)
+        return self.get_file_properties(file_name=create_file_name)
