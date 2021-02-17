@@ -45,8 +45,10 @@ class Connector:
     def wait_for_done(self, dialog_uuid):
         timeout = time.time() + 600
         while True:
-            conn = self.db_conn("SELECT result FROM dialog WHERE uuid = '%s'" % str(dialog_uuid))
+            conn = self.db_conn(
+                "SELECT result FROM dialog WHERE uuid = '%s' and need_update is false" % str(dialog_uuid))
             if len(conn) > 0 and conn[0][0] == "done":
+                print(conn)
 
                 dialog_id = self.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
 
