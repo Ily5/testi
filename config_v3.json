@@ -26,7 +26,8 @@
       "remove_queue_dialog_2": "/api/v2/queue/dialog/remove",
       "post_queue_calls": "/api/v2/queue/call",
       "remove_queue_call": "/api/v2/queue/call/remove",
-      "set_media_params": "/api/v2/rbac/agent/"
+      "set_media_params": "/api/v2/rbac/agent/",
+      "download_call_audio": "/api/v2/log/call/download/"
     },
     "poll_api": {
       "get_calls": "/get_calls",
