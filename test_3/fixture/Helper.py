@@ -20,10 +20,9 @@ class FileHelper(object):
 
     def create_file_of_response(self, file_name, api_response):
         full_path_to_file = self.path_to_file + file_name
-        with open(fr'{full_path_to_file}', 'wb') as file:
+        with open(r'{path}'.format(path=full_path_to_file), 'wb') as file:
             api_response: requests.Response
             file.write(api_response.content)
-            # file.close()
 
         return file_name
 
@@ -36,8 +35,5 @@ class FileHelper(object):
             rate = f.getframerate()
             duration = frames / float(rate)
 
-        os.remove(full_path_to_file)
+        # os.remove(full_path_to_file)
         return {'size': size, 'duration': duration}
-
-
-
