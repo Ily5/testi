@@ -134,11 +134,11 @@ class TestWebDataUploading:
     @allure.title('Скачивание образца загрузочного файла')
     def test_download_example(self, data_uploading):
 
-        locator = data_uploading.DataUploading._DataUploadingPage__download_example
+        locator = data_uploading.DataUploading._DataUploading__download_example
         flag = data_uploading.BasePage.check_element_on_page(locator)
         assert flag
         # todo добавить скачивание файла и проверку, что он скачался
-        # data_uploading.DataUploadingPage.download_example()
+        # data_uploading.DataUploading.download_example()
 
     @allure.title('Скачивание валидного успешно загруженного файла')
     def test_download_valid_file(self, data_uploading):
@@ -148,15 +148,15 @@ class TestWebDataUploading:
 
         data_uploading.DataUploading.set_filer_status(status='success')
 
-        locator = data_uploading.DataUploading._DataUploadingPage__all_uploading_file_list + '/div[1]'
-        locator_1 = data_uploading.DataUploading._DataUploadingPage__download_valid_file
+        locator = data_uploading.DataUploading._DataUploading__all_uploading_file_list + '/div[1]'
+        locator_1 = data_uploading.DataUploading._DataUploading__download_valid_file
         locator += locator_1
 
         flag = data_uploading.BasePage.check_element_on_page(locator)
         assert flag
 
         # todo добавить скачивание файла и проверку, что он скачался
-        # data_uploading.DataUploadingPage.download_valid_n_file(1)
+        # data_uploading.DataUploading.download_valid_n_file(1)
 
     @allure.title('Удаление всех успешно загруженных файлов')
     def test_delete_all_completed_file(self, data_uploading):
