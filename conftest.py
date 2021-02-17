@@ -4,10 +4,12 @@ import os
 import json
 import time
 import pytest
+
 from fixture.application import Application
 from fixture.database import Connector, MongoConnector
 from test_3.fixture.api import APIClientV3
 from test_3.fixture.application_3 import ApplicationNewVersion
+from test_3.fixture.Helper import FileHelper
 
 # fixture = None
 
@@ -134,6 +136,12 @@ def mdb(request):
         fixture = MongoConnector(str(config["Mongo_client"]))
     request.addfinalizer(fixture.cancel)
     return fixture
+
+
+@pytest.fixture()
+def file_helper():
+    helper = FileHelper(path_to_file='/home/')
+    return helper
 
 
 @pytest.fixture
