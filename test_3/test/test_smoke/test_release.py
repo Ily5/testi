@@ -1,7 +1,6 @@
 import time
 import pytest
 import allure
-from test_3.fixture.Helper import FileHelper
 
 result = []
 synth_phrase_list = []
@@ -76,8 +75,8 @@ def test_test(api_v3, db):
     global result, logs_dict
     global synth_phrase_list
     db.create_connect(api_v3.database["RW"])
-    db.wait_for_done('7dc5a6fc-77f6-4ca0-828e-9a5f78622580')
-    result = db.execute_call_data(table='dialog_stats', data='587878')
+    # db.wait_for_done('7dc5a6fc-77f6-4ca0-828e-9a5f78622580')
+    result = db.execute_call_data(table='dialog_stats', data='969995')
     # count_call = db.select_data(table='call', column='dialog_id', sdata='count(uuid)', data=int(587878))
     synth_phrase_list = [res[1][res[1].find(':') + 4: res[1].find(',') - 1] for res in result if 'nv.synthesize' in res]
 
@@ -182,8 +181,9 @@ def test_v3_media_part_yandex_listen_interruption(api_v3, db):
 @allure.title('nv.listen прерывание по сущности')
 def test_v3_media_part_yandex_nv_listen_stop_entity(api_v3, db):
     for item in [res for res in result if 'nv.listen' in res]:
-        if "сущность" in item:
-            assert 'этого текста не должно быть в результатах' not in item
+        if "сущность" in item[1]:
+            assert 'робот' in item[1]
+            assert 'этого текста не должно быть в результатах' not in item[1]
 
 
 @allure.feature("Smoke 3.0")
@@ -318,20 +318,18 @@ def test_v3_media_part_yandex_nv_media_params():
 @allure.story("Проверка медиа части Yandex")
 @allure.title('Сравнение аудиозаписи звонка с эталонной')
 def test_comparison_audio_files(db, file_helper, api_v3):
-    # dialog_id = 965392
     call_uuid = db.get_call_uuid_by_dialog_id(dialog_id=dialog_id, call_duration=70)[0][0]
     file_name = 'call_sound_{uuid}'.format(uuid=call_uuid)
-    res = file_helper.get_call_file_properties(create_file_name=file_name, call_uuid=call_uuid)
-    print(res)
-    res_reference = file_helper.get_call_file_properties('reference_call_yandex',
-                                                         api_v3.test_data['reference_call_uuid_yandex'])
-    print(res_reference)
-    divergence_size = abs(res['size'] / res_reference['size'] - 1) * 100
-    divergence_duration = abs(res['duration'] / res_reference['duration'] - 1) * 100
-    print(divergence_size)
-    print(divergence_duration)
-    assert divergence_size < 5
-    assert divergence_duration < 5
+    test_file_prop = file_helper.get_call_file_properties(create_file_name=file_name, call_uuid=call_uuid)
+    reference_file_prop = file_helper.get_call_file_properties('reference_call_yandex',
+                                                               api_v3.test_data['reference_call_uuid_yandex'])
+    print(reference_file_prop)
+    print(test_file_prop)
+    assert file_helper.get_percent(test_file_prop['size'], reference_file_prop['size']) < 5
+    assert file_helper.get_percent(test_file_prop['duration'], reference_file_prop['duration']) < 5
+    assert file_helper.get_percent(test_file_prop['rms_sum'], reference_file_prop['rms_sum']) < 5
+    assert file_helper.get_percent(test_file_prop['acts_sum'], reference_file_prop['acts_sum']) < 8
+    assert file_helper.get_percent(test_file_prop['cent_sum'], reference_file_prop['cent_sum']) < 5
 
 
 # @pytest.mark.skip(reason='test')
@@ -339,8 +337,7 @@ def test_comparison_audio_files(db, file_helper, api_v3):
 @allure.story("Google")
 @allure.title('Создание диалога, получение статистики из БД')
 def test_v3_init_call_google(api_v3, db):
-    global result, logs_dict
-    global synth_phrase_list
+    global result, logs_dict, synth_phrase_list, dialog_id
     db.create_connect(api_v3.database['RW'])
     with allure.step("Авторизация в external_api"):
         token = api_v3.token
@@ -458,8 +455,9 @@ def test_v3_media_part_google_listen_interruption(api_v3, db):
 @allure.title('nv.listen прерывание по сущности')
 def test_v3_media_part_google_nv_listen_stop_entity(api_v3, db):
     for item in [res for res in result if 'nv.listen' in res]:
-        if "сущность" in item:
-            assert 'этого текста не должно быть в результатах' not in item
+        if "сущность" in item[1]:
+            assert 'робот' in item[1]
+            assert 'этого текста не должно быть в результатах' not in item[1]
 
 
 @allure.feature("Smoke 3.0")
@@ -588,6 +586,24 @@ def test_v3_media_part_google_nv_media_params():
     assert len(media_params_list) > 0
     assert logs_dict['asr_engine'] == 'yandex'
     assert '@yandex' in logs_dict['tts_engine']
+
+
+@allure.feature("Smoke 3.0")
+@allure.story("Проверка медиа части Google")
+@allure.title('Сравнение аудиозаписи звонка с эталонной')
+def test_comparison_audio_files_google(db, file_helper, api_v3):
+    call_uuid = db.get_call_uuid_by_dialog_id(dialog_id=dialog_id, call_duration=70)[0][0]
+    file_name = 'call_sound_{uuid}'.format(uuid=call_uuid)
+    test_file_prop = file_helper.get_call_file_properties(create_file_name=file_name, call_uuid=call_uuid)
+    reference_file_prop = file_helper.get_call_file_properties('reference_call_google',
+                                                               api_v3.test_data['reference_call_uuid_google'])
+    print(reference_file_prop)
+    print(test_file_prop)
+    assert file_helper.get_percent(test_file_prop['size'], reference_file_prop['size']) < 5
+    assert file_helper.get_percent(test_file_prop['duration'], reference_file_prop['duration']) < 5
+    assert file_helper.get_percent(test_file_prop['rms_sum'], reference_file_prop['rms_sum']) < 5
+    assert file_helper.get_percent(test_file_prop['acts_sum'], reference_file_prop['acts_sum']) < 8
+    assert file_helper.get_percent(test_file_prop['cent_sum'], reference_file_prop['cent_sum']) < 5
 
 
 @allure.feature("Silence")
