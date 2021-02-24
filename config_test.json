@@ -52,6 +52,8 @@
     "tts": "jane@yandex",
     "language": "ru-RU",
     "total_channel_limit": 2,
+    "reference_call_uuid_yandex": "dbc696a9-561f-4c89-8164-7647298e9779",
+    "reference_call_uuid_google": "c52dea25-d5d4-4b58-b3f9-2ce28ea72413",
 
     "data_release_run": {
       "agent_uuid": "b5b2a743-259b-4641-a007-0dd2abe3e0fa",

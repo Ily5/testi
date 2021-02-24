@@ -1,8 +1,8 @@
 import allure
-from test_3.fixture.WebFW.AnyPage import AnyPage
+from test_3.fixture.BasePage import BasePage
 
 
-class LoginPage(AnyPage):
+class LoginPage(BasePage):
     __set_username = '//*[@id="mat-input-0"]'
     __set_password = '//*[@id="mat-input-1"]'
     __show_password_button = ''

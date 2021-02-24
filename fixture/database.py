@@ -45,7 +45,8 @@ class Connector:
     def wait_for_done(self, dialog_uuid):
         timeout = time.time() + 600
         while True:
-            conn = self.db_conn("SELECT result FROM dialog WHERE uuid = '%s'" % str(dialog_uuid))
+            conn = self.db_conn(
+                "SELECT result FROM dialog WHERE uuid = '%s' and need_update is false" % str(dialog_uuid))
             if len(conn) > 0 and conn[0][0] == "done":
 
                 dialog_id = self.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
@@ -98,6 +99,11 @@ class Connector:
         return self.db_conn(
             "select action, data from {table} where dialog_id = {data} and data is not null".format(table=table,
                                                                                                     data=data))
+
+    def get_call_uuid_by_dialog_id(self, dialog_id, call_duration):
+        return self.db_conn(
+            "select uuid from call where dialog_id = {dialog_id} and duration >= {duration} ".format(
+                dialog_id=dialog_id, duration=call_duration))
 
 
 class MongoConnector:

@@ -345,6 +345,18 @@ class TestExternalApi:
         assert response.status_code == 200
         assert 'result' in response.json()
 
+    @allure.title('Получение записи звнока, существующий uuid')
+    def test_get_call_record_exist_uuid(self, api_v3):
+        path = api_v3.path_end_point['get_download_call_record']
+        call_uuid = api_v3.test_data['reference_call_uuid_yandex']
+        params = {'call_uuid': call_uuid}
+        response = api_v3.request_send(path=path, params=params)
+        assert response.status_code == 200
+        assert 'data' in response.json()
+        assert 'file_name' in response.json()
+        assert response.json()['data'] is not None
+        assert response.json()['file_name'] is not None
+
     @allure.title('Получение записи звнока, несуществующий uuid')
     def test_get_call_record_does_not_exist_uuid(self, api_v3):
         path = api_v3.path_end_point['get_download_call_record']
@@ -365,17 +377,6 @@ class TestExternalApi:
             assert 'result' in dialog
             assert dialog['msisdn'] is not None
             assert dialog['dialog_uuid'] is not None
-
-    @allure.title('Получение списка звонков агента, валидные данные')
-    def test_get_agent_calls_valid(self, api_v3, params_agent_uuid):
-        path = api_v3.path_end_point['get_calls_agent']
-        response = api_v3.request_send(path=path, params=params_agent_uuid)
-        assert response.status_code == 200
-        assert 'msisdn' in response.json()
-        assert 'call_uuid' in response.json()
-        assert 'result' in response.json()
-        assert 'date_added' in response.json()
-        assert 'date_processed' in response.json()
 
     @allure.title('Остановка диалогов в очереди, валидный agent_uuid')
     def test_stop_queue_dialogs_valid(self, api_v3, params_agent_uuid):
@@ -429,6 +430,26 @@ class TestExternalApi:
         path = api_v3.path_end_point['remove_queue_dialogs']
         response = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json={}, status_code=409)
         assert response.status_code == 200
+
+    @allure.title('Получение списка звонков агента, валидные данные')
+    def test_get_agent_calls_valid(self, api_v3, params_agent_uuid, creation_queue_calls):
+        path = api_v3.path_end_point['get_calls_agent']
+        response = api_v3.request_send(path=path, params=params_agent_uuid)
+        assert response.status_code == 200
+        for call in response.json()['data']:
+            assert call['msisdn'] is not None
+            assert 'msisdn' in call
+            assert 'uuid' in call
+            assert 'result' in call
+            assert 'date_added' in call
+            assert 'dialog' in call
+            assert 'msisdn' in call['dialog']
+            assert 'uuid' in call['dialog']
+            assert call['uuid'] is not None
+            assert call['result'] is not None
+            assert call['date_added'] is not None
+            assert call['dialog']['msisdn'] is not None
+            assert call['dialog']['uuid'] is not None
 
     @allure.title('Удаление одного звонка из очереди по call_uuid')
     def test_remove_one_calls_queue(self, api_v3, params_agent_uuid, creation_queue_calls):
