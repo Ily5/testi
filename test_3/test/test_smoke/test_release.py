@@ -3,24 +3,24 @@ import pytest
 import allure
 
 
+@allure.story("Работа cms")
+@allure.title('Провека UI')
+def test_v3_cms(db, app_3_web):
+    with allure.step("логин в cms v3"):
+        pass
+    with allure.step("Переходим в проект release_run"):
+        agent_setting_url = app_3_web.test_data['agent_setting_url'] + \
+                            app_3_web.test_data['test_data']['data_release_run']['agent_uuid']
+        app_3_web.BasePage.goto_page(agent_setting_url)
+    with allure.step("Наличие элементов меню"):
+        app_3_web.AnyAgentPage.opening_all_page_agent()
+    with allure.step('Логаут'):
+        app_3_web.AnyPage.logout()
+
+
 @allure.feature("Smoke 3.0")
 @allure.story("Проверка медиа части Yandex")
 class TestYandexEngine:
-
-    @allure.story("Работа cms")
-    @allure.title('Провека UI')
-    def test_v3_cms(self, db, app_3_web):
-        with allure.step("логин в cms v3"):
-            pass
-        with allure.step("Переходим в проект release_run"):
-            agent_setting_url = app_3_web.test_data['agent_setting_url'] + \
-                                app_3_web.test_data['test_data']['data_release_run']['agent_uuid']
-            app_3_web.BasePage.goto_page(agent_setting_url)
-        with allure.step("Наличие элементов меню"):
-            app_3_web.AnyAgentPage.opening_all_page_agent()
-        with allure.step('Логаут'):
-            app_3_web.AnyPage.logout()
-        app_3_web.cancel()
 
     @allure.title('nv_say')
     def test_v3_media_part_yandex_say(self, api_v3, db, v3_init_yandex):

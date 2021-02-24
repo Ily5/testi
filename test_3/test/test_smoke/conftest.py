@@ -10,6 +10,7 @@ def v3_init_yandex(api_v3, db):
 
 @pytest.fixture(scope='class')
 def v3_init_google(api_v3, db):
+    time.sleep(7)
     return init_dialog('google', db, api_v3)
 
 
