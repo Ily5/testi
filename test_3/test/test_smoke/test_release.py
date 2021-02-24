@@ -155,12 +155,12 @@ def test_v3_media_part_yandex_synthesize(api_v3, db):
 
 @allure.feature("Smoke 3.0")
 @allure.story("Проверка медиа части Yandex")
-@allure.title('listen распознование')
+@allure.title('listen распознавание')
 def test_v3_media_part_yandex_listen_interruption(api_v3, db):
     for r in [res[1] for res in result if 'nv.listen' in res]:
 
-        if "распознование" in r:
-            text = 'распознование пока произносится это синтезированный тест это нужно говорить и' \
+        if "распознавание" in r:
+            text = 'распознавание пока произносится это синтезированный тест это нужно говорить и' \
                    ' смотреть результаты распознавания'
             assert text in r
     if not any('nv.listen' in d for d in result):
@@ -429,12 +429,12 @@ def test_v3_media_part_google_synthesize(api_v3, db):
 
 @allure.feature("Smoke 3.0")
 @allure.story("Проверка медиа части google")
-@allure.title('listen распознование')
+@allure.title('listen распознавание')
 def test_v3_media_part_google_listen_interruption(api_v3, db):
     for r in [res[1] for res in result if 'nv.listen' in res]:
 
-        if "распознование" in r:
-            text = 'распознование пока произносится это синтезированный тест это нужно говорить и' \
+        if "распознавание" in r:
+            text = 'распознавание пока произносится это синтезированный тест это нужно говорить и' \
                    ' смотреть результаты распознавания'
             assert text in r
     if not any('nv.listen' in d for d in result):
