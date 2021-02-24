@@ -328,7 +328,6 @@ def test_comparison_audio_files(db, file_helper, api_v3):
     assert file_helper.get_percent(test_file_prop['size'], reference_file_prop['size']) < 5
     assert file_helper.get_percent(test_file_prop['duration'], reference_file_prop['duration']) < 5
     assert file_helper.get_percent(test_file_prop['rms_sum'], reference_file_prop['rms_sum']) < 5
-    assert file_helper.get_percent(test_file_prop['acts_sum'], reference_file_prop['acts_sum']) < 8
     assert file_helper.get_percent(test_file_prop['cent_sum'], reference_file_prop['cent_sum']) < 5
 
 
@@ -602,7 +601,6 @@ def test_comparison_audio_files_google(db, file_helper, api_v3):
     assert file_helper.get_percent(test_file_prop['size'], reference_file_prop['size']) < 5
     assert file_helper.get_percent(test_file_prop['duration'], reference_file_prop['duration']) < 5
     assert file_helper.get_percent(test_file_prop['rms_sum'], reference_file_prop['rms_sum']) < 5
-    assert file_helper.get_percent(test_file_prop['acts_sum'], reference_file_prop['acts_sum']) < 8
     assert file_helper.get_percent(test_file_prop['cent_sum'], reference_file_prop['cent_sum']) < 5
 
 
