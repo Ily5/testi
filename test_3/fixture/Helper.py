@@ -46,7 +46,7 @@ class FileHelper(object):
     def comparison_audio_files(file_name):
         y, sr = librosa.load(file_name, sr=8000)
         s = np.abs(librosa.stft(y))
-        comps, acts = librosa.decompose.decompose(s, n_components=8, init='nndsvdar', max_iter=500)
+        comps, acts = librosa.decompose.decompose(s, n_components=8, init='nndsvdar', max_iter=1000)
         rms = librosa.feature.rms(y=y)
         cent = librosa.feature.spectral_centroid(y=y, sr=sr)
         cent_sum = 0
