@@ -1,6 +1,6 @@
 import os
 
-import numpy as np
+import numpy
 import wave
 import contextlib
 
@@ -45,7 +45,7 @@ class FileHelper(object):
     @staticmethod
     def comparison_audio_files(file_name):
         y, sr = librosa.load(file_name, sr=8000)
-        s = np.abs(librosa.stft(y))
+        s = numpy.abs(librosa.stft(y))
         rms = librosa.feature.rms(y=y)
         cent = librosa.feature.spectral_centroid(y=y, sr=sr)
         cent_sum = 0
