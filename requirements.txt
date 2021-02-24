@@ -25,4 +25,5 @@ zipp==1.2.0
 paramiko==2.7.2
 numpy
 wave==0.0.2
-librosa
+
+pytest-xdist==1.30.0
