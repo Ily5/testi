@@ -11,7 +11,7 @@ more-itertools==8.4.0
 packaging==20.4
 pathlib2==2.3.5
 pluggy==0.13.1
-psycopg2==2.8.5
+psycopg2-binary
 py==1.9.0
 pymongo==3.11.0
 pyparsing==2.4.7
@@ -23,7 +23,7 @@ urllib3==1.25.9
 wcwidth==0.2.5
 zipp==1.2.0
 paramiko==2.7.2
-numpy
-wave
-librosa
-pytest-xdist
+numpy==1.20.1
+wave==0.0.2
+librosa==0.8.0
+pytest-xdist==1.30.0
