@@ -22,17 +22,19 @@ class TestDialogsQueue:
         queue_page.filter_dialogs_calls_queue_list(param='dialog', text=msisdn)
         assert queue_page.get_count_list_dialogs_and_calls() == 0
 
-    @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1803')
+    # @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1803')
     @allure.title('Фильтрация списка диалогов по Status, валидное значение')
     def test_dialogs_queue_filter_by_status_valid(self, creation_queue_dialog, queue_page, cancel_filter_queue):
         status = queue_page.get_queue_info(number='1')['status']
-        queue_page.filter_dialogs_calls_queue_list(param='status', text=status)
+        if 'queue' in status.lower():
+            status = 'queued'
+        queue_page.filter_dialogs_calls_queue_list(param='status', text=status.lower())
         assert queue_page.get_count_list_dialogs_and_calls() > 0
         stats = queue_page.get_queue_info()
         for item in stats.values():
             assert item['status'].lower() == status.lower()
 
-    @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1803')
+    # @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1803')
     @allure.title('Фильтрация списка диалогов по Status, невалидное значение')
     def test_dialogs_queue_filter_by_status_no_valid(self, creation_queue_dialog, queue_page, random_str_generator,
                                                      cancel_filter_queue):
@@ -125,7 +127,7 @@ class TestCallsQueue:
         msisdn_4 = stats_list_new['4']['msisdn']
         assert msisdn_4 != msisdn_3
 
-    @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1781')
+    # @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1781')
     @allure.title('Сортировка списка звонков по Status')
     def test_calls_queue_sort_status(self, creation_queue_calls, queue_page):
         queue_page.action_n_dialog_or_call('calls', '1', 'pause')
@@ -153,16 +155,16 @@ class TestCallsQueue:
         queue_page.filter_dialogs_calls_queue_list(page='calls', param='contact', text=msisdn)
         assert int(queue_page.get_count_list_dialogs_and_calls(page='calls')) == 0
 
-    @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1803')
+    # @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1803')
     @allure.title('Фильтрация списка звонков по валидному Status')
-    def test_calls_queue_filter_by_status_valid(self, creation_queue_dialog, queue_page, cancel_filter_queue):
+    def test_calls_queue_filter_by_status_valid(self, creation_queue_calls, queue_page, cancel_filter_queue):
         status = queue_page.get_queue_info(page='calls', number='1')['status']
-        queue_page.filter_dialogs_calls_queue_list(page='calls', param='status', text=status)
+        queue_page.filter_dialogs_calls_queue_list(page='calls', param='status', text=status.lower())
         stats = queue_page.get_queue_info(page='calls')
         for item in stats.values():
             assert item['status'].lower() == status.lower()
 
-    @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1781')
+    # @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1781')
     @allure.title('Фильтрация списка звонков по невалидному Status')
     def test_calls_queue_filter_by_status_no_valid(self, creation_queue_calls, queue_page, cancel_filter_queue,
                                                    random_str_generator):
@@ -170,7 +172,7 @@ class TestCallsQueue:
         queue_page.filter_dialogs_calls_queue_list(page='calls', param='status', text=status)
         assert queue_page.get_count_list_dialogs_and_calls(page='calls') == 0
 
-    @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1781')
+    # @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1781')
     @allure.title('Поставить на паузу один звонок')
     def test_calls_queue_pause_one_call(self, creation_queue_calls, queue_page):
         status_call = queue_page.get_queue_info(page='calls', number=3)
@@ -180,7 +182,7 @@ class TestCallsQueue:
         assert status_call['status'] != status_call_new['status']
         assert str(status_call_new['status']).lower() == 'stopped'
 
-    @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1781')
+    # @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1781')
     @allure.title('Вернуть с паузы один звонок')
     def test_calls_queue_return_one_call(self, creation_queue_calls, queue_page):
         stat_call = queue_page.get_queue_info_for_msisdn_status(page='calls', status='stopped')
@@ -194,13 +196,13 @@ class TestCallsQueue:
         assert status_dialog_new['msisdn'] == stat_call['msisdn']
         assert status_dialog_new['status'].lower() != 'stopped'
 
-    @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1781')
+    # @pytest.mark.skip(reason='https://neuronet.atlassian.net/browse/NP-1781')
     @allure.title('Удалить один звонок')
     def test_calls_queue_remove_one_call(self, creation_queue_calls, queue_page):
         count_calls_before = queue_page.get_count_list_dialogs_and_calls(page='calls')
         queue_page.action_n_dialog_or_call(page='calls', number=1, action='remove')
         count_calls_after = queue_page.get_count_list_dialogs_and_calls(page='calls')
-        assert int(count_calls_before) < int(count_calls_after)
+        assert int(count_calls_before) > int(count_calls_after)
 
     @allure.title('Поставить на паузу все звонки')
     def test_calls_queue_pause_all_calls(self, creation_queue_calls, queue_page):
