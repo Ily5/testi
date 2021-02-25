@@ -108,7 +108,11 @@ def creation_queue_dialog(request, pool_api_v3, api_v3, params_agent_uuid, remov
     for i in range(count_dialogs):
         data.append(
             {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"})
-    api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
+    res = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
+    if res.status_code not in [200, 201, 202]:
+        print(res.status_code)
+        print(res.text)
+        raise Exception('Uploading group dialog error')
 
     print('\n', 'LEN data - ', len(data))
 
@@ -132,7 +136,11 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_uuid, remove
     for i in range(randint(12, 15)):
         data.append(
             {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"})
-    api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
+    res = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
+    if res.status_code not in [200, 201, 202]:
+        print(res.status_code)
+        print(res.text)
+        raise Exception('Uploading group dialog error')
 
     check_queue(params_agent_uuid, pool_api_v3, path_name='get_list_queue_calls', queue_name='calls',
                 queue_len=len(data))
