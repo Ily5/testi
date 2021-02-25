@@ -274,11 +274,15 @@ class TestExternalApi:
         bulk_uuid = uuid.uuid4()
         response = api_v3.request_send(method='POST', path=api_v3.path_end_point['upload_group_dialogs'],
                                        params={**params_agent_uuid, **{"bulk_uuid": bulk_uuid}}, json=data_dialogs)
-
-        assert response.status_code == 409
-        assert 'message' in response.json()
-        assert type(response.json()['message']) is str
-        assert len(response.json()['message']) > 0
+        try:
+            assert response.status_code == 409
+            assert 'message' in response.json()
+            assert type(response.json()['message']) is str
+            assert len(response.json()['message']) > 0
+        except AssertionError as e:
+            print(e)
+            print(response.text)
+            raise e
 
     @allure.title('Добавление диалга к уже существующему набору диалогов с невалидным bulk_uuid')
     def test_add_dialogs_no_valid_bulk_uuid(self, api_v3, params_agent_uuid):
@@ -470,10 +474,11 @@ class TestExternalApi:
             assert int(response_before.json()['total_count']) >= int(response_after.json()['total_count']) + 1
             uuid_list = [item['uuid'] for item in response_after.json()['data']]
             assert data not in uuid_list
-        except AssertionError:
+        except AssertionError as e:
             print('Код ответа - удаление звонка по cull_uud ==', response.status_code)
             print('Список звонков в очери до удаления', response_before.json())
             print('Список звонков в очери после удаления', response_after.json())
+            raise e
 
     @allure.title('Удаление всех звонков из очереди')
     def test_remove_all_calls_queue(self, api_v3, params_agent_uuid, creation_queue_calls):
