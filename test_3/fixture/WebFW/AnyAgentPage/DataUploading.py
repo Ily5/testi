@@ -9,21 +9,20 @@ class DataUploading(AnyAgentPage):
     __upload_file_button = '//span[text()="upload "]/..'
     __download_example = '//div[contains(text(),"download example")]'
 
-    __menu_all_uploading_file = '//div[@class="app-initial-data__container__info ng-star-inserted"]'
-    __all_uploading_file_list = __menu_all_uploading_file + '/../div[3]'
-    __delete_download_menu = '//div[@class="ng-star-inserted"]'
-    __delete_valid_file = __delete_download_menu + '/button[2]'
-    __delete_no_valid_file = __delete_download_menu + '/button'
+    __menu_all_uploading_file = '//div[@class="app-import-task-list"]'
+    __all_uploading_file_list = __menu_all_uploading_file + '/div'
+    __delete_valid_file = '/div[2]/button[2]'
+    __delete_no_valid_file = '/div[2]/button'
     __sure_delete_file = '//span[contains(text(), "delete")]/..'
-    __download_valid_file = __delete_download_menu + '/button[1]'
+    __download_valid_file = '/div[2]/button[2]'
 
-    __status_file = '/*[1]//div[contains(@class, "status")]'
+    __status_file = '/app-status-circle/div'
     __name_file = '/div/div[1]'
-    __time_uploading_file = '/div/div[2]/div'
-    __error_message_file = '/div/div[2]/div[3]/div'
-    __count_contact = '/div/div[2]/div[3]'
+    __time_uploading_file = '/div/div[2]/span[1]'
+    __error_message_file = '/div/div[2]/span[2]'
+    __count_contact = '/div/div[2]/span[2]'
 
-    __sorting_time_uploading_button = __menu_all_uploading_file + '/div/div/button'
+    __sorting_time_uploading_button = __menu_all_uploading_file + '/form/button[1]'
 
     __filer_status_button = __menu_all_uploading_file + '//mat-form-field/div'
     __filter_all_statuses = '//span[contains(text(),"All statuses")]'
@@ -34,7 +33,7 @@ class DataUploading(AnyAgentPage):
 
     __select_another_file = ''
 
-    __delete_all_menu_button = __menu_all_uploading_file + '/div/button'
+    __delete_all_menu_button = __menu_all_uploading_file + '/form/button[2]'
     __delete_all_completed_button = '//div[contains(@class, "overlay-connected")]//button'
 
     @allure.step('Загрузка файла')
