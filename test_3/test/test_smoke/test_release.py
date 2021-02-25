@@ -281,7 +281,7 @@ class TestGoogleEngine:
         result, synth_phrase_list, logs_dict, dialog_id = v3_init_google
         for item in [res for res in result if 'nv.listen' in res]:
             if "сущность" in item[1]:
-                assert 'робот' in item[1]
+                assert 'робот' in item[1] or 'труба' in item[1]
                 assert 'этого текста не должно быть в результатах' not in item[1]
 
     @allure.title('nv_listen тишина')
