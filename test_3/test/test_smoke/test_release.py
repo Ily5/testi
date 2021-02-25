@@ -395,21 +395,22 @@ class TestGoogleEngine:
         assert file_helper.get_percent(test_file_prop['rms_sum'], reference_file_prop['rms_sum']) < 5
         assert file_helper.get_percent(test_file_prop['cent_sum'], reference_file_prop['cent_sum']) < 5
 
-# @allure.feature("Silence")
-# @allure.story("Тишина + тишина")
-# def test_v3_silence(api_v3, db):
-#     time.sleep(10)
-#     db.create_connect(api_v3.database["RW"])
-#     # with allure.step("Авторизация в external_api"):
-#     #     token = api_v3.api.auth()
-#     with allure.step("Изменение параметров в cms_api"):
-#         # api_v3.api.set_yandex(token)
-#         token = api_v3.token
-#         assert len(token['Authorization']) > 10
-#     with allure.step("Иницализация диалога в external_api"):
-#         dialog_uuid = api_v3.init_dialog(msisdn=55555, agent='release').json()['dialog_uuid']
-#     with allure.step("Звонок завершён успешно"):
-#         db.wait_for_done(dialog_uuid)
-#         dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
-#         result_test = db.execute_call_data(table='dialog_stats', data=dialog_id)
-#         print(db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
+
+@allure.feature("Silence")
+@allure.story("Тишина + тишина")
+def test_v3_silence(api_v3, db):
+    time.sleep(10)
+    db.create_connect(api_v3.database["RW"])
+    # with allure.step("Авторизация в external_api"):
+    #     token = api_v3.api.auth()
+    with allure.step("Изменение параметров в cms_api"):
+        # api_v3.api.set_yandex(token)
+        token = api_v3.token
+        assert len(token['Authorization']) > 10
+    with allure.step("Иницализация диалога в external_api"):
+        dialog_uuid = api_v3.init_dialog(msisdn=55555, agent='release').json()['dialog_uuid']
+    with allure.step("Звонок завершён успешно"):
+        db.wait_for_done(dialog_uuid)
+        dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
+        result_test = db.execute_call_data(table='dialog_stats', data=dialog_id)
+        print(db.select_data(table='call', column='dialog_id', sdata='uuid', data=int(dialog_id)))
