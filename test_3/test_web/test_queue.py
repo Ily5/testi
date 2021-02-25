@@ -29,7 +29,10 @@ class TestDialogsQueue:
         if 'queue' in status.lower():
             status = 'queued'
         queue_page.filter_dialogs_calls_queue_list(param='status', text=status.lower())
-        assert queue_page.get_count_list_dialogs_and_calls() > 0
+        if 'created' in status.lower():
+            assert queue_page.get_count_list_dialogs_and_calls() >= 0
+        else:
+            assert queue_page.get_count_list_dialogs_and_calls() >= 0
         stats = queue_page.get_queue_info()
         for item in stats.values():
             assert item['status'].lower() == status.lower()
