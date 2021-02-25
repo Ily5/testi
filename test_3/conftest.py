@@ -80,7 +80,12 @@ def upload_group_dialogs(api_v3, params_agent_uuid, remove_queue_dialogs_and_cal
     path = api_v3.path_end_point['upload_group_dialogs']
     data = [{'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"},
             {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"}]
-    return (api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)).json()
+    res = api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
+    if res.status_code in [200, 201, 202]:
+        print(res.status_code)
+        print(res.text)
+        raise Exception('Status code error - При создании диалога статус код должен быть 200')
+    return res.json()
 
 
 @pytest.fixture(scope='class')
@@ -124,7 +129,7 @@ def creation_queue_calls(request, api_v3, pool_api_v3, params_agent_uuid, remove
 
     path = api_v3.path_end_point['upload_group_dialogs']
     data = []
-    for i in range(randint(5, 15)):
+    for i in range(randint(12, 15)):
         data.append(
             {'msisdn': str(randint(00000000000, 99999999999)), "script_entry_point": "main", "script_name": "test_api"})
     api_v3.request_send(method='POST', path=path, params=params_agent_uuid, json=data, status_code=409)
