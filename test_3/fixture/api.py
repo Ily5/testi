@@ -41,9 +41,14 @@ class APIClientV3:
 
     def get_api_token(self, login, password):
         response = requests.request(method='POST', url=self.base_url + '/api/v2/ext/auth', auth=(login, str(password)))
-        token = response.json()['token']
-        refresh_token = response.json()['refresh_token']
-        return {'Authorization': "Bearer %s" % token}, refresh_token
+        try:
+            token = response.json()['token']
+            refresh_token = response.json()['refresh_token']
+            return {'Authorization': "Bearer %s" % token}, refresh_token
+        except KeyError:
+            print('\n Статус код отвела при  получении токена', response.status_code)
+            print('\n Тело ответа при получении токена', response.text)
+            raise Exception('Get token error')
 
     def set_media_params_release_project(self, engine: str):
         data = {"speed": 1,
@@ -64,12 +69,23 @@ class APIClientV3:
         path = self.path_end_point['set_media_params'] + self.test_data['data_release_run']['agent_uuid']
         return self.request_send(method="PUT", path=path, json=data).json()
 
-    def init_dialog(self, msisdn, agent: str):
+    def init_dialog(self, msisdn, agent: str, api, params_agent_uuid, default_logic=True):
         path = self.path_end_point['upload_dialog']
         data = {"msisdn": "{}".format(msisdn), "script_entry_point": "main"}
         params = {}
+
         if agent in "release_run":
             params['agent_uuid'] = self.test_data['data_release_run']['agent_uuid']
+            if default_logic:
+                api: APIClientV3
+                body = {**{"uuid": api.test_data['data_release_run']['logic_uuid']}, **params_agent_uuid}
+                resp = api.request_send(method='POST',
+                                        path="/api/v2/logic/logic_unit/default",
+                                        params=params_agent_uuid,
+                                        json=body)
+                if resp.status_code != 200:
+                    print(resp.status_code)
+                    raise Exception('Change logic error')
         else:
             params['agent_uuid'] = self.test_data['agent_uuid']
         return self.request_send(method="POST", path=path, params=params, json=data)

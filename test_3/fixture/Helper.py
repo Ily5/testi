@@ -1,13 +1,9 @@
 import os
 
-import numpy
 import wave
 import contextlib
-
 import librosa
-
-
-# import librosa.display
+import paramiko
 
 
 class FileHelper(object):
@@ -62,3 +58,49 @@ class FileHelper(object):
     @staticmethod
     def get_percent(first, second):
         return abs(first / second - 1) * 100
+
+
+class SshHelper:
+
+    def __init__(self, username, hosts):
+        self.username = username
+        self.hosts = hosts
+
+    def client(self, host):
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        client.connect(hostname=host, username=self.username)
+        client.exec_command('sudo su')
+        return client
+
+    def get_count_lines_in_log(self, host, log_name, grep_text):
+        log_name = self.log_name(log_name)
+        command = f"cat /var/log/ivr/{log_name} |  grep {grep_text} | wc -l"
+        client = self.client(host)
+        result = client.exec_command(command)
+        res_end = result[1].read() + result[2].read()
+        client.close()
+        return int(str(res_end, encoding='utf-8'))
+
+    def get_last_n_line_log(self, host: str, log_name: str, n: int, add_command=''):
+        log_name = self.log_name(log_name)
+        if add_command != '':
+            add_command = ' | ' + add_command
+
+        client = self.client(host)
+        command = f"tail -n {str(n)} /var/log/ivr/{log_name}{add_command}"
+        result = client.exec_command(command)
+        res_end = result[1].read() + result[2].read()
+        client.close()
+        return str(res_end, encoding='utf-8')
+
+    @staticmethod
+    def log_name(log_name):
+        if 'online' in log_name:
+            log_name = 'logic-executor-online.log'
+        elif 'offline' in log_name:
+            log_name = 'logic-executor-offline.log'
+        elif 'media' in log_name:
+            log_name = 'media-server.log'
+        return log_name

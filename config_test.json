@@ -18,7 +18,6 @@
   "CmsUrl3": "https://cms-test-v3.neuro.net/auth/login?lng=en",
   "agent_setting_url": "https://cms-test-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=",
   "main_page_url": "https://cms-test-v3.neuro.net/agents?lng=en",
-
   "path_to_uploading_file": {
     "valid_file": "test_3/test_web/uploading_files/valid_file.xlsx",
     "no_valid_file": "test_3/test_web/uploading_files/no_valid_file.xlsx"
@@ -54,7 +53,13 @@
     "total_channel_limit": 2,
     "reference_call_uuid_yandex": "dbc696a9-561f-4c89-8164-7647298e9779",
     "reference_call_uuid_google": "c52dea25-d5d4-4b58-b3f9-2ce28ea72413",
-
+    "ssh": {
+      "login": "rdevetiarov",
+      "hosts": {
+        "id_1": "10.129.0.108",
+        "id_2": "10.131.0.60"
+      }
+    },
     "data_release_run": {
       "agent_uuid": "b5b2a743-259b-4641-a007-0dd2abe3e0fa",
       "agent_name": "release_run",
@@ -64,7 +69,8 @@
       "asr_google_uuid": "68828df6-fabb-4f01-a32b-1359512fd66c",
       "tts_google_uuid": "b90fecf7-96c3-48e9-b8a7-8f8ca8280eed",
       "google_voice": "ru-RU-Wavenet-E",
-      "agent_id": "117"
+      "agent_id": "117",
+      "logic_uuid": "8988a00f-c382-46a5-a6aa-f72ff0935836"
     }
   }
 }
