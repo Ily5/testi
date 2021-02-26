@@ -24,6 +24,7 @@ def init_dialog(engine: str, db, api_v3):
     with allure.step("Иницализация диалога в external_api"):
         response = api_v3.init_dialog(msisdn=55555, agent='release')
         dialog_uuid = response.json()['dialog_uuid']
+        print(dialog_uuid)
     db.wait_for_done(dialog_uuid)
     with allure.step("Выгрузка данных по диалогу из rw базы"):
         dialog_id = db.select_data(table='dialog', column='uuid', sdata='id', data=str(dialog_uuid))[0][0]
