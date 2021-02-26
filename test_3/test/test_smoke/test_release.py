@@ -201,8 +201,8 @@ class TestYandexEngine:
                                                                    api_v3.test_data['reference_call_uuid_yandex'])
         print(reference_file_prop)
         print(test_file_prop)
-        assert file_helper.get_percent(test_file_prop['size'], reference_file_prop['size']) < 5
-        assert file_helper.get_percent(test_file_prop['duration'], reference_file_prop['duration']) < 5
+        assert file_helper.get_percent(test_file_prop['size'], reference_file_prop['size']) < 6
+        assert file_helper.get_percent(test_file_prop['duration'], reference_file_prop['duration']) < 6
         assert file_helper.get_percent(test_file_prop['rms_sum'], reference_file_prop['rms_sum']) < 5
         assert file_helper.get_percent(test_file_prop['cent_sum'], reference_file_prop['cent_sum']) < 5
 
@@ -390,8 +390,8 @@ class TestGoogleEngine:
                                                                    api_v3.test_data['reference_call_uuid_google'])
         print(reference_file_prop)
         print(test_file_prop)
-        assert file_helper.get_percent(test_file_prop['size'], reference_file_prop['size']) < 5
-        assert file_helper.get_percent(test_file_prop['duration'], reference_file_prop['duration']) < 5
+        assert file_helper.get_percent(test_file_prop['size'], reference_file_prop['size']) < 6
+        assert file_helper.get_percent(test_file_prop['duration'], reference_file_prop['duration']) < 6
         assert file_helper.get_percent(test_file_prop['rms_sum'], reference_file_prop['rms_sum']) < 5
         assert file_helper.get_percent(test_file_prop['cent_sum'], reference_file_prop['cent_sum']) < 5
 
