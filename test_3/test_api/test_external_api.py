@@ -373,14 +373,14 @@ class TestExternalApi:
         path = api_v3.path_end_point['get_dialogs_agent']
         response = api_v3.request_send(path=path, params=params_agent_uuid)
         assert response.status_code == 200
-        assert 'dialogs' in response.json()
-        assert 'total' in response.json()
-        for dialog in response.json()['dialogs']:
+        # assert 'dialogs' in response.json()
+        assert 'total_count' in response.json()
+        for dialog in response.json()['data']:
             assert 'msisdn' in dialog
-            assert 'dialog_uuid' in dialog
+            assert 'uuid' in dialog
             assert 'result' in dialog
             assert dialog['msisdn'] is not None
-            assert dialog['dialog_uuid'] is not None
+            assert dialog['uuid'] is not None
 
     @allure.title('Остановка диалогов в очереди, валидный agent_uuid')
     def test_stop_queue_dialogs_valid(self, api_v3, params_agent_uuid):
@@ -482,16 +482,13 @@ class TestExternalApi:
 
     @allure.title('Удаление всех звонков из очереди')
     def test_remove_all_calls_queue(self, api_v3, params_agent_uuid, creation_queue_calls):
-        data = {"limit": 100, "offset": 0,
-                "where": {"agent_uuid": api_v3.test_data['agent_uuid'], "msisdn": [], "result": []}}
-        path = api_v3.path_end_point["post_queue_calls"]
-        response_before = api_v3.request_send(method="POST", path=path, json=data)
+        path = api_v3.path_end_point['get_calls_agent']
+        response_before = api_v3.request_send(path=path, params=params_agent_uuid)
 
         response = api_v3.request_send(method="POST", path=api_v3.path_end_point['remove_queue_call'], json={},
                                        params=params_agent_uuid)
 
-        response_after = api_v3.request_send(method="POST", path=path, json=data)
+        response_after = api_v3.request_send(path=path, params=params_agent_uuid)
         assert response.status_code == 200
         assert int(response_before.json()['total_count']) > int(response_after.json()['total_count'])
         assert int(response_after.json()['total_count']) == 0
-        assert len(response_after.json()['data']) == 0
