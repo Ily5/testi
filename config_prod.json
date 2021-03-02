@@ -52,7 +52,7 @@
     "language": "ru-RU",
     "total_channel_limit": 2,
     "reference_call_uuid_yandex": "d0585c26-bd59-4a92-937f-7f51b391fda3",
-    "reference_call_uuid_google": "4bc169bf-f643-4447-bacc-9960d40ec004",
+    "reference_call_uuid_google": "07be4f9a-9f9d-44a7-9709-5c9215634cb3",
     "ssh": {
       "login": "rdevetiarov",
       "hosts": {
