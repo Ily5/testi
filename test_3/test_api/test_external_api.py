@@ -97,7 +97,7 @@ class TestExternalApi:
 
     @allure.title("Изменение настроек проекта, валидные данные, agent_uuid")
     def test_change_agent_settings_valid(
-        self, api_v3, params_agent_uuid, default_settings_agent, random_str_generator
+            self, api_v3, params_agent_uuid, default_settings_agent, random_str_generator
     ):
         path = api_v3.path_end_point["put_change_agent_settings"]
         data = {
@@ -182,12 +182,12 @@ class TestExternalApi:
         assert "synthesis" in response.json()["data"][0]
         assert "agent_uuid" in response.json()["data"][0]
         assert (
-            response.json()["data"][0]["agent_uuid"] == api_v3.test_data["agent_uuid"]
+                response.json()["data"][0]["agent_uuid"] == api_v3.test_data["agent_uuid"]
         )
 
     @allure.title("Добавление и удаление входной сущности агента, валидные данные")
     def test_add_new_initial_entity_agent_valid(
-        self, api_v3, params_agent_uuid, random_str_generator
+            self, api_v3, params_agent_uuid, random_str_generator
     ):
         path = api_v3.path_end_point["agent_initial_entities"]
         data = {"name": random_str_generator, "synthesis": True}
@@ -207,7 +207,7 @@ class TestExternalApi:
 
     @allure.title("Изменение валидной сущности агента, валидные данные")
     def test_edit_initial_entity_agent_valid(
-        self, api_v3, create_new_initial_entity_agent, random_str_generator
+            self, api_v3, create_new_initial_entity_agent, random_str_generator
     ):
         path = api_v3.path_end_point["agent_initial_entities"]
         data = {
@@ -236,13 +236,13 @@ class TestExternalApi:
         assert "name" in response.json()["data"][0]
         assert "agent_uuid" in response.json()["data"][0]
         assert (
-            response.json()["data"][0]["agent_uuid"] == api_v3.test_data["agent_uuid"]
+                response.json()["data"][0]["agent_uuid"] == api_v3.test_data["agent_uuid"]
         )
 
     @pytest.mark.parametrize("entity_type", ["string", "number", "datetime"])
     @allure.title("Добавление и удаление выходной сущности агента, валидные данные")
     def test_add_delete_new_initial_entity_agent_valid(
-        self, api_v3, params_agent_uuid, random_str_generator, entity_type
+            self, api_v3, params_agent_uuid, random_str_generator, entity_type
     ):
         path = api_v3.path_end_point["agent_output_entities"]
         data = {
@@ -267,7 +267,7 @@ class TestExternalApi:
     @pytest.mark.parametrize("entity_type", ["string", "number", "datetime"])
     @allure.title("Изменение выходной сущности агента, валидные данные")
     def test_edit_output_entity_agent_valid(
-        self, api_v3, random_str_generator, create_new_output_entity_agent, entity_type
+            self, api_v3, random_str_generator, create_new_output_entity_agent, entity_type
     ):
         path = api_v3.path_end_point["agent_output_entities"]
         data = {
@@ -287,7 +287,7 @@ class TestExternalApi:
 
     @allure.title("Загрузка диалога, валидные данные")
     def test_upload_dialog(
-        self, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls
+            self, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls
     ):
         path = api_v3.path_end_point["upload_dialog"]
         data = {"msisdn": str(randint(00000000000, 99999999999))}
@@ -300,7 +300,7 @@ class TestExternalApi:
 
     @allure.title("Множественная загрузка диалога, получение статуса, валидные данные")
     def test_upload_group_dialogs(
-        self, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls
+            self, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls
     ):
         path = api_v3.path_end_point["upload_group_dialogs"]
         data = [
@@ -322,7 +322,7 @@ class TestExternalApi:
 
     @allure.title("Добавление диалга к уже существующему набору диалогов по bulk_uuid")
     def test_add_dialogs_bulk_uuid(
-        self, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls
+            self, api_v3, params_agent_uuid, remove_queue_dialogs_and_calls
     ):
 
         path = api_v3.path_end_point["upload_group_dialogs"]
@@ -498,7 +498,7 @@ class TestExternalApi:
 
     @allure.title("Получение списка диалогов агента, валидные данные")
     def test_get_agent_dialogs_valid(
-        self, api_v3, params_agent_uuid, creation_queue_dialog
+            self, api_v3, params_agent_uuid, creation_queue_dialog
     ):
         path = api_v3.path_end_point["get_dialogs_agent"]
         response = api_v3.request_send(path=path, params=params_agent_uuid)
@@ -530,7 +530,7 @@ class TestExternalApi:
 
     @allure.title("Удаление одного диалога из очереди по dialog_uuid")
     def test_remove_one_dialogs_queue(
-        self, api_v3, params_agent_uuid, creation_queue_dialog
+            self, api_v3, params_agent_uuid, creation_queue_dialog
     ):
         data = {
             "limit": 100,
@@ -557,15 +557,15 @@ class TestExternalApi:
         response_after = api_v3.request_send(method="POST", path=path, json=data)
         assert response.status_code == 200
         assert (
-            int(response_before.json()["total_count"])
-            >= int(response_after.json()["total_count"]) + 1
+                int(response_before.json()["total_count"])
+                >= int(response_after.json()["total_count"]) + 1
         )
         uuid_list = [item["uuid"] for item in response_after.json()["data"]]
         assert data not in uuid_list
 
     @allure.title("Удаление всех диалогов из очереди")
     def test_remove_all_dialogs_queue(
-        self, api_v3, params_agent_uuid, creation_queue_dialog
+            self, api_v3, params_agent_uuid, creation_queue_dialog
     ):
         data = {
             "limit": 100,
@@ -604,7 +604,7 @@ class TestExternalApi:
 
     @allure.title("Получение списка звонков агента, валидные данные")
     def test_get_agent_calls_valid(
-        self, api_v3, params_agent_uuid, creation_queue_calls
+            self, api_v3, params_agent_uuid, creation_queue_calls
     ):
         path = api_v3.path_end_point["get_calls_agent"]
         response = api_v3.request_send(path=path, params=params_agent_uuid)
@@ -627,7 +627,7 @@ class TestExternalApi:
 
     @allure.title("Удаление одного звонка из очереди по call_uuid")
     def test_remove_one_calls_queue(
-        self, api_v3, params_agent_uuid, creation_queue_calls
+            self, api_v3, params_agent_uuid, creation_queue_calls
     ):
         data = {
             "limit": 100,
@@ -655,8 +655,8 @@ class TestExternalApi:
         try:
             assert response.status_code == 200
             assert (
-                int(response_before.json()["total_count"])
-                >= int(response_after.json()["total_count"]) + 1
+                    int(response_before.json()["total_count"])
+                    >= int(response_after.json()["total_count"]) + 1
             )
             uuid_list = [item["uuid"] for item in response_after.json()["data"]]
             assert data not in uuid_list
@@ -668,7 +668,7 @@ class TestExternalApi:
 
     @allure.title("Удаление всех звонков из очереди")
     def test_remove_all_calls_queue(
-        self, api_v3, params_agent_uuid, creation_queue_calls
+            self, api_v3, params_agent_uuid, creation_queue_calls
     ):
         path = api_v3.path_end_point["get_calls_agent"]
         response_before = api_v3.request_send(path=path, params=params_agent_uuid)
