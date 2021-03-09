@@ -27,7 +27,7 @@ class Application:
         else:
             capabilities = {
                         "browserName": "chrome",
-                        "version": "83.0",
+                        "version": "88.0",
                         "platform": "LINUX",
                         "enableVNC": True
                     }

@@ -184,6 +184,7 @@ def check_queue(params_agent_uuid, pool_api_v3, path_name, queue_name, queue_len
     params = {**{"page": "1",
                  "by_count": "100000"}, **params_agent_uuid}
     path = pool_api_v3.path_end_point[path_name]
+    # TODO переделать проверку очереди через методы ext api
 
     while True:
         if time.time() > time_out:

@@ -9,7 +9,7 @@ from fixture.application import Application
 from fixture.database import Connector, MongoConnector
 from test_3.fixture.api import APIClientV3
 from test_3.fixture.application_3 import ApplicationNewVersion
-from test_3.fixture.Helper import FileHelper
+from test_3.fixture.Helper import FileHelper, SshHelper
 
 # fixture = None
 
@@ -143,6 +143,15 @@ def file_helper(api_v3):
     helper = FileHelper(path_to_file='/var/jenkins_home/call_files/', api_helper=api_v3)
     # helper = FileHelper(path_to_file='/home/renat/', api_helper=api_v3)
     return helper
+
+
+@pytest.fixture()
+def ssh_helper(request):
+    with open(request.config.getoption("--config")) as cfg:
+        config = json.load(cfg)
+        fixture = SshHelper(username=config['test_data']['ssh']['login'], hosts=config['test_data']['ssh']['hosts'])
+
+    return fixture
 
 
 @pytest.fixture

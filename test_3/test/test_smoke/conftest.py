@@ -4,17 +4,17 @@ import allure
 
 
 @pytest.fixture(scope='class')
-def v3_init_yandex(api_v3, db):
-    return init_dialog('yandex', db, api_v3)
+def v3_init_yandex(api_v3, db, params_agent_uuid):
+    return init_dialog('yandex', db, api_v3, params_agent_uuid)
 
 
 @pytest.fixture(scope='class')
-def v3_init_google(api_v3, db):
+def v3_init_google(api_v3, db, params_agent_uuid):
     time.sleep(7)
-    return init_dialog('google', db, api_v3)
+    return init_dialog('google', db, api_v3, params_agent_uuid)
 
 
-def init_dialog(engine: str, db, api_v3):
+def init_dialog(engine: str, db, api_v3, params_agent_uuid):
     db.create_connect(api_v3.database["RW"])
     with allure.step("Авторизация в external_api"):
         token = api_v3.token
@@ -22,7 +22,7 @@ def init_dialog(engine: str, db, api_v3):
     with allure.step("Изменение параметров в cms_api"):
         api_v3.set_media_params_release_project(engine=engine)
     with allure.step("Иницализация диалога в external_api"):
-        response = api_v3.init_dialog(msisdn=55555, agent='release')
+        response = api_v3.init_dialog(msisdn=55555, agent='release',  api=api_v3, params_agent_uuid=params_agent_uuid)
         dialog_uuid = response.json()['dialog_uuid']
         print(dialog_uuid)
     db.wait_for_done(dialog_uuid)
