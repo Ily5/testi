@@ -28,6 +28,9 @@ class APIClientV3:
             response = requests.request(method=method, url=request_url, headers=headers, **kwargs)
             if response.status_code != int(status_code):
                 break
+            if "pending" not in response.text:
+                print("Код ответа ", response.status_code)
+                raise Exception(response.text)
             if count % 10 == 0:
                 print('\n Код ответа от сервера = {}'.format(response.status_code),
                       '-- попытка № {}'.format(count))
@@ -46,7 +49,7 @@ class APIClientV3:
             refresh_token = response.json()['refresh_token']
             return {'Authorization': "Bearer %s" % token}, refresh_token
         except KeyError:
-            print('\n Статус код отвела при  получении токена', response.status_code)
+            print('\n Статус код при  получении токена', response.status_code)
             print('\n Тело ответа при получении токена', response.text)
             raise Exception('Get token error')
 
