@@ -72,7 +72,7 @@ class APIClientV3:
         path = self.path_end_point['set_media_params'] + self.test_data['data_release_run']['agent_uuid']
         return self.request_send(method="PUT", path=path, json=data).json()
 
-    def init_dialog(self, msisdn, agent: str, api, params_agent_uuid, default_logic=True):
+    def init_dialog(self, msisdn, agent: str, api, default_logic=True):
         path = self.path_end_point['upload_dialog']
         data = {"msisdn": "{}".format(msisdn), "script_entry_point": "main"}
         params = {}
@@ -81,10 +81,10 @@ class APIClientV3:
             params['agent_uuid'] = self.test_data['data_release_run']['agent_uuid']
             if default_logic:
                 api: APIClientV3
-                body = {**{"uuid": api.test_data['data_release_run']['logic_uuid']}, **params_agent_uuid}
+                body = {**{"uuid": api.test_data['data_release_run']['logic_uuid']}, **params}
                 resp = api.request_send(method='POST',
                                         path="/api/v2/logic/logic_unit/default",
-                                        params=params_agent_uuid,
+                                        params=params,
                                         json=body)
                 if resp.status_code != 200:
                     print(resp.status_code)
