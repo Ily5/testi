@@ -18,7 +18,6 @@
   "CmsUrl3": "https://cms-v3.neuro.net/auth/login?lng=en",
   "agent_setting_url": "https://cms-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=",
   "main_page_url": "https://cms-v3.neuro.net/agents?lng=en",
-
   "path_to_uploading_file": {
     "valid_file": "test_3/test_web/uploading_files/valid_file.xlsx",
     "no_valid_file": "test_3/test_web/uploading_files/no_valid_file.xlsx"
@@ -53,8 +52,14 @@
     "language": "ru-RU",
     "total_channel_limit": 2,
     "reference_call_uuid_yandex": "d0585c26-bd59-4a92-937f-7f51b391fda3",
-    "reference_call_uuid_google": "4bc169bf-f643-4447-bacc-9960d40ec004",
-
+    "reference_call_uuid_google": "07be4f9a-9f9d-44a7-9709-5c9215634cb3",
+    "ssh": {
+      "login": "rdevetiarov",
+      "hosts": {
+        "id_1": "10.129.0.108",
+        "id_2": "10.131.0.60"
+      }
+    },
     "data_release_run": {
       "agent_uuid": "f29c639f-f3ff-46bb-9425-fe2ffb27796c",
       "agent_name": "release_run",
@@ -64,7 +69,8 @@
       "asr_google_uuid": "a7f66456-cafe-4d7b-a9b9-3a2c2d72b402",
       "tts_google_uuid": "bbd9323f-0cc4-411c-ae81-58e02b283353",
       "google_voice": "ru-RU-Wavenet-E",
-      "agent_id": "164"
+      "agent_id": "164",
+      "logic_uuid": "da35a0d5-5d28-4c75-a99c-45d751411c4d"
     }
   }
 }
