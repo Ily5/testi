@@ -1,3 +1,4 @@
+from random import randint
 import time
 import pytest
 import paramiko
@@ -5,50 +6,41 @@ from test_3.fixture.api import APIClientV3
 
 
 def test_001(ssh_helper):
-    # client = paramiko.SSHClient()
-    # client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    # client.connect(hostname=ssh_helper.hosts['id_2'], username=ssh_helper.username)
-    # result_1 = client.exec_command('tail -n 20 /var/log/ivr/logic-executor-offline.log')
-    # res_1_end = result_1[1].read() + result_1[2].read()
-    # print(res_1_end)
-    # print(type(res_1_end))
-    #
-    # print(type(str(res_1_end)))
-    # client.close()
-    # result = ssh_helper.get_last_n_line_log(host=ssh_helper.hosts['id_2'], log_name='offline', n=5)
-    #
-    # print(result)
-    #
-    # result = ssh_helper.get_count_lines_in_log(host=ssh_helper.hosts['id_2'], log_name='offline', grep_text='INFO')
-    # print(result)
-    client = ssh_helper.client(host="10.129.0.108")
-    res = client.exec_command("sudo systemctl restart caller.service")
-    res_end = str((res[1].read() + res[2].read()), encoding="utf-8")
-    print(res_end)
-    client.close()
+    logic_pool_4 = ["10.129.2.71", "10.131.2.58", "10.129.2.83", "10.131.2.78", "10.129.2.55", "10.131.2.64",
+                    "10.129.2.77", "10.131.2.59", "10.129.2.6", "10.131.2.61", "10.129.2.43", "10.131.2.88",
+                    "10.129.2.78", "10.131.2.62", "10.129.2.62", "10.131.2.69", "10.129.2.85", "10.131.2.29",
+                    "10.129.2.68", "10.131.2.80", "10.129.2.81", "10.131.2.55", "10.129.2.95", "10.131.2.82",
+                    "10.129.2.15", "10.131.2.86", "10.129.2.75", "10.131.2.95", "10.129.2.66", "10.131.2.22",
+                    "10.129.2.65", "10.131.2.17", "10.129.2.63", "10.131.2.65", "10.129.2.41", "10.131.2.66",
+                    "10.129.2.20", "10.131.2.47", "10.129.2.69", "10.131.2.83", "10.129.2.57", "10.131.2.57",
+                    "10.129.2.28", "10.131.2.90", "10.129.2.31", "10.131.2.85", "10.129.2.73", "10.131.2.67",
+                    "10.129.2.86"]
+    # "10.131.2.77"
 
+    media_server_pool_4 = ["10.131.1.34", "10.129.1.93", "10.131.1.50", "10.129.1.73", "10.131.1.14", "10.129.1.48",
+                           "10.129.1.27", "10.131.1.72", "10.129.1.85", "10.131.1.83", "10.129.1.47", "10.131.1.56",
+                           "10.129.1.92", "10.131.1.80", "10.129.1.10", "10.131.1.39", "10.129.1.15", "10.131.1.41",
+                           "10.129.1.91", "10.131.1.28", "10.129.1.63", "10.131.1.70", "10.129.1.97", "10.131.1.53",
+                           "10.129.1.54", "10.131.1.87", "10.129.1.77", "10.131.1.18", "10.129.1.71", "10.131.1.81",
+                           "10.129.1.13", "10.131.1.94", "10.129.1.32", "10.129.1.7", "10.131.1.54", "10.129.1.75",
+                           "10.131.1.74", "10.129.1.59", "10.131.1.76", "10.131.1.19", "10.129.1.4", "10.131.1.63",
+                           "10.129.1.64", "10.131.1.92", "10.129.1.82", "10.131.1.69", "10.129.1.83", "10.131.1.15",
+                           "10.129.1.26", "10.131.1.52"]
+    # print(len(media_server_pool_4))
+    for hots in logic_pool_4:
+        client = ssh_helper.client(host=hots)
+        # res = client.exec_command("sudo systemctl stop logic-executor-online.service")
+        res = client.exec_command("sudo systemctl restart logic-executor-online.service")
+        # res = client.exec_command("sudo docker ps")
+        # res = client.exec_command(
+        #     "cat /var/log/ivr/media-server.log | grep '818ea0e4-a0d5-480e-b1d9-e3e0d32180b8'")
+        res_end = str((res[1].read() + res[2].read()), encoding="utf-8")
+        print('*' * 100)
+        print(hots)
+        print(res_end)
 
-""""Сценарий нагрузочного тестирования LE Online
-I Максимальное количество звонков обрабатываемое лоджиком
- (изменеие конфига фрисвича https://neuronet.atlassian.net/browse/NP-1955)
-    1. Устанавливаем дефолтной нужную логику с бесконечным циклом в LE online ++++++
-    2. Устанавливаем TCL = 0
-    3. Загружаем диалоги, ждем пока они встанут в очередь
-    4. Меняем TCL на 1000
-    5. Ждем пока звонки начнуться, считаем в раел тайм сколько звонков обрабатывается в данный момент
-        - как это сделать? через лог/ через БД ?
-    6. Подчищаем все после теста (удаляем звонки)
-    
-II. Сколько раз был обработан каждый метод за 1 минуту
-    0. В логике запускаем бесконечный вызов какого-то метода
-    1. Устанавливаем дефолтной нужную логику ++++++++++++++
-    2. Загружаем звонок 
-    3. Чекаем логи пока звонок не начнется 
-    4. Засекаем 60 секунд
-    5. Считаем количество вызовов функции через декоратор в логике
-    6. Ищем в БД статистику по кажому параметру и выводим их на печать
-    
-"""
+        client.close()
+
 
 
 def test_load_le_online(api_v3, db):
@@ -58,7 +50,6 @@ def test_load_le_online(api_v3, db):
         msisdn="55555",
         agent="release",
         api=api_v3,
-        params_agent_uuid=params,
         default_logic=False
     )
     dialog_uuid = response.json()['dialog_uuid']
@@ -86,29 +77,37 @@ def test_load_le_online(api_v3, db):
 
 def test_load_le_online_count(api_v3, db, clear_queue_new):
     params = api_v3.test_data['data_release_run']['agent_uuid']
-    change_default_logic(api_v3, params, "count")
+    # change_default_logic(api_v3, params, "count")
 
     api_v3.request_send(
         method="PUT",
         path=api_v3.path_end_point["put_change_agent_settings"],
-        json={"total_channel_limit": 10000},
+        json={"total_channel_limit": 23},
         params={"agent_uuid": params},
     )
 
-    data = [{'msisdn': '55555', "script_entry_point": "main", "script_name": "test_release"}]
-    for i in range(500):
-        data.append(data[0])
+    data = []
+    for i in range(60):
+        data.append(
+            {'msisdn': "55555",
+             "script_entry_point": "main",
+             "script_name": "test_release"})
     response = api_v3.request_send(method='POST',
                                    path=api_v3.path_end_point['upload_group_dialogs'],
                                    params={'agent_uuid': params},
                                    json=data,
                                    status_code=409)
+    print(response.text)
+    if response.status_code not in [200, 201, 202, 203, 204]:
+        raise Exception('Upload group dialog error')
 
-    timeout = time.time() + 3000
+    agent_id = api_v3.test_data['data_release_run']['agent_id']
+    timeout = time.time() + 900
     while True:
-        result = db.db_conn(f"SELECT count(id) from call where agent_id =117 and result in ('pending', 'queued', null)")
-        print('Активных звонков - ', result[0][0])
-        time.sleep(0.1)
+        result = db.db_conn(f"SELECT count(id) from call where agent_id ='{agent_id}' and result = 'pending' ")
+        print(time.time(), ' Активных звонков - ', result[0][0])
+
+        time.sleep(1)
         if time.time() >= timeout:
             break
 
