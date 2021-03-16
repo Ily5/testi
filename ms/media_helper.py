@@ -2,7 +2,7 @@ import requests
 import json
 import time
 import random
-
+import logging
 
 def get_value(response, value):
     return response[value]
@@ -22,6 +22,8 @@ class MediaHelper:
         self.querystring = {"agent_uuid": "61664bbc-3826-4107-85bd-5b093c9e1909"}
         self.times = []
         self.result = []
+        logging.basicConfig(filename=None, level=logging.INFO,
+                            format='%(asctime)s  - %(levelname)s - %(message)s')
 
     def auth(self):
         response = requests.request("POST", self.url, data=self.payload, headers=self.headers)
@@ -66,8 +68,10 @@ class MediaHelper:
     def get_la(self):
         self.url = "http://10.129.0.108:8088/get_la"
         response = requests.request("get", self.url, data=self.payload, headers=self.headers, params=self.querystring)
-        print("la_ms_1: " + str(response.json()))
+        logging.info("la_ms_1: " + str(response.json()))
+        # print("la_ms_1: " + str(response.json()))
         self.url = "http://10.131.0.60:8088/get_la"
         response = requests.request("get", self.url, data=self.payload, headers=self.headers, params=self.querystring)
-        print("la_ms_2: " + str(response.json()))
+        logging.info("la_ms_2: " + str(response.json()))
+        # print("la_ms_2: " + str(response.json()))
         return response
