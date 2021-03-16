@@ -395,7 +395,6 @@ class TestGoogleEngine:
         assert file_helper.get_percent(test_file_prop['rms_sum'], reference_file_prop['rms_sum']) < 6
         assert file_helper.get_percent(test_file_prop['cent_sum'], reference_file_prop['cent_sum']) < 6
 
-
 # @allure.feature("Silence")
 # @allure.story("Тишина + тишина")
 # def test_v3_silence(api_v3, db):
