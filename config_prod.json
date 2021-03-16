@@ -51,6 +51,9 @@
     "tts": "jane@yandex",
     "language": "ru-RU",
     "total_channel_limit": 2,
+    "pool_uuid": "9bbcfe6b-ad85-43f4-aed8-a48ed97e6d93",
+    "trunk_uuid": "fd91ab46-b5a6-4f27-a2ed-84e34f191172",
+    "logic_uuid": "f38e5231-c94b-4b96-a287-d0168fc72016",
     "reference_call_uuid_yandex": "d0585c26-bd59-4a92-937f-7f51b391fda3",
     "reference_call_uuid_google": "07be4f9a-9f9d-44a7-9709-5c9215634cb3",
     "ssh": {
@@ -61,8 +64,12 @@
       }
     },
     "data_release_run": {
-      "agent_uuid": "f29c639f-f3ff-46bb-9425-fe2ffb27796c",
+      "total_channel_limit": 8,
+      "language": "ru-RU",
+      "recall_count": 1,
+      "agent_flag": "nprotskaia",
       "agent_name": "release_run",
+      "agent_uuid": "f29c639f-f3ff-46bb-9425-fe2ffb27796c",
       "asr_yandex_uuid": "31b5edd7-4bd6-4968-8346-27d091a68fbf",
       "tts_yandex_uuid": "785f6528-1bfc-441d-8236-d97574af697e",
       "yandex_voice": "zahar",
