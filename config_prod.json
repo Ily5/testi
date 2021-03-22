@@ -54,8 +54,8 @@
     "pool_uuid": "9bbcfe6b-ad85-43f4-aed8-a48ed97e6d93",
     "trunk_uuid": "fd91ab46-b5a6-4f27-a2ed-84e34f191172",
     "logic_uuid": "f38e5231-c94b-4b96-a287-d0168fc72016",
-    "reference_call_uuid_yandex": "d0585c26-bd59-4a92-937f-7f51b391fda3",
-    "reference_call_uuid_google": "07be4f9a-9f9d-44a7-9709-5c9215634cb3",
+    "reference_call_uuid_yandex": "f387c0b0-157c-42e9-9131-ad436763a390",
+    "reference_call_uuid_google": "ced96982-0f04-43e6-b3bc-1eec4b91b76c",
     "ssh": {
       "login": "rdevetiarov",
       "hosts": {
