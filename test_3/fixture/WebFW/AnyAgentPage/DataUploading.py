@@ -4,13 +4,16 @@ from test_3.fixture.WebFW.AgentPage import AnyAgentPage
 
 
 class DataUploading(AnyAgentPage):
-    __input_select_file = '//input[@type="file"]'
+    # __input_select_file = '//input[@type="file"]'
+    __input_select_file = '//div[@data-test-id="initialData_fileUploader"]//input'
     __select_file_button = '//span[contains(text(),"select file")]/..'
     __upload_file_button = '//span[text()="upload "]/..'
     __download_example = '//div[contains(text(),"download example")]'
 
-    __menu_all_uploading_file = '//div[@class="app-import-task-list"]'
-    __all_uploading_file_list = __menu_all_uploading_file + '/div'
+    # __menu_all_uploading_file = '//div[@class="app-import-task-list"]'
+    __menu_all_uploading_file = '//app-import-task-list[@data-test-id="initialDataList"]/div'
+    # __all_uploading_file_list = __menu_all_uploading_file + '/div'
+    __all_uploading_file_list = '//div[@data-test-id="initialDataList_taskListContainer"]'
     __delete_valid_file = '/div[2]/button[2]'
     __delete_no_valid_file = '/div[2]/button'
     __sure_delete_file = '//span[contains(text(), "delete")]/..'
@@ -22,9 +25,9 @@ class DataUploading(AnyAgentPage):
     __error_message_file = '/div/div[2]/span[2]'
     __count_contact = '/div/div[2]/span[2]'
 
-    __sorting_time_uploading_button = __menu_all_uploading_file + '/form/button[1]'
+    __sorting_time_uploading_button = '//button[@data-test-id="initialDataList_taskListFilter_listFilterSortButton"]'
 
-    __filer_status_button = __menu_all_uploading_file + '//mat-form-field/div'
+    __filer_status_button = '//mat-form-field[@data-test-id="initialDataList_taskListFilter_listSortSelect"]'
     __filter_all_statuses = '//span[contains(text(),"All statuses")]'
     __filer_success = '//span[text()=" Success "]'
     __filter_failed = '//span[contains(text(),"Failed")]'
@@ -33,7 +36,7 @@ class DataUploading(AnyAgentPage):
 
     __select_another_file = ''
 
-    __delete_all_menu_button = __menu_all_uploading_file + '/form/button[2]'
+    __delete_all_menu_button = '//button[@data-test-id="initialDataList_taskListFilter_listActions"]'
     __delete_all_completed_button = '//div[contains(@class, "overlay-connected")]//button'
 
     @allure.step('Загрузка файла')
