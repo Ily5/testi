@@ -160,9 +160,15 @@ def random_str_generator(size=random.randint(3, 129),
     return ''.join(random.choice(chars) for _ in range(size))
 
 
+@pytest.fixture()
+def get_asr_engine(request):
+    return request.config.getoption("--asr")
+
+
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="remote")
     parser.addoption("--config", action="store", default=ROOT_DIR + "/config_prod.json")
+    parser.addoption("--asr", action="store", default="yandex", help="Set ars engine: yandex or google")
 
 # TODO : make universal parametrize method in future
 # def pytest_make_parametrize_id(val):
