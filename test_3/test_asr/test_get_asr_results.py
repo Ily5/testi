@@ -46,6 +46,33 @@ def test_asr_no_ans(api_v3, get_asr_engine):
     )
 
 
+def test_asr_with_answer_machines(api_v3, get_asr_engine):
+    agent_uuid = "929a8689-1bc2-442f-b04b-a90343fea44c"
+    agent_id = "414"
+    agent_name = "test_asr_with_ans"
+    yandex_asr_uuid = "dc8f622f-a07e-4491-a186-ff4a06807038"
+    google_asr_uuid = "53a98777-efe9-4506-a735-688d6250d7b4"
+    count_audio_files = 10364
+
+    print(f"\n {datetime.now()} - ASR engine must be set - {get_asr_engine}")
+
+    final_results = get_final_result_asr(
+        agent_id,
+        agent_name,
+        agent_uuid,
+        api_v3,
+        count_audio_files,
+        get_asr_engine,
+        google_asr_uuid,
+        yandex_asr_uuid,
+    )
+
+    create_final_report = CreateReportAsr()
+    create_final_report.create_asr_result_to_csv(
+        final_results, f"{get_asr_engine}_with_answering_machines"
+    )
+
+
 def get_final_result_asr(
         agent_id,
         agent_name,
@@ -180,5 +207,3 @@ def change_asr_engine(
     print(
         f"\n {datetime.now()} - status code change asr engine {response_change_asr_engine.status_code}"
     )
-
-
