@@ -18,7 +18,7 @@ database = {
 db_conn = Connector(data=database)
 
 
-def test_asr_no_ans(api_v3, get_asr_engine):
+def test_asr_no_ans_machines(api_v3, get_asr_engine):
     agent_uuid = "b2ebe88e-6c7b-4e86-919a-3eeb248f8035"
     agent_id = "408"
     agent_name = "test_asr_no_ans"
