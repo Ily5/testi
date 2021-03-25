@@ -42,7 +42,7 @@ def test_asr_no_ans_machines(api_v3, get_asr_engine):
 
     create_final_report = CreateReportAsr()
     create_final_report.create_asr_result_to_csv(
-        final_results, f"{get_asr_engine}_no_ans"
+        final_results, f"{get_asr_engine}_no_ans_machines"
     )
 
 
