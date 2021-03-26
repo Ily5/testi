@@ -107,7 +107,7 @@ def get_final_result_asr(
         if time.time() >= timeout_upload_dialogs:
             raise TimeoutError("Timeout upload dialogs")
         count_upload_dialogs = db_conn.db_conn(
-            f"SELECT count(id) FROM dialog where id > {last_dialog_id}"
+            f"SELECT count(id) FROM dialog where id > {last_dialog_id} and agent_id = {agent_id}"
         )
         print(
             f"\n {datetime.now()} - Dialogs were loaded {count_upload_dialogs[0][0]} of {count_audio_files}"
