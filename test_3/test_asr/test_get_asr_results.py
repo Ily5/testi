@@ -25,7 +25,7 @@ def test_asr_no_ans_machines(api_v3, get_asr_engine):
     yandex_asr_uuid = "40a9e26c-06c0-4c0b-b8fd-73827013d6b2"
     google_asr_uuid = "e3e9a0bd-73ce-4ae2-833c-6f667238f0d0"
     count_audio_files = 5670
-    count_audio_files = 30
+    # count_audio_files = 30
 
     print(f"\n {datetime.now()} - ASR engine must be set - {get_asr_engine}")
 
