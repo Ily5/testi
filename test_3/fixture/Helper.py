@@ -158,7 +158,5 @@ class CreateReportAsr:
         )
         print(f"\n {datetime.datetime.now()} - Finish create without detect report")
         print(df.memory_usage())
-        print("DIR     ", os.path.abspath(os.curdir))
-        print("SCRIPT     ", os.path.abspath(__file__))
         del df
         gc.collect()
