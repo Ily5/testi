@@ -14,10 +14,10 @@ class DataUploading(AnyAgentPage):
     __menu_all_uploading_file = '//app-import-task-list[@data-test-id="initialDataList"]/div'
     # __all_uploading_file_list = __menu_all_uploading_file + '/div'
     __all_uploading_file_list = '//div[@data-test-id="initialDataList_taskListContainer"]'
-    __delete_valid_file = '/div[2]/button[2]'
-    __delete_no_valid_file = '/div[2]/button'
+    __delete_valid_file = '//button[2]'
+    __delete_no_valid_file = '//button'
     __sure_delete_file = '//span[contains(text(), "delete")]/..'
-    __download_valid_file = '/div[2]/button[2]'
+    __download_valid_file = '//button[1]'
 
     __status_file = '//app-status-circle/div'
     __name_file = '//div[contains(@class, "main-content app-text")]/div'
