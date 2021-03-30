@@ -1,9 +1,11 @@
 import os
-
+import datetime
+import gc
 import wave
 import contextlib
 import librosa
 import paramiko
+from pandas import DataFrame
 
 
 class FileHelper(object):
@@ -107,3 +109,54 @@ class SshHelper:
         elif "media" in log_name:
             log_name = "media-server.log"
         return log_name
+
+
+class CreateReportAsr:
+    @staticmethod
+    def create_asr_result_to_csv(result_all: list, file_name: str):
+        result_final_good = []
+        detect_good = []
+        file_good = []
+        result_final_bad = []
+        detect_bad = []
+        file_bad = []
+
+        for result in result_all:
+            if "None" in result[1]:
+                file_bad.append(result[0])
+                detect_bad.append("")
+            else:
+                file_good.append(result[0])
+                detect_good.append(result[1])
+
+        result_final_good.append(file_good)
+        result_final_good.append(detect_good)
+
+        result_final_bad.append(file_bad)
+        result_final_bad.append(detect_bad)
+        print(f"\n {datetime.datetime.now()} - Start create with detect report")
+        df = DataFrame(result_final_good).transpose()
+        df.columns = ["filename", "detected"]
+        df.to_csv(
+            f"{datetime.datetime.now().strftime('%d-%m-%Y_%H:%M:%S')}_{file_name}_with_detect",
+            sep="\t",
+            header=True,
+            index=False,
+        )
+        print(f"\n {datetime.datetime.now()} - Finish create with detect report")
+        print(df.memory_usage())
+        del df
+
+        print(f"\n {datetime.datetime.now()} - Start create without detect report")
+        df = DataFrame(result_final_bad).transpose()
+        df.columns = ["filename", "detected"]
+        df.to_csv(
+            f"{datetime.datetime.now().strftime('%d-%m-%Y_%H:%M:%S')}_{file_name}_without_detect",
+            sep="\t",
+            header=True,
+            index=False,
+        )
+        print(f"\n {datetime.datetime.now()} - Finish create without detect report")
+        print(df.memory_usage())
+        del df
+        gc.collect()
