@@ -20,10 +20,10 @@ class DataUploading(AnyAgentPage):
     __download_valid_file = '/div[2]/button[2]'
 
     __status_file = '//app-status-circle/div'
-    __name_file = '/div/div[1]'
-    __time_uploading_file = '/div/div[2]/span[1]'
-    __error_message_file = '/div/div[2]/span[2]'
-    __count_contact = '/div/div[2]/span[2]'
+    __name_file = '//div[contains(@class, "main-content app-text")]/div'
+    __time_uploading_file = '//div[@secondary-content]/span[1]'
+    __error_message_file = '//div[@secondary-content]/span[2]'
+    __count_contact = '//div[@secondary-content]/span[2]'
 
     __sorting_time_uploading_button = '//button[@data-test-id="initialDataList_taskListFilter_listFilterSortButton"]'
 
