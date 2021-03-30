@@ -19,7 +19,7 @@ class DataUploading(AnyAgentPage):
     __sure_delete_file = '//span[contains(text(), "delete")]/..'
     __download_valid_file = '/div[2]/button[2]'
 
-    __status_file = '/app-status-circle/div'
+    __status_file = '//app-status-circle/div'
     __name_file = '/div/div[1]'
     __time_uploading_file = '/div/div[2]/span[1]'
     __error_message_file = '/div/div[2]/span[2]'
