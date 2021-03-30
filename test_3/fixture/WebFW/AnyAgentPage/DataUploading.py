@@ -16,7 +16,8 @@ class DataUploading(AnyAgentPage):
     __all_uploading_file_list = '//div[@data-test-id="initialDataList_taskListContainer"]'
     __delete_valid_file = '//button[2]'
     __delete_no_valid_file = '//button'
-    __sure_delete_file = '//span[contains(text(), "yes")]/..'
+    __yes_delete_file_button = '//span[contains(text(), "yes")]/..'
+    __sure_all_delete_file_button = '//span[contains(text(), "elete")]/..'
     __download_valid_file = '//button[1]'
 
     __status_file = '//app-status-circle/div'
@@ -62,7 +63,7 @@ class DataUploading(AnyAgentPage):
     def delete_all_completed_uploading(self):
         self.click_by_xpath(self.__delete_all_menu_button)
         self.click_by_xpath(self.__delete_all_completed_button)
-        self.click_by_xpath(self.__sure_delete_file)
+        self.click_by_xpath(self.__sure_all_delete_file_button)
 
     @allure.step('Измениение сортировки по времени загрузки файла')
     def click_button_sorting_list(self):
@@ -97,7 +98,7 @@ class DataUploading(AnyAgentPage):
 
         count = self.count_list_files()
         self.click_by_xpath(delete_file_locator)
-        self.click_by_xpath(self.__sure_delete_file)
+        self.click_by_xpath(self.__yes_delete_file_button)
         while True:
             if self.count_list_files() < count:
                 break
