@@ -16,7 +16,7 @@ class DataUploading(AnyAgentPage):
     __all_uploading_file_list = '//div[@data-test-id="initialDataList_taskListContainer"]'
     __delete_valid_file = '//button[2]'
     __delete_no_valid_file = '//button'
-    __sure_delete_file = '//span[contains(text(), "delete")]/..'
+    __sure_delete_file = '//span[contains(text(), "yes")]/..'
     __download_valid_file = '//button[1]'
 
     __status_file = '//app-status-circle/div'
