@@ -218,7 +218,7 @@ def get_asr_engine(request):
 
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="remote")
-    parser.addoption("--config", action="store", default=ROOT_DIR + "/config_test.json")
+    parser.addoption("--config", action="store", default=ROOT_DIR + "/config_prod.json")
     parser.addoption(
         "--asr",
         action="store",
