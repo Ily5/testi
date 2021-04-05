@@ -2,25 +2,27 @@ import os
 import datetime
 import gc
 import wave
+from typing import Union, List, Tuple, Dict
 import contextlib
 import librosa
 import paramiko
+import requests
 from pandas import DataFrame
 
 
 class FileHelper(object):
-    def __init__(self, path_to_file, api_helper):
+    def __init__(self, path_to_file: str, api_helper):
         self.api_helper = api_helper
         self.path_to_file = path_to_file
 
-    def create_file_of_response(self, file_name, api_response) -> str:
+    def create_file_of_response(self, file_name: str, api_response: requests.Response) -> str:
         full_path_to_file = self.path_to_file + file_name
         with open(r"{path}".format(path=full_path_to_file), "wb") as file:
             file.write(api_response.content)
 
         return file_name
 
-    def get_file_properties(self, file_name: str) -> dict:
+    def get_file_properties(self, file_name: str) -> Dict[str, str]:
         full_path_to_file = self.path_to_file + file_name
         size = os.path.getsize(full_path_to_file)
 
@@ -38,14 +40,14 @@ class FileHelper(object):
             "cent_sum": cent_sum,
         }
 
-    def get_call_file_properties(self, create_file_name, call_uuid) -> dict:
+    def get_call_file_properties(self, create_file_name: str, call_uuid: str) -> Dict[str, str]:
         path = self.api_helper.path_end_point["download_call_audio"] + str(call_uuid)
         response = self.api_helper.request_send(path=path)
         self.create_file_of_response(file_name=create_file_name, api_response=response)
         return self.get_file_properties(file_name=create_file_name)
 
     @staticmethod
-    def comparison_audio_files(file_name):
+    def comparison_audio_files(file_name: str) -> Tuple[float, float]:
         y, sr = librosa.load(file_name, sr=8000)
         rms = librosa.feature.rms(y=y)
         cent = librosa.feature.spectral_centroid(y=y, sr=sr)
@@ -62,16 +64,16 @@ class FileHelper(object):
         return rms_sum, cent_sum
 
     @staticmethod
-    def get_percent(first, second):
+    def get_percent(first: Union[int, str], second: Union[int, str]) -> Union[float]:
         return abs(first / second - 1) * 100
 
 
 class SshHelper:
-    def __init__(self, username, hosts):
+    def __init__(self, username: str, hosts: str):
         self.username = username
         self.hosts = hosts
 
-    def client(self, host):
+    def client(self, host: str) -> paramiko.SSHClient:
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
@@ -79,7 +81,7 @@ class SshHelper:
         client.exec_command("sudo su")
         return client
 
-    def get_count_lines_in_log(self, host, log_name, grep_text):
+    def get_count_lines_in_log(self, host: str, log_name: str, grep_text: str) -> int:
         log_name = self.log_name(log_name)
         command = f"cat /var/log/ivr/{log_name} |  grep {grep_text} | wc -l"
         client = self.client(host)
@@ -88,7 +90,7 @@ class SshHelper:
         client.close()
         return int(str(res_end, encoding="utf-8"))
 
-    def get_last_n_line_log(self, host: str, log_name: str, n: int, add_command=""):
+    def get_last_n_line_log(self, host: str, log_name: str, n: int, add_command="") -> str:
         log_name = self.log_name(log_name)
         if add_command != "":
             add_command = " | " + add_command
@@ -101,7 +103,7 @@ class SshHelper:
         return str(res_end, encoding="utf-8")
 
     @staticmethod
-    def log_name(log_name):
+    def log_name(log_name: str) -> str:
         if "online" in log_name:
             log_name = "logic-executor-online.log"
         elif "offline" in log_name:
@@ -113,7 +115,7 @@ class SshHelper:
 
 class CreateReportAsr:
     @staticmethod
-    def create_asr_result_to_csv(result_all: list, file_name: str):
+    def create_asr_result_to_csv(result_all: list, file_name: str) -> None:
         result_final_good = []
         detect_good = []
         file_good = []
@@ -160,3 +162,19 @@ class CreateReportAsr:
         print(df.memory_usage())
         del df
         gc.collect()
+
+
+class AsrResultHelper:
+    def __init__(self):
+        from jiwer import wer
+
+        self.wer = wer
+
+    def get_wer_cer(
+        self,
+        expected_result: Union[str, List[str]],
+        detected_result: Union[str, List[str]],
+    ) -> Tuple[float, float]:
+        wer = self.wer(expected_result, detected_result)
+        cer = self.wer(list("".join(expected_result)), list("".join(detected_result)))
+        return wer, cer
