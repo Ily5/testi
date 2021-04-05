@@ -27,3 +27,4 @@ numpy
 wave==0.0.2
 librosa~=0.8.0
 pandas~=1.2.3
+jiwer==2.2.0
