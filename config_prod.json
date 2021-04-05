@@ -55,7 +55,7 @@
     "trunk_uuid": "fd91ab46-b5a6-4f27-a2ed-84e34f191172",
     "logic_uuid": "f38e5231-c94b-4b96-a287-d0168fc72016",
     "reference_call_uuid_yandex": "67fdbe24-8b0e-40e7-be95-5ccaf78cedb8",
-    "reference_call_uuid_google": "ced96982-0f04-43e6-b3bc-1eec4b91b76c",
+    "reference_call_uuid_google": "00f9fd8f-f9e2-4fed-aa7b-e64d44f4745a",
     "ssh": {
       "login": "rdevetiarov",
       "hosts": {
