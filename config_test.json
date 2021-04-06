@@ -40,7 +40,7 @@
     "agent_id": "116",
     "msisdn": "89960652535",
     "company_uuid": "9db4c04b-deca-480f-ad1f-9399a28ecffa",
-    "agent_name": "API_test_automation",
+    "agent_name": "API_test_agent",
     "agent_flag": "apiflag",
     "agent_language": "ru-RU",
     "agent_tts": "oksana@yandex",
@@ -51,6 +51,9 @@
     "tts": "jane@yandex",
     "language": "ru-RU",
     "total_channel_limit": 2,
+    "pool_uuid": "4ffb0835-8443-4af0-9bf8-30ddfccb9796",
+    "trunk_uuid": "2a5cd86c-5344-42db-a25d-ca1cf10191c4",
+    "logic_uuid": "3e7abaf7-51c0-4d85-99e3-4ccb762dce81",
     "reference_call_uuid_yandex": "dbc696a9-561f-4c89-8164-7647298e9779",
     "reference_call_uuid_google": "c52dea25-d5d4-4b58-b3f9-2ce28ea72413",
     "ssh": {
@@ -61,8 +64,12 @@
       }
     },
     "data_release_run": {
-      "agent_uuid": "b5b2a743-259b-4641-a007-0dd2abe3e0fa",
+      "total_channel_limit": 8,
+      "language": "ru-RU",
+      "recall_count": 1,
+      "agent_flag": "nprotskaia",
       "agent_name": "release_run",
+      "agent_uuid": "b5b2a743-259b-4641-a007-0dd2abe3e0fa",
       "asr_yandex_uuid": "148ef1f0-d81e-415a-8c0b-26c7319138b1",
       "tts_yandex_uuid": "86988b9a-35dd-4e4b-bda9-fcc943acb86c",
       "yandex_voice": "zahar",

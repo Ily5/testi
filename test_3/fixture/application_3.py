@@ -10,8 +10,6 @@ from test_3.fixture.WebFW.AgentPage import AnyAgentPage
 from test_3.fixture.WebFW.AnyAgentPage.DataUploading import DataUploading
 from test_3.fixture.WebFW.AnyAgentPage.QueuePage import QueuePage
 
-from test_3.fixture.api import APIClientV3
-
 
 class ApplicationNewVersion:
 
@@ -42,7 +40,6 @@ class ApplicationNewVersion:
         self.cms_url = cms_url
         self.database = database
         self.test_data = test_data
-        self.api_new = APIClientV3(self)
 
         self.BasePage = BasePage(self)
         self.LoginPage = LoginPage(self)
