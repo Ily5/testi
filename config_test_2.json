@@ -1,0 +1,83 @@
+{
+  "Postgres": {
+    "RW": {
+      "database": "pbx_refactor",
+      "user": "postgres",
+      "password": "",
+      "host": "10.129.90.21",
+      "port": 5001
+    },
+    "RO": {
+      "database": "pbx_refactor",
+      "user": "postgres",
+      "password": "",
+      "host": "10.129.90.21",
+      "port": 5000
+    }
+  },
+  "CmsUrl3": "https://cms-test2-v3.neuro.net/auth/login?lng=en",
+  "agent_setting_url": "https://cms-test2-v3.neuro.net/agent-settings/settings?lng=en&agent_uuid=",
+  "main_page_url": "https://cms-test2-v3.neuro.net/agents?lng=en",
+  "path_to_uploading_file": {
+    "valid_file": "test_3/test_web/uploading_files/valid_file.xlsx",
+    "no_valid_file": "test_3/test_web/uploading_files/no_valid_file.xlsx"
+  },
+  "name_uploading_file": {
+    "valid_file": "valid_file.xlsx",
+    "no_valid_file": "no_valid_file.xlsx"
+  },
+  "auth": {
+    "login": "rdevetiarov@neuro.net",
+    "pass": "123456"
+  },
+  "api": {
+    "external_api_base_url": "https://api-test2-v3.neuro.net",
+    "poll_api_v3_url": "http://10.129.90.15:8083",
+    "nlu_api_url": "http://10.131.90.18:8099"
+  },
+  "test_data": {
+    "agent_uuid": "2f48ff00-f1fa-49b5-a5b5-4f6198c82426",
+    "agent_id": "3",
+    "msisdn": "89960652535",
+    "company_uuid": "0c6bd8b9-ccfe-4a52-8726-6bf03cdc4ae8",
+    "agent_name": "API_test_agent",
+    "agent_flag": "apiflag",
+    "agent_language": "ru-RU",
+    "agent_tts": "oksana@yandex",
+    "agent_pool_name": "yandex-pool-1",
+    "agent_trunk_name": "sip-client-test",
+    "recall_count": 1,
+    "asr": "yandex",
+    "tts": "jane@yandex",
+    "language": "ru-RU",
+    "total_channel_limit": 2,
+    "pool_uuid": "f58894cb-1a4a-49f3-957f-ffacab2fd029",
+    "trunk_uuid": "01b3478a-e627-4e73-861b-bc54d71e5957",
+    "logic_uuid": "b11f1d17-f8d7-4b48-a1e2-0f1d70ca8aa6",
+    "reference_call_uuid_yandex": "dbc696a9-561f-4c89-8164-7647298e9779",
+    "reference_call_uuid_google": "c52dea25-d5d4-4b58-b3f9-2ce28ea72413",
+    "ssh": {
+      "login": "rdevetiarov",
+      "hosts": {
+        "id_1": "10.129.0.108",
+        "id_2": "10.131.0.60"
+      }
+    },
+    "data_release_run": {
+      "total_channel_limit": 8,
+      "language": "ru-RU",
+      "recall_count": 1,
+      "agent_flag": "nprotskaia",
+      "agent_name": "release_run",
+      "agent_uuid": "327b3679-3cda-4540-b6df-1804127aa1a8",
+      "asr_yandex_uuid": "5cb8a1f8-5e4c-4bae-b36e-cff047b4271c",
+      "tts_yandex_uuid": "3770aa45-e011-42a5-9f91-093034b66b55",
+      "yandex_voice": "zahar",
+      "asr_google_uuid": "d12a22d5-da4a-43ac-b2b7-b12f5b164b55",
+      "tts_google_uuid": "dbd14415-f9fb-4d5a-b0b4-1ae208fcd983",
+      "google_voice": "ru-RU-Wavenet-E",
+      "agent_id": "5",
+      "logic_uuid": "19f8df95-882d-472b-a284-68325e88c576"
+    }
+  }
+}
