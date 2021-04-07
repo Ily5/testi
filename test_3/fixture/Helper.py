@@ -31,7 +31,7 @@ class FileHelper(object):
             rate = f.getframerate()
             duration = frames / float(rate)
         rms_sum, cent_sum = self.comparison_audio_files(full_path_to_file)
-
+        yield
         os.remove(full_path_to_file)
         return {
             "size": size,
