@@ -52,6 +52,11 @@
     "tts": "jane@yandex",
     "language": "ru-RU",
     "total_channel_limit": 2,
+    "pool_uuid": "d6452554-4a31-4847-b130-7618253e7630",
+    "trunk_uuid": "8b68d30b-2ac2-4966-a96f-d7bad66f651e",
+    "logic_uuid": "1cff417c-3008-44bf-ab5f-0fa54143ad33",
+    "reference_call_uuid_yandex": "67fdbe24-8b0e-40e7-be95-5ccaf78cedb8",
+    "reference_call_uuid_google": "00f9fd8f-f9e2-4fed-aa7b-e64d44f4745a",
 
     "data_release_run": {
       "agent_uuid": "7e5a1f42-45d1-446d-9381-3f7235d8488f",
