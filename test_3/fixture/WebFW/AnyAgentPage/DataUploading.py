@@ -99,10 +99,13 @@ class DataUploading(AnyAgentPage):
         count = self.count_list_files()
         self.click_by_xpath(delete_file_locator)
         self.click_by_xpath(self.__yes_delete_file_button)
+        timeout = time.time() + 15
         while True:
             if self.count_list_files() < count:
                 break
             time.sleep(0.5)
+            if time.time() >= timeout:
+                raise TimeoutError
 
     @allure.step('Скачивание n-ого сверху валидного файла из списка')
     def download_valid_n_file(self, number):
