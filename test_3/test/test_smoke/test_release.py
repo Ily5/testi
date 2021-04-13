@@ -3,6 +3,7 @@ import pytest
 import allure
 
 
+@pytest.mark.skip(reason="Пока не увиличели мощность 10.129.0.112")
 @allure.story("Работа cms")
 @allure.title('Провека UI')
 def test_v3_cms(db, app_3_web):
@@ -394,7 +395,6 @@ class TestGoogleEngine:
         assert file_helper.get_percent(test_file_prop['duration'], reference_file_prop['duration']) < 8
         assert file_helper.get_percent(test_file_prop['rms_sum'], reference_file_prop['rms_sum']) < 8
         assert file_helper.get_percent(test_file_prop['cent_sum'], reference_file_prop['cent_sum']) < 8
-
 
 # @allure.feature("Silence")
 # @allure.story("Тишина + тишина")
