@@ -30,7 +30,7 @@ class CmsApi(APIClientV3):
             limit=2000,
             offset=0,
     ) -> requests.Response:
-        """" Метод получения звонков агента
+        """" Метод получения звонков агента в очереди
         :param agent_uuid: обязательный параметр, передаем agent_uuid
         :param msisdn: необязательно, передаем для фильтрации по номеру
         :param result: необязательо, передаем для фильтрации по статусу
@@ -48,9 +48,9 @@ class CmsApi(APIClientV3):
             "where": {"agent_uuid": agent_uuid, "msisdn": [], "result": []},
         }
         if msisdn is not None:
-            request_data['where']["msisdn"].append(msisdn)
+            request_data["where"]["msisdn"].append(msisdn)
         if result is not None:
-            request_data['where']["result"].append(result)
+            request_data["where"]["result"].append(result)
         if call_uuid is not None:
             request_data["where"]["call_uuid"] = call_uuid
         if bulk_uuid is not None:
