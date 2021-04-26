@@ -26,11 +26,11 @@ class FileHelper(object):
         full_path_to_file = self.path_to_file + file_name
         size = os.path.getsize(full_path_to_file)
 
-        # with contextlib.closing(wave.open(full_path_to_file, "r")) as f:
-        #     frames = f.getnframes()
-        #     rate = f.getframerate()
-        #     duration = frames / float(rate)
-        duration = librosa.get_duration(filename=full_path_to_file)
+        with contextlib.closing(wave.open(full_path_to_file, "r")) as f:
+            frames = f.getnframes()
+            rate = f.getframerate()
+            duration = frames / float(rate)
+        # duration = librosa.get_duration(filename=full_path_to_file)
         rms_sum, cent_sum = self.comparison_audio_files(full_path_to_file)
         os.remove(full_path_to_file)
         return {
