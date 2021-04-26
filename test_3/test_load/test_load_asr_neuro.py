@@ -2,6 +2,8 @@ import time
 from datetime import datetime
 from typing import List, Union, Dict, Any
 
+import pytest
+
 from test_3.fixture.Helper import AsrResultHelper
 from test_3.conftest import clear_queue
 
@@ -19,21 +21,16 @@ agent_uuid = "a4096ad9-f0b8-41fc-8393-93a88ef18c40"
 
 
 def test_asr(cms_api_v3, api_v3, pool_api_v3, db):
-    # чистим очередь
-    # for step in range(2, 6, 2):
-    #     clear_queue(api_v3,
-    #                 {"agent_uuid": agent_uuid},
-    #                 pool_api_v3)
-    #
-    #     asr_result_check(api_v3, cms_api_v3, db, step, step * 2)
     expected_result = "это бесплатная услуга никакой абонентской платой подключение бесплатный на тариф тоже не повлияет это просто как постраховка вас выручит если вдруг не успейте средство внести на телефон вы сможете всегда позвонить потраченую сумму сможете внести поднее в течении трех дней будет просто врежемие ожидание находиться активизируется она только если баланс безокнулю то есть если у вас есть средства на телефоне вы её даже не зонитите"
-    clear_queue(api_v3,
-                {"agent_uuid": agent_uuid},
-                pool_api_v3)
-    arr_results = asr_result_check(api_v3, cms_api_v3, db, 3, 4)
+    # чистим очередь
     asr_helper = AsrResultHelper()
-    for result in arr_results:
-        print(asr_helper.get_wer_cer(expected_result, result.get("utterance")))
+    for step in range(1, 4, 1):
+        clear_queue(api_v3,
+                    {"agent_uuid": agent_uuid},
+                    pool_api_v3)
+        asr_results = asr_result_check(api_v3, cms_api_v3, db, step, step * 2)
+        for result in asr_results:
+            print(asr_helper.get_wer_cer(expected_result, result.get("utterance")))
 
     # оцениваем продолжительность
 
@@ -42,6 +39,7 @@ def test_asr(cms_api_v3, api_v3, pool_api_v3, db):
 
 def asr_result_check(api_v3, cms_api_v3, db, step_rise: int, count_dialog: int):
     # count_dialog = 50
+    # TODO вынести изменение TCL
     tcl = 0
     resp_change_tcl = api_v3.change_base_agent_setting(
         agent_uuid=agent_uuid,
@@ -68,18 +66,14 @@ def asr_result_check(api_v3, cms_api_v3, db, step_rise: int, count_dialog: int):
     # ожидаем пока активные звонки = tcl и получаем uuid этих звонков, диалогов
     active_calls: List[Dict[str, str]] = []
     count_active_calls = 0
+    timeout_active_calls = time.time() + 600
     while count_active_calls != tcl:
-        all_calls = api_v3.get_calls_agent(agent_uuid).json()["data"]
-        # print(f"\n {datetime.now()} - Count all calls - {len(all_calls)}")
-        active = list()
-        count_active_calls = 0
-        for call in all_calls:
-            if call["result"] == "active":
-                count_active_calls += 1
-                active.append(dict(call_uuid=call["uuid"], dialog_uuid=call["dialog"]["uuid"], status=call["result"]))
-            active_calls = active
+        all_active_calls = cms_api_v3.get_calls_agent_in_queue(agent_uuid=agent_uuid, result="active").json()
+        count_active_calls = all_active_calls["total_count"]
         time.sleep(1)
-        print(f"\n {datetime.now()} - Count active calls - {count_active_calls}, All calls {len(all_calls)}")
+        print(f"\n {datetime.now()} - Count active calls - {count_active_calls}, All calls {len(all_active_calls)}")
+        if time.time() >= timeout_active_calls:
+            raise TimeoutError
 
     # меняем TCL на 0
     # resp_change_tcl = api_v3.change_base_agent_setting(

@@ -26,7 +26,8 @@ class ApplicationNewVersion:
                 "browserName": "chrome",
                 "version": "88.0",
                 "platform": "LINUX",
-                "enableVNC": True
+                "enableVNC": True,
+                "sessionTimeout": "3m"
             }
 
             self.wd = webdriver.Remote(

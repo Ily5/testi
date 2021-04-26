@@ -51,6 +51,9 @@
             "ner_address": "/ner_address",
             "ner_person": "/ner_person"
         },
-        "cms_api": {"get_call_logs": "/api/v2/log/call/logs/"}
+        "cms_api": {
+            "get_call_logs": "/api/v2/log/call/logs/",
+            "get_calls_agent_in_queue": "/api/v2/queue/call"
+        }
     }
 }

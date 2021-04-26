@@ -30,8 +30,8 @@ class FileHelper(object):
             frames = f.getnframes()
             rate = f.getframerate()
             duration = frames / float(rate)
+        # duration = librosa.get_duration(filename=full_path_to_file)
         rms_sum, cent_sum = self.comparison_audio_files(full_path_to_file)
-
         os.remove(full_path_to_file)
         return {
             "size": size,
@@ -64,7 +64,7 @@ class FileHelper(object):
         return rms_sum, cent_sum
 
     @staticmethod
-    def get_percent(first: Union[int, str], second: Union[int, str]) -> Union[float]:
+    def get_percent(first: Union[int, float], second: Union[int, float]) -> Union[float]:
         return abs(first / second - 1) * 100
 
 

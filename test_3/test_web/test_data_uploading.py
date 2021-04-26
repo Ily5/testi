@@ -9,6 +9,7 @@ class TestWebDataUploading:
 
     @allure.title('Загрузка валидного файла')
     def test_data_uploading_valid_file(self, data_uploading, remove_queue_dialogs_and_calls):
+        data_uploading.DataUploading.delete_all_completed_uploading()
 
         count = data_uploading.DataUploading.count_list_files()
 
