@@ -1,6 +1,7 @@
 import os
 import datetime
 import gc
+import time
 import wave
 from typing import Union, List, Tuple, Dict
 import contextlib
@@ -15,14 +16,7 @@ class FileHelper(object):
         self.api_helper = api_helper
         self.path_to_file = path_to_file
 
-    def create_file_of_response(self, file_name: str, api_response: requests.Response) -> str:
-        full_path_to_file = self.path_to_file + file_name
-        with open(r"{path}".format(path=full_path_to_file), "wb") as file:
-            file.write(api_response.content)
-
-        return file_name
-
-    def get_file_properties(self, file_name: str) -> Dict[str, str]:
+    def get_file_properties(self, file_name: str) -> Dict[str, Union[str, int, float]]:
         full_path_to_file = self.path_to_file + file_name
         size = os.path.getsize(full_path_to_file)
 
@@ -43,11 +37,23 @@ class FileHelper(object):
     def get_call_file_properties(self, create_file_name: str, call_uuid: str) -> Dict[str, str]:
         path = self.api_helper.path_end_point["download_call_audio"] + str(call_uuid)
         response = self.api_helper.request_send(path=path)
-        self.create_file_of_response(file_name=create_file_name, api_response=response)
+        status_code = response.status_code
+        timeout = time.time() + 300
+        while status_code != 200:
+            response = self.api_helper.request_send(path=path)
+            response: requests.Response
+            status_code = response.status_code
+            if time.time() >= timeout:
+                raise TimeoutError
+
+        full_path_to_file = self.path_to_file + create_file_name
+        with open(r"{path}".format(path=full_path_to_file), "wb") as file:
+            file.write(response.content)
+
         return self.get_file_properties(file_name=create_file_name)
 
     @staticmethod
-    def comparison_audio_files(file_name: str) -> Tuple[float, float]:
+    def comparison_audio_files(file_name: str):
         y, sr = librosa.load(file_name, sr=8000)
         rms = librosa.feature.rms(y=y)
         cent = librosa.feature.spectral_centroid(y=y, sr=sr)
@@ -171,9 +177,9 @@ class AsrResultHelper:
         self.wer = wer
 
     def get_wer_cer(
-        self,
-        expected_result: Union[str, List[str]],
-        detected_result: Union[str, List[str]],
+            self,
+            expected_result: Union[str, List[str]],
+            detected_result: Union[str, List[str]],
     ) -> Tuple[float, float]:
         wer = self.wer(expected_result, detected_result)
         cer = self.wer(list("".join(expected_result)), list("".join(detected_result)))
