@@ -81,7 +81,7 @@ def test_quality_asr(api_v3, db):
             list_ver_cer.append({"file_name": file_name, "wer": wer, "cer": cer})
             if wer > 0.35 or cer > 0.25:
                 print(f"{file_name} , wer = {wer}, cer = {cer}")
-                print(f"Actual_result - {actual_results[file_name]} \nExpected result - {utterance}")
+                print(f"Actual_result - {actual_results[file_name]} \nExpected result - {utterance}\n")
 
     avg_wer = sum([i["wer"] for i in list_ver_cer]) / len(list_ver_cer)
     avg_cer = sum([i["cer"] for i in list_ver_cer]) / len(list_ver_cer)
