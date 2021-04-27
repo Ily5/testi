@@ -79,6 +79,8 @@ def test_quality_asr(api_v3, db):
         for file_name, utterance in asr_result.items():
             wer, cer = asr_helper.get_wer_cer(utterance, actual_results[file_name])
             list_ver_cer.append({"file_name": file_name, "wer": wer, "cer": cer})
+            if wer > 0.30 or cer > 0.20:
+                print(f"{file_name} , wer = {wer}, cer = {cer}")
 
     avg_wer = sum([i["wer"] for i in list_ver_cer]) / len(list_ver_cer)
     avg_cer = sum([i["cer"] for i in list_ver_cer]) / len(list_ver_cer)
