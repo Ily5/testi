@@ -2,22 +2,13 @@ import os
 import time
 import json
 from datetime import datetime
-from typing import Dict, Union
 from test_3.fixture.Helper import AsrResultHelper
-import pathlib
-
-""""
-1. Запускам звонки
-2. Дожидаемся пока закончатся
-3. Парсим базу с результатами распознавания
-4. Считаем средний ver, cer
-"""
 
 
 def test_quality_asr(api_v3, db):
     agent_uuid = 'f7cf51e8-5022-4d40-9b04-4bc97b5f142f'
     agent_id = '57'
-    dialogs_count = 30
+    dialogs_count = 4000
 
     data_create_dialog = []
     for i in range(dialogs_count):
@@ -65,25 +56,38 @@ def test_quality_asr(api_v3, db):
 
     # получаем результаты распознавания
     all_asr_results = db.db_conn(
-        f"SELECT name, data FROM dialog_stats WHERE name like 'test_asr%'\
-          and id >{last_id_dialog_stats} ORDER BY id DESC")
+        f"SELECT dialog_stats.name, dialog_stats.data, call.uuid FROM dialog_stats\
+          INNER JOIN call\
+          ON dialog_stats.call_id = call.id \
+          WHERE name like 'test_asr%'\
+          and dialog_stats.id >{last_id_dialog_stats} ORDER BY dialog_stats.id DESC")
 
     actual_results = {result[0]: result[1] for result in all_asr_results}
+    name_call_uuid = {result[0]: result[2] for result in all_asr_results}
 
     asr_helper = AsrResultHelper()
     path_to_expected_result = f"{os.path.abspath(os.path.dirname(__file__))}/asr_results.json"
     list_ver_cer = []
 
     with open(path_to_expected_result) as file:
-        asr_result: dict = json.load(file)
-        for file_name, utterance in asr_result.items():
-            wer, cer = asr_helper.get_wer_cer(utterance, actual_results[file_name])
+        asr_result_expected: dict = json.load(file)
+        count_error = {"must_be_none": 0, "must_be_not_none": 0}
+        for file_name, utterance in actual_results.items():
+            wer, cer = asr_helper.get_wer_cer(asr_result_expected[file_name], utterance)
             list_ver_cer.append({"file_name": file_name, "wer": wer, "cer": cer})
-            if wer > 0.35 or cer > 0.25:
-                print(f"{file_name} , wer = {wer}, cer = {cer}")
-                print(f"Actual_result - {actual_results[file_name]} \nExpected result - {utterance}\n")
+            if asr_result_expected[file_name] == "None" and utterance != "None" \
+                    or wer > 1 and asr_result_expected[file_name] != "None" and utterance != "None" \
+                    or cer > 1 and asr_result_expected[file_name] != "None" and utterance != "None":
+                # if wer > 0.8 or cer > 1:
+                print(f"\n{file_name} , wer = {wer}, cer = {cer}")
+                print(f"Actual_result - {utterance} \nExpected result - {asr_result_expected[file_name]}")
+                print(f"call_uuid - {name_call_uuid[file_name]}\n")
+            if asr_result_expected[file_name] == "None" and utterance != "None":
+                count_error["must_be_none"] += 1
+            if utterance == "None" and asr_result_expected[file_name] != "None":
+                count_error["must_be_not_none"] += 1
 
     avg_wer = sum([i["wer"] for i in list_ver_cer]) / len(list_ver_cer)
     avg_cer = sum([i["cer"] for i in list_ver_cer]) / len(list_ver_cer)
+    print(count_error)
     print(f"avg_wer = {avg_wer}  avg_cer = {avg_cer}")
-
