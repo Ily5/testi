@@ -163,8 +163,7 @@ def upload_dialogs(agent_uuid, api_v3, dialogs_count: int):
         method="POST",
         path=api_v3.path_end_point["upload_group_dialogs"],
         params={"agent_uuid": agent_uuid},
-        json=data_create_dialog,
-        status_code=409,
+        json=data_create_dialog
     )
     print(
         f"\n {datetime.now()} - status code upload dialogs {response_upload_dialogs.status_code}"
