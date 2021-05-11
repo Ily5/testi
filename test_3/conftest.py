@@ -111,7 +111,7 @@ def upload_group_dialogs(api_v3, params_agent_uuid, remove_queue_dialogs_and_cal
         },
     ]
     res = api_v3.request_send(
-        method="POST", path=path, params=params_agent_uuid, json=data, status_code=409
+        method="POST", path=path, params=params_agent_uuid, json=data
     )
     if res.status_code not in [200, 201, 202]:
         print(res.status_code)
@@ -125,17 +125,15 @@ def upload_dialog(api_v3, params_agent_uuid, remove_queue_dialogs_and_calls):
     path = api_v3.path_end_point["upload_dialog"]
     data = {"msisdn": str(randint(00000000000, 99999999999))}
     return (
-        api_v3.request_send(
-            method="POST",
-            path=path,
-            params=params_agent_uuid,
-            json=data,
-            status_code=409,
-        )
-    ).json()
+            api_v3.request_send(
+                method="POST",
+                path=path,
+                params=params_agent_uuid,
+                json=data
+            ).json())
 
 
-@pytest.fixture(scope="class")
+@ pytest.fixture(scope="class")
 def creation_queue_dialog(
         request,
         pool_api_v3,
@@ -157,7 +155,7 @@ def creation_queue_dialog(
         }
     ]
     response = api_v3.request_send(
-        method="POST", path=path, params=params_agent_uuid, json=data, status_code=409
+        method="POST", path=path, params=params_agent_uuid, json=data
     )
     for i in range(count_dialogs):
         data.append(
@@ -168,8 +166,7 @@ def creation_queue_dialog(
             }
         )
     res = api_v3.request_send(
-        method="POST", path=path, params=params_agent_uuid, json=data, status_code=409
-    )
+        method="POST", path=path, params=params_agent_uuid, json=data)
     if res.status_code not in [200, 201, 202]:
         print(res.status_code)
         print(res.text)
@@ -210,7 +207,7 @@ def creation_queue_calls(
             }
         )
     res = api_v3.request_send(
-        method="POST", path=path, params=params_agent_uuid, json=data, status_code=409
+        method="POST", path=path, params=params_agent_uuid, json=data
     )
     if res.status_code not in [200, 201, 202]:
         print(res.status_code)
@@ -243,14 +240,12 @@ def clear_queue(api_v3, params_agent_uuid, pool_api_v3):
         method="POST",
         path=api_v3.path_end_point["return_queue_dialogs"],
         params=params_agent_uuid,
-        json={},
-        status_code=409,
+        json={}
     )
     api_v3.request_send(
         method="POST",
         path=api_v3.path_end_point["remove_queue_dialogs"],
-        params=params_agent_uuid,
-        status_code=409,
+        params=params_agent_uuid
     )
 
     pool_api_v3.request_send(
