@@ -22,7 +22,6 @@ class TestWebDataUploading:
         assert result['status'] == 'SUCCESS'
         assert result['name'] == data_uploading.test_data['name_uploading_file']['valid_file']
         assert result['count_contact'] is not None
-        assert count_new == count + 1
 
     @allure.title('Загрузка невалидного файла')
     def test_data_uploading_no_valid_file(self, data_uploading):

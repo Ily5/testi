@@ -1,5 +1,4 @@
 import requests
-import time
 
 
 class APIClientV3:
@@ -22,7 +21,7 @@ class APIClientV3:
         self.api_headers = headers
 
     def request_send(
-            self, method="GET", path=None, status_code=480, waiting_queue_sec=900, **kwargs
+            self, method="GET", path=None, **kwargs
     ):
         if path is None:
             request_url = self.base_url
@@ -31,27 +30,9 @@ class APIClientV3:
 
         headers = self.token
 
-        count = 0
-        while True:
-            count += 1
-            response = requests.request(
-                method=method, url=request_url, headers=headers, **kwargs
-            )
-            if response.status_code != int(status_code):
-                break
-            if "pending" not in response.text:
-                print("Код ответа ", response.status_code)
-                raise Exception(response.text)
-            if count % 10 == 0:
-                print(
-                    "\n Код ответа от сервера = {}".format(response.status_code),
-                    "-- попытка № {}".format(count),
-                )
-                print("\n", "Message Error - {}".format(response.text))
-            time.sleep(0.5)
-            if count > waiting_queue_sec * 2:
-                print("Очередь занята более {} секунд ".format(waiting_queue_sec))
-                raise TimeoutError("Превышено время отправки запроса")
+        response = requests.request(
+            method=method, url=request_url, headers=headers, **kwargs
+        )
 
         return response
 

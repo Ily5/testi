@@ -523,7 +523,7 @@ class TestExternalApi:
     def test_stop_queue_dialogs_valid(self, api_v3, params_agent_uuid):
         path = api_v3.path_end_point["stop_queue_dialogs"]
         response = api_v3.request_send(
-            method="POST", path=path, params=params_agent_uuid, json={}, status_code=409
+            method="POST", path=path, params=params_agent_uuid, json={}
         )
         assert response.status_code == 200
 
@@ -605,7 +605,7 @@ class TestExternalApi:
     def test_remove_queue_dialogs_valid(self, api_v3, params_agent_uuid):
         path = api_v3.path_end_point["remove_queue_dialogs"]
         response = api_v3.request_send(
-            method="POST", path=path, params=params_agent_uuid, json={}, status_code=409
+            method="POST", path=path, params=params_agent_uuid, json={}
         )
         assert response.status_code == 200
 
