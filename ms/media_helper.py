@@ -6,8 +6,6 @@ import logging
 from test_3.fixture.api import APIClientV3
 
 
-
-
 def get_value(response, value):
     return response[value]
 

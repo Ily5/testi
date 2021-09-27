@@ -34,7 +34,7 @@ logging.basicConfig(filename=None, level=logging.INFO,
 #     print(result)
 
 def test_media_server():
-    mh.set_voice('stc_test_asr')
+    # mh.set_voice('stc_test_asr')
     channel_limit = int(sys.argv[1])
     delay = float(sys.argv[2])
     token = mh.auth()
