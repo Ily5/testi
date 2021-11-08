@@ -18,8 +18,10 @@ from test_3.fixture.ApiWF.PoolApi import PoolApi
 from test_3.fixture.ApiWF.NluApi import NluApi
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-"исправление" \
-""
+
+
+
+
 """ Фикстуры для V2"""
 
 
